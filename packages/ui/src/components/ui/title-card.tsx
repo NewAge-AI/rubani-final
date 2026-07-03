@@ -1,0 +1,90 @@
+import type * as React from "react";
+
+import { cn } from "@notra/ui/lib/utils";
+
+interface TitleCardProps extends Omit<React.ComponentProps<"div">, "title"> {
+  heading: React.ReactNode;
+  icon?: React.ReactNode;
+  action?: React.ReactNode;
+  footer?: React.ReactNode;
+  accentColor?: string;
+  contentClassName?: string;
+  footerClassName?: string;
+  disabled?: boolean;
+}
+
+function TitleCard({
+  heading,
+  icon,
+  action,
+  footer,
+  accentColor,
+  className,
+  contentClassName,
+  footerClassName,
+  disabled = false,
+  children,
+  ...props
+}: TitleCardProps) {
+  const gradientStyle = accentColor
+    ? {
+        backgroundImage: `linear-gradient(to bottom right, ${accentColor}20 0%, transparent 50%)`,
+      }
+    : undefined;
+
+  return (
+    <div
+      aria-disabled={disabled || undefined}
+      className={cn(
+        "group relative isolate flex flex-col overflow-hidden rounded-lg border border-border/80 border-b-border/40 bg-muted/80 shadow-2xs",
+        disabled && "cursor-not-allowed",
+        className
+      )}
+      {...props}
+    >
+      {accentColor && (
+        <div
+          className={cn(
+            "pointer-events-none absolute inset-0 -z-10 opacity-0 transition-opacity duration-200",
+            !disabled && "group-hover:opacity-100"
+          )}
+          style={gradientStyle}
+        />
+      )}
+      <div className="flex items-start justify-between gap-4 px-4 py-2.5">
+        <div className="flex min-w-0 flex-1 items-center gap-2">
+          {icon && (
+            <div className="flex size-8 shrink-0 items-center justify-center text-muted-foreground [&_svg]:size-5">
+              {icon}
+            </div>
+          )}
+          <p className="min-w-0 flex-1 truncate font-medium text-lg">{heading}</p>
+        </div>
+        {action && (
+          <div className="flex shrink-0 items-center gap-2">{action}</div>
+        )}
+      </div>
+      <div
+        className={cn(
+          "flex-1 rounded-t-lg border-border/60 border-t bg-background px-4 py-3",
+          contentClassName
+        )}
+      >
+        {children}
+      </div>
+      {footer && (
+        <div
+          className={cn(
+            "flex items-center justify-between gap-4 border-border/80 border-t bg-background px-4 py-3",
+            footerClassName
+          )}
+        >
+          {footer}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export { TitleCard };
+export type { TitleCardProps };

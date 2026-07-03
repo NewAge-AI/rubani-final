@@ -1,0 +1,57 @@
+const URL_REGEX = /\/+$/;
+
+function normalizeUrl(url: string): string {
+  return url.replace(URL_REGEX, "");
+}
+
+export const EMAIL_CONFIG = {
+  /**
+   * Site URL for marketing site (logo, assets, etc.)
+   * Falls back to production URL if not set
+   */
+  getSiteUrl(): string {
+    return normalizeUrl(
+      process.env.NEXT_PUBLIC_SITE_URL || "https://usenotra.com"
+    );
+  },
+
+  /**
+   * App/Dashboard URL for the Dashboard application
+   * Falls back to production URL if not set
+   */
+  getAppUrl(): string {
+    return normalizeUrl(
+      process.env.NEXT_PUBLIC_APP_URL || "https://app.usenotra.com"
+    );
+  },
+
+  /**
+   * Get logo URL with fallback (uses site URL)
+   */
+  getLogoUrl(): string {
+    const siteUrl = this.getSiteUrl();
+    return `${siteUrl}/icon1.png`;
+  },
+
+  /**
+   * Reply-to email address
+   */
+  replyTo: "support@usenotra.com",
+
+  /**
+   * From email address for automated notification emails.
+   * Use a subdomain sender so notification mail does not share the apex domain.
+   */
+  from: "Notra <notifications@notifications.usenotra.com>",
+
+  /**
+   * Physical mailing address for CAN-SPAM compliance
+   */
+  physicalAddress: {
+    name: "Dominik Koch - c/o IP-Management #8532",
+    street: "Ludwig-Erhard-Str. 18",
+    city: "Hamburg",
+    zip: "20459",
+    country: "Germany",
+  },
+} as const;
