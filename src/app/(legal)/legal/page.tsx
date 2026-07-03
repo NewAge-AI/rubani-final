@@ -1,0 +1,44 @@
+import type { Metadata } from "next";
+import LegalContent from "../../../content/legal/legal.mdx";
+import { DEFAULT_SOCIAL_IMAGE, TWITTER_HANDLE } from "../../../utils/metadata";
+import { SITE_URL } from "../../../utils/urls";
+
+const title = "Legal Notice";
+const description =
+  "Legal notice and imprint for Rubani in accordance with applicable law.";
+const url = `${SITE_URL}/legal`;
+
+export const metadata: Metadata = {
+  title,
+  description,
+  alternates: {
+    canonical: url,
+  },
+  openGraph: {
+    title,
+    description,
+    url,
+    type: "website",
+    siteName: "Rubani",
+    images: [DEFAULT_SOCIAL_IMAGE],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+    images: [DEFAULT_SOCIAL_IMAGE.url],
+    site: TWITTER_HANDLE,
+    creator: TWITTER_HANDLE,
+  },
+};
+
+export default function LegalPage() {
+  return (
+    <>
+      <h1 className="mb-8 font-sans font-semibold text-3xl tracking-tight sm:text-4xl">
+        Legal Notice
+      </h1>
+      <LegalContent />
+    </>
+  );
+}
