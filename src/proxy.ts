@@ -18,7 +18,7 @@ const dualmarkProxy = createDualmarkMiddleware({
       "/.well-known",
       "/api",
       "/apple-icon.png",
-      "/contributors",
+      "/brand/rubani-icon.svg",
       "/demo-dark.webp",
       "/demo.webp",
       "/design.md",
