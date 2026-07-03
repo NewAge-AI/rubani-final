@@ -160,6 +160,8 @@ const nextConfig: NextConfig = {
 
 const withMDX = createMDX();
 
-export default withDualmark(withMDX(nextConfig), {
+const config: NextConfig = withDualmark(withMDX(nextConfig), {
   siteUrl: SITE_URL,
 });
+
+export default config;

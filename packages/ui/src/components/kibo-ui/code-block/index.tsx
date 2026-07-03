@@ -1,5 +1,12 @@
 "use client";
 
+import {
+  transformerNotationDiff,
+  transformerNotationErrorLevel,
+  transformerNotationFocus,
+  transformerNotationHighlight,
+  transformerNotationWordHighlight,
+} from "@shikijs/transformers";
 import { Button } from "@notra/ui/components/ui/button";
 import {
   Select,
@@ -9,13 +16,6 @@ import {
   SelectValue,
 } from "@notra/ui/components/ui/select";
 import { useControllableState } from "@notra/ui/hooks/use-controllable-state";
-import {
-  transformerNotationDiff,
-  transformerNotationErrorLevel,
-  transformerNotationFocus,
-  transformerNotationHighlight,
-  transformerNotationWordHighlight,
-} from "@shikijs/transformers";
 import { CheckIcon, CopyIcon } from "lucide-react";
 import type { ComponentProps, HTMLAttributes, ReactNode } from "react";
 import { createContext, useContext, useEffect, useState } from "react";
@@ -278,7 +278,7 @@ const highlight = (
       transformerNotationErrorLevel({
         matchAlgorithm: "v3",
       }),
-    ],
+    ] as never,
   });
 
 interface CodeBlockData {
