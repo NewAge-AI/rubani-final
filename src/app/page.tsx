@@ -411,7 +411,7 @@ export default function LandingPage() {
           <FAQSection />
         </section>
 
-        <section className="landing-reveal w-full content-defer" id="cta">
+        <section className="w-full content-defer" id="cta">
           <CTASection />
         </section>
       </main>
