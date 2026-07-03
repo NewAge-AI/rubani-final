@@ -198,7 +198,7 @@ export default function FooterSection() {
 
       <div className="flex flex-col items-start gap-4 self-stretch border-foreground/10 border-t px-4 py-6 md:px-8">
         <div className="font-medium font-sans text-foreground/50 text-xs uppercase tracking-wider">
-          Built for institutions
+          Summarize with AI
         </div>
         <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
           {AI_SUMMARY_LINKS.map(({ name, slug, Icon, href, iconClassName }) => (
