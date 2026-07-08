@@ -5,37 +5,78 @@ import { Linkedin } from "@notra/ui/components/ui/svgs/linkedin";
 import { Reddit } from "@notra/ui/components/ui/svgs/reddit";
 import { XTwitter } from "@notra/ui/components/ui/svgs/twitter";
 import { Youtube } from "@notra/ui/components/ui/svgs/youtube";
-import { cn } from "@notra/ui/lib/utils";
 import Link from "next/link";
-import { AI_SUMMARY_LINKS } from "@/utils/ai-summary-links";
-import {
-  FOOTER_FREE_TOOL_LINKS,
-  FOOTER_INTEGRATION_LINKS,
-  FOOTER_PRODUCT_LINKS,
-  FOOTER_TOOL_LINKS,
-} from "@/utils/navigation";
 import { SOCIAL_LINKS } from "../utils/social-links";
 import { RubaniMark } from "./notra-mark";
-import { TrackedAiSummaryLink } from "./tracked-ai-summary-link";
 
-export default function FooterSection() {
+type FooterSectionProps = {
+  variant?: "default" | "landing";
+};
+
+export default function FooterSection({
+  variant = "default",
+}: FooterSectionProps) {
   const year = new Date().getFullYear();
+  const isLanding = variant === "landing";
 
   return (
-    <div className="flex w-full flex-col items-start justify-start pt-10">
-      <div className="flex h-auto flex-col items-stretch justify-between self-stretch pt-0 pr-0 pb-8 md:flex-row">
-        <div className="flex h-auto flex-col items-start justify-start gap-8 p-4 md:p-8">
-          <div className="flex items-center justify-start self-stretch">
-            <RubaniMark className="h-20 w-auto shrink-0" />
-          </div>
-          <div className="font-medium font-sans text-foreground/90 text-sm leading-4.5">
-            Sovereignty · Orchestration · Edge
-          </div>
-          <div className="font-normal font-sans text-foreground/60 text-xs leading-5">
+    <footer
+      className={
+        isLanding
+          ? "w-full border-white/12 border-t bg-black px-4 py-12 xl:px-8"
+          : "flex w-full flex-col items-start justify-start pt-10"
+      }
+    >
+      <div
+        className={
+          isLanding
+            ? "mx-auto flex w-full max-w-[75rem] flex-col gap-10 md:flex-row md:items-start md:justify-between"
+            : "flex h-auto w-full flex-col items-stretch justify-between gap-8 self-stretch px-4 pb-8 md:flex-row md:px-8"
+        }
+      >
+        <div className="flex flex-col items-start gap-5">
+          <RubaniMark
+            className={`h-16 w-auto shrink-0 md:h-20 ${
+              isLanding ? "brightness-0 invert" : ""
+            }`}
+          />
+          <p
+            className={
+              isLanding
+                ? "max-w-sm text-sm text-white/55 leading-relaxed"
+                : "font-medium font-sans text-foreground/90 text-sm leading-4.5"
+            }
+          >
+            {isLanding
+              ? "Sovereign AI infrastructure for African enterprise. In-country data, orchestrated models, and edge-first delivery."
+              : "Sovereignty · Orchestration · Edge"}
+          </p>
+          <p
+            className={
+              isLanding
+                ? "text-white/35 text-xs"
+                : "font-normal font-sans text-foreground/60 text-xs leading-5"
+            }
+          >
             {`© ${year} Rubani. All rights reserved.`}
-          </div>
+          </p>
+        </div>
 
-          <div className="flex items-start justify-start gap-2 text-foreground">
+        <div className="flex flex-col items-start gap-6 md:items-end">
+          <Link
+            className={
+              isLanding
+                ? "font-medium text-sm text-white hover:text-white/80"
+                : "font-medium font-sans text-foreground text-sm transition-colors hover:text-primary"
+            }
+            href="/contact"
+          >
+            Contact
+          </Link>
+
+          <div
+            className={`flex items-start gap-2 ${isLanding ? "text-white" : "text-foreground"}`}
+          >
             <Link
               aria-label="Visit Rubani on X"
               className={buttonVariants({ size: "icon", variant: "ghost" })}
@@ -64,7 +105,7 @@ export default function FooterSection() {
               <Github className="size-5" />
             </Link>
             <Link
-              aria-label="Contact Rubani"
+              aria-label="Visit Rubani on Discord"
               className={buttonVariants({ size: "icon", variant: "ghost" })}
               href={SOCIAL_LINKS.discord}
               rel="noopener noreferrer"
@@ -73,7 +114,7 @@ export default function FooterSection() {
               <Discord className="size-5" />
             </Link>
             <Link
-              aria-label="Contact Rubani"
+              aria-label="Visit Rubani on Reddit"
               className={buttonVariants({ size: "icon", variant: "ghost" })}
               href={SOCIAL_LINKS.reddit}
               rel="noopener noreferrer"
@@ -92,130 +133,7 @@ export default function FooterSection() {
             </Link>
           </div>
         </div>
-
-        <div className="grid grid-cols-2 gap-6 self-stretch p-4 sm:flex sm:flex-row sm:flex-wrap sm:items-start sm:justify-between md:gap-8 md:p-8">
-          <div className="flex min-w-30 flex-1 flex-col items-start justify-start gap-3">
-            <div className="font-medium font-sans text-foreground/50 text-sm leading-5">
-              Platform
-            </div>
-            <div className="flex flex-col items-start justify-end gap-2">
-              {FOOTER_PRODUCT_LINKS.map((link) => (
-                <Link
-                  className="font-normal font-sans text-foreground text-sm leading-5 transition-colors hover:text-primary"
-                  href={link.href}
-                  key={link.href}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex min-w-30 flex-1 flex-col items-start justify-start gap-3">
-            <div className="font-medium font-sans text-foreground/50 text-sm leading-5">
-              Capabilities
-            </div>
-            <div className="flex flex-col items-start justify-end gap-2">
-              {FOOTER_TOOL_LINKS.map((link) => (
-                <Link
-                  className="font-normal font-sans text-foreground text-sm leading-5 transition-colors hover:text-primary"
-                  href={link.href}
-                  key={link.href}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex min-w-30 flex-1 flex-col items-start justify-start gap-3">
-            <div className="font-medium font-sans text-foreground/50 text-sm leading-5">
-              Trusted AI
-            </div>
-            <div className="flex flex-col items-start justify-end gap-2">
-              {FOOTER_FREE_TOOL_LINKS.map((link) => (
-                <Link
-                  className="font-normal font-sans text-foreground text-sm leading-5 transition-colors hover:text-primary"
-                  href={link.href}
-                  key={link.href}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex min-w-30 flex-1 flex-col items-start justify-start gap-3">
-            <div className="font-medium font-sans text-foreground/50 text-sm leading-5">
-              Systems
-            </div>
-            <div className="flex flex-col items-start justify-end gap-2">
-              {FOOTER_INTEGRATION_LINKS.map((link) => (
-                <Link
-                  className="font-normal font-sans text-foreground text-sm leading-5 transition-colors hover:text-primary"
-                  href={link.href}
-                  key={link.href}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex min-w-30 flex-1 flex-col items-start justify-start gap-3">
-            <div className="font-medium font-sans text-foreground/50 text-sm leading-5">
-              Legal
-            </div>
-            <div className="flex flex-col items-start justify-center gap-2">
-              <Link
-                className="font-normal font-sans text-foreground text-sm leading-5 transition-colors hover:text-primary"
-                href="/privacy"
-              >
-                Privacy Policy
-              </Link>
-              <Link
-                className="font-normal font-sans text-foreground text-sm leading-5 transition-colors hover:text-primary"
-                href="/terms"
-              >
-                Terms of Service
-              </Link>
-              <Link
-                className="font-normal font-sans text-foreground text-sm leading-5 transition-colors hover:text-primary"
-                href="/legal"
-              >
-                Legal Notice
-              </Link>
-              <Link
-                className="font-normal font-sans text-foreground text-sm leading-5 transition-colors hover:text-primary"
-                href="/subprocessors"
-              >
-                Subprocessors
-              </Link>
-            </div>
-          </div>
-        </div>
       </div>
-
-      <div className="flex flex-col items-start gap-4 self-stretch border-foreground/10 border-t px-4 py-6 md:px-8">
-        <div className="font-medium font-sans text-foreground/50 text-xs uppercase tracking-wider">
-          Summarize with AI
-        </div>
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-          {AI_SUMMARY_LINKS.map(({ name, slug, Icon, href, iconClassName }) => (
-            <TrackedAiSummaryLink
-              href={href}
-              key={name}
-              name={name}
-              slug={slug}
-            >
-              <Icon className={cn("size-5 shrink-0", iconClassName)} />
-              <span className="font-normal font-sans text-sm leading-5">
-                {name}
-              </span>
-            </TrackedAiSummaryLink>
-          ))}
-        </div>
-      </div>
-    </div>
+    </footer>
   );
 }

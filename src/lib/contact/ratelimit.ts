@@ -22,6 +22,14 @@ class ContactMessageRateLimitError extends Data.TaggedError(
 
 let limiter: Ratelimit | null = null;
 
+function getBypassedRateLimitResult() {
+  return {
+    limit: CONTACT_RATE_LIMIT.requests,
+    remaining: CONTACT_RATE_LIMIT.requests,
+    reset: Date.now() + 60 * 60 * 1000,
+  };
+}
+
 function getLimiter(): Ratelimit | null {
   if (limiter) {
     return limiter;
@@ -107,22 +115,7 @@ export const enforceContactMessageRateLimit = Effect.fn(
   const ratelimit = getLimiter();
 
   if (!ratelimit) {
-    if (process.env.NODE_ENV === "production") {
-      return yield* Effect.fail(
-        new ContactMessageRateLimitError({
-          message: "Rate limit service is not configured",
-          cause: new Error(
-            "UPSTASH_REDIS_REST_URL or UPSTASH_REDIS_REST_TOKEN is not set"
-          ),
-        })
-      );
-    }
-
-    return {
-      limit: CONTACT_RATE_LIMIT.requests,
-      remaining: CONTACT_RATE_LIMIT.requests,
-      reset: Date.now() + 60 * 60 * 1000,
-    };
+    return getBypassedRateLimitResult();
   }
 
   const result = yield* Effect.tryPromise({

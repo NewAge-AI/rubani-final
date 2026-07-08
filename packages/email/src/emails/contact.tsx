@@ -19,7 +19,7 @@ export const ContactMessageEmail = ({
   name = "Jane Doe",
   email = "jane@example.com",
   company,
-  message = "We're evaluating Notra for our team and would love to chat about volume pricing.",
+  message = "We're evaluating Rubani for our team and would love to chat about volume pricing.",
 }: ContactMessageEmailProps) => {
   const logoUrl = EMAIL_CONFIG.getLogoUrl();
 
@@ -35,7 +35,7 @@ export const ContactMessageEmail = ({
           <Container className="mx-auto my-[40px] max-w-[520px] rounded p-[20px]">
             <Section className="mt-[32px]">
               <Img
-                alt="Notra Logo"
+                alt="Rubani Logo"
                 className="mx-auto"
                 height="40"
                 src={logoUrl}

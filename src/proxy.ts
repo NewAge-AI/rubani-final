@@ -1,6 +1,7 @@
 import { Tracker } from "@bydefault/vercel";
 import { createDualmarkMiddleware } from "@dualmark/nextjs";
 import { after, type NextRequest, NextResponse } from "next/server";
+import { isPublicRoute } from "@/lib/navigation/public-routes";
 import { HOMEPAGE_LINK_HEADER, SITE_URL } from "@/utils/urls";
 
 const bydefaultToken = process.env.BYDEFAULT_TOKEN;
@@ -19,6 +20,7 @@ const dualmarkProxy = createDualmarkMiddleware({
       "/api",
       "/apple-icon.png",
       "/brand/rubani-icon.svg",
+      "/landing",
       "/demo-dark.webp",
       "/demo.webp",
       "/design.md",
@@ -47,8 +49,17 @@ function appendLinkHeader(headers: Headers, value: string) {
 }
 
 export async function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  if (!isPublicRoute(pathname)) {
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = "/";
+    redirectUrl.search = "";
+    return NextResponse.redirect(redirectUrl);
+  }
+
   if (
-    request.nextUrl.pathname === "/" &&
+    pathname === "/" &&
     request.nextUrl.searchParams.get("mode") === "agent"
   ) {
     const response = NextResponse.rewrite(new URL("/agent", request.url));

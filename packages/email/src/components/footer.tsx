@@ -8,25 +8,25 @@ export const EmailFooter = () => {
     <Section>
       <Hr className="mx-0 mb-[26px] w-full border border-[#eaeaea] border-solid" />
       <Text className="m-0 text-center text-xs" style={{ color: "#717175" }}>
-        © {currentYear} Notra. All rights reserved.
+        © {currentYear} Rubani. All rights reserved.
       </Text>
       <Text className="mt-4 text-center text-xs" style={{ color: "#717175" }}>
         <Link
-          href="https://usenotra.com"
+          href="https://rubani.ai"
           style={{ color: "#717175", textDecoration: "underline" }}
         >
           Website
         </Link>
         {" · "}
         <Link
-          href="https://usenotra.com/legal"
+          href="https://rubani.ai/legal"
           style={{ color: "#717175", textDecoration: "underline" }}
         >
           Legal Notice
         </Link>
         {" · "}
         <Link
-          href="https://usenotra.com/privacy"
+          href="https://rubani.ai/privacy"
           style={{ color: "#717175", textDecoration: "underline" }}
         >
           Privacy Policy
