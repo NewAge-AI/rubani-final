@@ -1,3 +1,4 @@
+import { cn } from "@notra/ui/lib/utils";
 import Image from "next/image";
 import { LandingSectionFrame, LandingSectionHeader } from "./landing-section";
 
@@ -42,16 +43,24 @@ export function LandingComparison() {
       />
 
       <div className="landing-reveal-stagger mt-12 grid grid-cols-2 gap-px overflow-hidden border border-neutral-950/10 bg-neutral-950/10 sm:grid-cols-3 lg:grid-cols-5">
-        {APPROACH.map((item) => (
+        {APPROACH.map((item, index) => (
           <div
-            className="group relative flex aspect-[3/4] flex-col justify-end overflow-hidden bg-neutral-900 p-4"
+            className={cn(
+              "group relative flex aspect-[3/4] flex-col justify-end overflow-hidden bg-neutral-900 p-4",
+              index === APPROACH.length - 1 &&
+                "col-span-2 aspect-[16/9] sm:col-span-1 sm:aspect-[3/4]"
+            )}
             key={item.label}
           >
             <Image
               alt=""
               className="object-cover opacity-80 transition-transform duration-700 ease-out group-hover:scale-105"
               fill
-              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+              sizes={
+                index === APPROACH.length - 1
+                  ? "(max-width: 640px) 100vw, (max-width: 1024px) 33vw, 20vw"
+                  : "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+              }
               src={item.image}
             />
             <div
