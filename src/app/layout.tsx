@@ -56,7 +56,7 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [{ url: "/brand/rubani-icon.svg", type: "image/svg+xml" }],
-    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+    apple: [{ url: "/brand/rubani-icon.svg", type: "image/svg+xml" }],
   },
   openGraph: {
     type: "website",

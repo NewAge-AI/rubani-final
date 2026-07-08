@@ -43,7 +43,7 @@ export const InviteUserEmail = ({
           <Container className="mx-auto my-[40px] max-w-[465px] rounded p-[20px]">
             <Section className="mt-[32px]">
               <Img
-                alt="Notra Logo"
+                alt="Rubani Logo"
                 className="mx-auto"
                 height="40"
                 src={logoUrl}

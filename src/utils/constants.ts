@@ -8,7 +8,7 @@ import {
 } from "@/components/institution-logos";
 import type { ComponentType, SVGProps } from "react";
 
-export const NOTRA_LOGO_PATH = "/brand/rubani-logo.png";
+export const NOTRA_LOGO_PATH = "/brand/rubani-icon.svg";
 
 export const RSS_FEED_PATH = "/rss.xml";
 export const RSS_FEED_TITLE = "Rubani Blog RSS Feed";

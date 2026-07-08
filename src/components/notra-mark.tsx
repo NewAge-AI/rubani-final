@@ -15,10 +15,10 @@ export function RubaniMark({
     <Image
       alt="Rubani Logo"
       className={`${className} dark:grayscale dark:invert`}
-      height={400}
+      height={512}
       unoptimized
-      src="/brand/rubani-logo.png"
-      width={1024}
+      src="/brand/rubani-icon.svg"
+      width={512}
     />
   );
 }

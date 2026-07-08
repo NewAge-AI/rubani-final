@@ -18,7 +18,6 @@ const dualmarkProxy = createDualmarkMiddleware({
     skipPaths: [
       "/.well-known",
       "/api",
-      "/apple-icon.png",
       "/brand/rubani-icon.svg",
       "/landing",
       "/demo-dark.webp",
@@ -30,15 +29,12 @@ const dualmarkProxy = createDualmarkMiddleware({
       "/llms.txt",
       "/manifest.json",
       "/marketing",
-      "/notra-mark.svg",
       "/og-image.png",
       "/robots.txt",
       "/rss.xml",
       "/sitemap.xml",
       "/subprocessors",
       "/testimonials",
-      "/web-app-manifest-192x192.png",
-      "/web-app-manifest-512x512.png",
     ],
   },
 });

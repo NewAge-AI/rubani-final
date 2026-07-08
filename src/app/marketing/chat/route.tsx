@@ -137,7 +137,7 @@ export async function GET(request: NextRequest) {
     " "
   )} Send a message... (type @ to add context) Add context Medium Auto Send N ↵ …`;
 
-  const [interRegular, interMedium, interSemibold, bgJpg, notraSvg] =
+  const [interRegular, interMedium, interSemibold, bgJpg, rubaniSvg] =
     await Promise.all([
       loadGoogleFont("Outfit", fontText),
       loadGoogleFont("Outfit:wght@500", fontText),
@@ -146,12 +146,12 @@ export async function GET(request: NextRequest) {
         readFileSync(join(process.cwd(), "public/marketing/chat-bg.jpg"))
       ),
       Promise.resolve(
-        readFileSync(join(process.cwd(), "public/notra-mark.svg"), "utf-8")
+        readFileSync(join(process.cwd(), "public/brand/rubani-icon.svg"), "utf-8")
       ),
     ]);
 
   const bgDataUrl = `data:image/jpeg;base64,${bgJpg.toString("base64")}`;
-  const notraDataUrl = `data:image/svg+xml;base64,${Buffer.from(notraSvg).toString("base64")}`;
+  const rubaniDataUrl = `data:image/svg+xml;base64,${Buffer.from(rubaniSvg).toString("base64")}`;
 
   return new ImageResponse(
     <div
@@ -295,7 +295,7 @@ export async function GET(request: NextRequest) {
                   }}
                 >
                   {/* biome-ignore lint/performance/noImgElement: next/og JSX requires native img */}
-                  <img alt="" height={14} src={notraDataUrl} width={14} />
+                  <img alt="" height={14} src={rubaniDataUrl} width={14} />
                   <span>Auto</span>
                 </div>
 

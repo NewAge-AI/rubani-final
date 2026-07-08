@@ -2,18 +2,18 @@ import type { BrandAssetPaths, BrandColor, BrandFont } from "~types/brand";
 
 export const BRAND_ASSETS: BrandAssetPaths = {
   mark: {
-    svg: "/brand/rubani-logo.png",
-    png: "/brand/rubani-logo.png",
+    svg: "/brand/rubani-icon.svg",
+    png: "/brand/rubani-icon.svg",
   },
   wordmark: {
-    svg: "/brand/rubani-logo.png",
-    png: "/brand/rubani-logo.png",
+    svg: "/brand/rubani-icon.svg",
+    png: "/brand/rubani-icon.svg",
   },
   wordmarkDark: {
-    svg: "/brand/rubani-logo.png",
-    png: "/brand/rubani-logo.png",
+    svg: "/brand/rubani-icon.svg",
+    png: "/brand/rubani-icon.svg",
   },
-  zip: "/brand/rubani-logo.png",
+  zip: "/brand/rubani-icon.svg",
 };
 
 export const BRAND_COLORS: BrandColor[] = [
