@@ -99,7 +99,7 @@ export function buildAgentJson() {
     title: "Rubani Agent Discovery",
     description: SITE_DESCRIPTION,
     url: SITE_URL,
-    icon: siteUrl("/brand/rubani-icon.svg"),
+    icon: siteUrl("/brand/rubani-logo.png"),
     category: "Institutional intelligence",
     docs: DOCS_URL,
     api: {

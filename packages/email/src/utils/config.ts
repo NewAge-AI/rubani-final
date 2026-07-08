@@ -30,7 +30,7 @@ export const EMAIL_CONFIG = {
    */
   getLogoUrl(): string {
     const siteUrl = this.getSiteUrl();
-    return `${siteUrl}/brand/rubani-icon.svg`;
+    return `${siteUrl}/brand/rubani-logo.png`;
   },
 
   /**

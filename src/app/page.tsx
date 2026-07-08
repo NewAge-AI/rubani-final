@@ -46,7 +46,7 @@ const organizationJsonLd = {
   "@type": "Organization",
   name: "Rubani",
   url: SITE_URL,
-  logo: siteUrl("/brand/rubani-icon.svg"),
+  logo: siteUrl("/brand/rubani-logo.png"),
   description: SITE_DESCRIPTION,
   sameAs: NOTRA_SAME_AS,
   contactPoint: [
