@@ -1,6 +1,7 @@
 import type { IconSvgElement } from "@hugeicons/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { cn } from "@notra/ui/lib/utils";
+import Image from "next/image";
 import type { ReactNode } from "react";
 
 type TitleLine = {
@@ -34,6 +35,7 @@ export function LandingSectionFrame({
   tone = "light",
   noBorderTop = false,
   padding = "default",
+  backgroundImage,
 }: {
   children: ReactNode;
   className?: string;
@@ -41,18 +43,40 @@ export function LandingSectionFrame({
   tone?: SectionTone;
   noBorderTop?: boolean;
   padding?: "default" | "compact";
+  backgroundImage?: string;
 }) {
   return (
     <section
       className={cn(
-        "w-full",
+        "relative w-full overflow-hidden",
         !noBorderTop && "border-t",
-        FRAME_BG[tone],
+        backgroundImage ? "bg-black" : FRAME_BG[tone],
         FRAME_BORDER[tone],
         className
       )}
       id={id}
     >
+      {backgroundImage ? (
+        <>
+          <Image
+            alt=""
+            aria-hidden="true"
+            className="object-cover brightness-[0.35]"
+            fill
+            sizes="100vw"
+            src={backgroundImage}
+            unoptimized
+          />
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-linear-to-b from-black/80 via-black/70 to-black/90"
+          />
+          <div
+            aria-hidden="true"
+            className="landing-abacus-dots absolute inset-0 opacity-20"
+          />
+        </>
+      ) : null}
       <div
         className={cn(
           "relative mx-auto xl:max-w-[75rem] xl:border-x",
@@ -197,9 +221,19 @@ export function LandingRowNumber({ index }: { index: number }) {
 
 type IconRowVariant = "solid" | "soft";
 
-const ICON_ROW_CIRCLE: Record<IconRowVariant, string> = {
-  solid: "bg-[#1b3a6b] text-white",
-  soft: "bg-[#1b3a6b]/10 text-[#1b3a6b]",
+const ICON_ROW_CIRCLE: Record<SectionTone, Record<IconRowVariant, string>> = {
+  light: {
+    solid: "bg-[#1b3a6b] text-white",
+    soft: "bg-[#1b3a6b]/10 text-[#1b3a6b]",
+  },
+  muted: {
+    solid: "bg-[#1b3a6b] text-white",
+    soft: "bg-[#1b3a6b]/10 text-[#1b3a6b]",
+  },
+  dark: {
+    solid: "bg-[#8eb4ff] text-black",
+    soft: "bg-white/10 text-[#8eb4ff]",
+  },
 };
 
 export function LandingIconRow({
@@ -230,7 +264,7 @@ export function LandingIconRow({
       <div
         className={cn(
           "flex size-10 shrink-0 items-center justify-center rounded-full",
-          ICON_ROW_CIRCLE[variant]
+          ICON_ROW_CIRCLE[tone][variant]
         )}
       >
         <HugeiconsIcon className="size-5" icon={Icon} />

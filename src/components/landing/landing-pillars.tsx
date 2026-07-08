@@ -3,11 +3,8 @@ import {
   Globe02Icon,
   Shield01Icon,
 } from "@hugeicons/core-free-icons";
-import {
-  LandingIconRow,
-  LandingSectionFrame,
-  LandingSectionHeader,
-} from "./landing-section";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { LandingSectionFrame, LandingSectionHeader } from "./landing-section";
 
 const PRINCIPLES = [
   {
@@ -32,7 +29,10 @@ const PRINCIPLES = [
 
 export function LandingPillars() {
   return (
-    <LandingSectionFrame id="features">
+    <LandingSectionFrame
+      backgroundImage="/landing/solutions/government.png"
+      id="features"
+    >
       <LandingSectionHeader
         description="Three beliefs that shape how Rubani is built: sovereignty over data, orchestration over lock-in, and the edge over the data centre."
         eyebrow="Core Founding Principles"
@@ -40,17 +40,35 @@ export function LandingPillars() {
           { text: "Engineered for sovereignty," },
           { muted: true, text: "not experimentation." },
         ]}
+        tone="dark"
       />
 
-      <div className="landing-reveal-stagger mt-12 flex flex-col overflow-hidden border border-neutral-200/80 bg-white">
-        {PRINCIPLES.map((principle) => (
-          <LandingIconRow
-            description={principle.description}
-            icon={principle.icon}
+      <div className="landing-reveal-stagger mt-12 grid grid-cols-1 gap-px overflow-hidden border border-white/15 bg-white/10 sm:grid-cols-3">
+        {PRINCIPLES.map((principle, index) => (
+          <div
+            className="group relative flex flex-col gap-6 bg-[#05070c]/70 p-6 backdrop-blur-md transition-colors duration-300 hover:bg-[#05070c]/50 md:p-8"
             key={principle.title}
-            title={principle.title}
-            variant="solid"
-          />
+          >
+ 
+
+            <div className="relative flex size-12 items-center justify-center rounded-full bg-[#8eb4ff] text-black ring-4 ring-[#8eb4ff]/15 transition-transform duration-300 group-hover:scale-105">
+              <HugeiconsIcon className="size-6" icon={principle.icon} />
+            </div>
+
+            <div className="relative flex flex-col gap-3">
+              <p className="font-medium text-[1.25rem] text-white tracking-[-0.02em]">
+                {principle.title}
+              </p>
+              <p className="text-[0.9375rem] text-white/60 leading-relaxed">
+                {principle.description}
+              </p>
+            </div>
+
+            <span
+              aria-hidden="true"
+              className="absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 bg-[#8eb4ff] transition-transform duration-300 group-hover:scale-x-100"
+            />
+          </div>
         ))}
       </div>
     </LandingSectionFrame>

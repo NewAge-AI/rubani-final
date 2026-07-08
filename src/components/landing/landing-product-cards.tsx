@@ -7,27 +7,34 @@ const PRODUCTS = [
     title: "Agents & Copilots",
     description:
       "Credit, savings, customer, and SME agents, plus developer APIs, deployed as copilots across the business.",
-    image: "/landing/industry-building.png",
+    image: "/landing/solutions/agents.png",
   },
   {
     tag: "Orchestration",
     title: "Smart Model Orchestration",
     description:
       "The right-sized model for every task, balancing accuracy, cost, privacy, and latency.",
-    image: "/landing/product-bg-2.svg",
+    image: "/landing/solutions/orchestration.png",
   },
   {
     tag: "Data",
     title: "360° Data Fabric",
     description:
-      "Transaction, telecom, device, customer, market, and compliance data, unified into one sovereign data fabric.",
-    image: "/landing/product-bg-3.svg",
+      "Integrates, aligns, and contextualizes your data, from transactions and devices to customers, markets, and compliance, into one fabric that turns it into actionable insight.",
+    image: "/landing/solutions/360-fabric.png",
   },
 ] as const;
 
 export function LandingProductCards() {
   return (
     <LandingSectionFrame id="how-it-works" tone="muted">
+      <img
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-32 -left-24 hidden w-[34rem] max-w-none rotate-180 opacity-50 mix-blend-multiply select-none lg:block"
+        src="/landing/product-bg-4.svg"
+      />
+
       <LandingSectionHeader
         description="How the three founding principles become a full stack, from customer-facing agents down to the sovereign data fabric underneath them."
         eyebrow="Rubani Platform Architecture"
@@ -37,7 +44,7 @@ export function LandingProductCards() {
         ]}
       />
 
-      <div className="landing-reveal-stagger mt-12 flex flex-col overflow-hidden border border-neutral-200/80 bg-white">
+      <div className="landing-reveal-stagger relative mt-12 flex flex-col overflow-hidden border border-neutral-200/80 bg-white/95 backdrop-blur-sm">
         {PRODUCTS.map((product) => (
           <article
             className="landing-product-row grid grid-cols-1 items-center gap-8 border-neutral-200/80 border-b px-4 py-10 last:border-b-0 md:grid-cols-[3fr_2fr] md:px-8 md:py-12"
@@ -54,7 +61,7 @@ export function LandingProductCards() {
                 {product.description}
               </p>
             </div>
-            <div className="relative h-44 overflow-hidden rounded-2xl bg-neutral-100 md:h-56">
+            <div className="relative h-44 overflow-hidden rounded-none bg-neutral-100 md:h-56">
               <Image
                 alt=""
                 className="object-cover opacity-90"
