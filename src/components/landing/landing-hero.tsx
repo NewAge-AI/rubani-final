@@ -69,7 +69,7 @@ export function LandingHero() {
     <section className="landing-abacus-hero relative w-full overflow-hidden border-white/12 border-b">
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-[url('/landing/hero-field.png')] bg-center bg-cover"
+        className="absolute inset-0 bg-[url('/landing/hero-field.webp')] bg-center bg-cover"
       />
       <div
         aria-hidden="true"

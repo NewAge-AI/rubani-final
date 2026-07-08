@@ -49,9 +49,15 @@ export function LandingFAQ() {
 
   return (
     <section
-      className="w-full bg-[#fafafa] px-6 py-16 md:px-10 md:py-20 lg:px-12"
+      className="w-full relative bg-[#fafafa] px-6 py-16 md:px-10 md:py-20 lg:px-12"
       id="faq"
     >
+            <img
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-32 -right-24 hidden w-[34rem] max-w-none opacity-80 mix-blend-multiply select-none lg:block"
+        src="/landing/product-bg-3.svg"
+      />
       <div className="mx-auto max-w-3xl">
         <div className="flex flex-col items-center text-center">
           <LandingEyebrow>FAQ</LandingEyebrow>

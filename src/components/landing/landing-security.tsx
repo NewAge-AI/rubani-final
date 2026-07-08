@@ -20,7 +20,7 @@ const BLOCKS = [
       "Zero data egress",
       "No shared training data",
     ],
-    image: "/landing/solutions/data.png",
+    image: "/landing/solutions/data.webp",
   },
   {
     icon: LockIcon,
@@ -33,7 +33,7 @@ const BLOCKS = [
       "Change control",
       "Model-level permissions",
     ],
-    image: "/landing/solutions/model.png",
+    image: "/landing/solutions/model.webp",
   },
   {
     icon: AiBrain01Icon,
@@ -46,7 +46,7 @@ const BLOCKS = [
       "Immutable audit trails",
       "Evidence packs",
     ],
-    image: "/landing/solutions/audit.png",
+    image: "/landing/solutions/audit.webp",
   },
   {
     icon: Tick02Icon,
@@ -59,7 +59,7 @@ const BLOCKS = [
       "Lineage tracking",
       "Institution-wide controls",
     ],
-    image: "/landing/solutions/compliance.png",
+    image: "/landing/solutions/compliance.webp",
   },
 ] as const;
 
@@ -72,6 +72,12 @@ const CERTIFICATIONS = [
 export function LandingSecurity() {
   return (
     <LandingSectionFrame tone="muted">
+      <img
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-32 -left-24 hidden w-[34rem] max-w-none rotate-180 opacity-50 mix-blend-multiply select-none lg:block"
+        src="/landing/product-bg-1.svg"
+      />
       <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
         <LandingSectionHeader
           description="Rubani is built for regulated environments where sovereignty, oversight, and auditability are non-negotiable."
@@ -81,21 +87,6 @@ export function LandingSecurity() {
             { muted: true, text: "can defend." },
           ]}
         />
-
-        <div className="landing-reveal flex flex-wrap gap-2 lg:justify-end lg:pb-1">
-          {CERTIFICATIONS.map((cert) => (
-            <span
-              className="inline-flex items-center gap-1.5 rounded-full border border-neutral-950/12 px-3 py-1.5 font-mono text-[0.6875rem] text-neutral-600 uppercase tracking-[0.1em]"
-              key={cert}
-            >
-              <HugeiconsIcon
-                className="size-3 text-[#1b3a6b]"
-                icon={Tick02Icon}
-              />
-              {cert}
-            </span>
-          ))}
-        </div>
       </div>
 
       <div className="landing-reveal-stagger mt-12 grid grid-cols-1 gap-px overflow-hidden border border-neutral-950/10 bg-neutral-950/10 md:grid-cols-2">
@@ -111,7 +102,6 @@ export function LandingSecurity() {
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
                 src={block.image}
-                unoptimized
               />
               <div
                 aria-hidden="true"

@@ -5,27 +5,27 @@ const APPROACH = [
   {
     label: "Data",
     text: "Stays in-country, inside your infrastructure",
-    image: "/landing/solutions/data.png",
+    image: "/landing/solutions/data.webp",
   },
   {
     label: "Model strategy",
     text: "Right-sized model, orchestrated per task",
-    image: "/landing/solutions/model.png",
+    image: "/landing/solutions/model.webp",
   },
   {
     label: "Cost",
     text: "Small models first, significantly cheaper",
-    image: "/landing/solutions/llm.png",
+    image: "/landing/solutions/llm.webp",
   },
   {
     label: "Vendor risk",
     text: "No single point of vendor lock-in",
-    image: "/landing/solutions/risk.png",
+    image: "/landing/solutions/risk.webp",
   },
   {
     label: "Reach",
     text: "Edge inference, on-device, low-bandwidth",
-    image: "/landing/solutions/reach.png",
+    image: "/landing/solutions/reach.webp",
   },
 ] as const;
 
@@ -53,7 +53,6 @@ export function LandingComparison() {
               fill
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
               src={item.image}
-              unoptimized
             />
             <div
               aria-hidden="true"

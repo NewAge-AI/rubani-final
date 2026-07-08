@@ -7,21 +7,21 @@ const PRODUCTS = [
     title: "Agents & Copilots",
     description:
       "Credit, savings, customer, and SME agents, plus developer APIs, deployed as copilots across the business.",
-    image: "/landing/solutions/agents.png",
+    image: "/landing/solutions/agents.webp",
   },
   {
     tag: "Orchestration",
     title: "Smart Model Orchestration",
     description:
       "The right-sized model for every task, balancing accuracy, cost, privacy, and latency.",
-    image: "/landing/solutions/orchestration.png",
+    image: "/landing/solutions/orchestration.webp",
   },
   {
     tag: "Data",
     title: "360° Data Fabric",
     description:
       "Integrates, aligns, and contextualizes your data, from transactions and devices to customers, markets, and compliance, into one fabric that turns it into actionable insight.",
-    image: "/landing/solutions/360-fabric.png",
+    image: "/landing/solutions/360-fabric.webp",
   },
 ] as const;
 
@@ -68,7 +68,6 @@ export function LandingProductCards() {
                 fill
                 sizes="(max-width: 768px) 100vw, 460px"
                 src={product.image}
-                unoptimized
               />
             </div>
           </article>

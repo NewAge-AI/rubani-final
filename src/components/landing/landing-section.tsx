@@ -65,7 +65,6 @@ export function LandingSectionFrame({
             fill
             sizes="100vw"
             src={backgroundImage}
-            unoptimized
           />
           <div
             aria-hidden="true"

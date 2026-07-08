@@ -30,7 +30,7 @@ const PRINCIPLES = [
 export function LandingPillars() {
   return (
     <LandingSectionFrame
-      backgroundImage="/landing/solutions/government.png"
+      backgroundImage="/landing/solutions/government.webp"
       id="features"
     >
       <LandingSectionHeader
@@ -44,13 +44,11 @@ export function LandingPillars() {
       />
 
       <div className="landing-reveal-stagger mt-12 grid grid-cols-1 gap-px overflow-hidden border border-white/15 bg-white/10 sm:grid-cols-3">
-        {PRINCIPLES.map((principle, index) => (
+        {PRINCIPLES.map((principle) => (
           <div
             className="group relative flex flex-col gap-6 bg-[#05070c]/70 p-6 backdrop-blur-md transition-colors duration-300 hover:bg-[#05070c]/50 md:p-8"
             key={principle.title}
           >
- 
-
             <div className="relative flex size-12 items-center justify-center rounded-full bg-[#8eb4ff] text-black ring-4 ring-[#8eb4ff]/15 transition-transform duration-300 group-hover:scale-105">
               <HugeiconsIcon className="size-6" icon={principle.icon} />
             </div>

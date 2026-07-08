@@ -17,7 +17,7 @@ const SOLUTIONS = [
       "Banks, SACCOs, insurers, and digital lenders run credit, KYC, and fraud agents inside their own infrastructure, cutting review time without sending customer data to a foreign cloud.",
     href: "/contact",
     cta: "See how banks use Rubani",
-    image: "/landing/solutions/financial-services.png",
+    image: "/landing/solutions/financial-services.webp",
   },
   {
     id: "healthcare",
@@ -26,7 +26,7 @@ const SOLUTIONS = [
       "Hospitals, clinics, and health networks deploy clinical copilots and records intelligence on-premise, keeping patient data sovereign while still reaching frontline staff at the edge.",
     href: "/contact",
     cta: "See how healthcare uses Rubani",
-    image: "/landing/solutions/healthcare.png",
+    image: "/landing/solutions/healthcare.webp",
   },
   {
     id: "government",
@@ -35,7 +35,7 @@ const SOLUTIONS = [
       "Ministries, agencies, and parastatals modernise citizen services with orchestrated, auditable AI that stays in-country and satisfies public-sector governance requirements.",
     href: "/contact",
     cta: "See how government uses Rubani",
-    image: "/landing/solutions/government.png",
+    image: "/landing/solutions/government.webp",
   },
   {
     id: "telecom-utilities",
@@ -44,7 +44,7 @@ const SOLUTIONS = [
       "Networks, billing, and utility operators orchestrate OSS/BSS and customer-care agents at the edge, reaching low-bandwidth regions without routing traffic through distant data centres.",
     href: "/contact",
     cta: "See how operators use Rubani",
-    image: "/landing/solutions/telecom-utilities.png",
+    image: "/landing/solutions/telecom-utilities.webp",
   },
 ] as const;
 
@@ -73,7 +73,6 @@ export function LandingSolutions() {
             priority={solution.id === SOLUTIONS[0].id}
             sizes="100vw"
             src={solution.image}
-            unoptimized
           />
         </div>
       ))}
