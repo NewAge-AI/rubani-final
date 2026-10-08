@@ -150,15 +150,15 @@ function LandingPageJsonLd() {
 
 export default function LandingPage() {
   return (
-    <div className="landing-abacus w-full overflow-hidden bg-black">
+    <div className="w-full overflow-hidden bg-paper">
       <LandingPageJsonLd />
       <main className="flex w-full flex-col">
         <LandingHero />
         <LandingStats />
         <LandingProductCards />
         <LandingPillars />
-        <LandingComparison />
         <LandingSolutions />
+        <LandingComparison />
         <LandingSecurity />
         <LandingFAQ />
         <LandingCTA />

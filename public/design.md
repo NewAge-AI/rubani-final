@@ -1,23 +1,31 @@
 ---
 version: alpha
 name: Rubani
-description: Rubani's public design system. Light-first, institutional, and built from navy action color, neutral surfaces, precise borders, structural hatch texture, Outfit UI typography, and JetBrains Mono metadata type.
+description: Rubani's public design system. Editorial enterprise style on warm paper surfaces, near-black ink actions, navy brand accents, rounded media cards, a single midnight feature band, Switzer (a Swiss neo-grotesk) for display and UI type, and JetBrains Mono metadata.
 colors:
-  primary: "#1B3A6B"
-  primary-hover: "#13294D"
-  primary-foreground: "oklch(0.997 0 0)"
+  paper: "#FAFAF7"
+  stone: "#F1F0EB"
+  ink: "#17171C"
+  midnight: "#0C1720"
+  brand: "#1B3A6B"
+  brand-soft: "#DFE7F5"
+  coral: "#E5683F"
+  lilac: "#D9CFF5"
+  primary: "#17171C"
+  primary-hover: "#000000"
+  primary-foreground: "#FFFFFF"
   primary-border: "color-mix(in oklab, var(--primary) 12%, transparent)"
-  background: "hsl(0 0% 100%)"
-  foreground: "hsl(0 0% 9%)"
-  card: "hsl(0 0% 100%)"
-  card-foreground: "hsl(0 0% 9%)"
+  background: "#FAFAF7"
+  foreground: "#17171C"
+  card: "#FFFFFF"
+  card-foreground: "#17171C"
   popover: "hsl(0 0% 100%)"
   popover-foreground: "hsl(0 0% 9%)"
-  secondary: "hsl(0 0% 96.1%)"
+  secondary: "#F1F0EB"
   secondary-foreground: "hsl(0 0% 9%)"
-  muted: "hsl(0 0% 96.1%)"
+  muted: "#F1F0EB"
   muted-foreground: "hsl(0 0% 45.1%)"
-  accent: "hsl(0 0% 96.1%)"
+  accent: "#F1F0EB"
   accent-foreground: "hsl(0 0% 9%)"
   border: "hsl(0 0% 89.8%)"
   input: "hsl(0 0% 89.8%)"
@@ -51,95 +59,95 @@ colors:
   chart-5: "oklch(0.769 0.188 70.08)"
 typography:
   display-serif-80:
-    fontFamily: Outfit
+    fontFamily: Switzer
     fontSize: 80px
     fontWeight: 400
     lineHeight: 96px
     letterSpacing: 0
   display-serif-52:
-    fontFamily: Outfit
+    fontFamily: Switzer
     fontSize: 52px
     fontWeight: 400
     lineHeight: 62px
     letterSpacing: 0
   heading-56:
-    fontFamily: Outfit
+    fontFamily: Switzer
     fontSize: 56px
     fontWeight: 600
     lineHeight: 64px
     letterSpacing: -1.4px
   heading-48:
-    fontFamily: Outfit
+    fontFamily: Switzer
     fontSize: 48px
     fontWeight: 600
     lineHeight: 60px
     letterSpacing: -1.2px
   heading-36:
-    fontFamily: Outfit
+    fontFamily: Switzer
     fontSize: 36px
     fontWeight: 600
     lineHeight: 44px
     letterSpacing: -0.9px
   heading-30:
-    fontFamily: Outfit
+    fontFamily: Switzer
     fontSize: 30px
     fontWeight: 600
     lineHeight: 38px
     letterSpacing: -0.75px
   heading-24:
-    fontFamily: Outfit
+    fontFamily: Switzer
     fontSize: 24px
     fontWeight: 600
     lineHeight: 32px
     letterSpacing: -0.6px
   heading-20:
-    fontFamily: Outfit
+    fontFamily: Switzer
     fontSize: 20px
     fontWeight: 600
     lineHeight: 28px
     letterSpacing: -0.4px
   heading-18:
-    fontFamily: Outfit
+    fontFamily: Switzer
     fontSize: 18px
     fontWeight: 500
     lineHeight: 28px
   copy-20:
-    fontFamily: Outfit
+    fontFamily: Switzer
     fontSize: 20px
     fontWeight: 500
     lineHeight: 32px
   copy-18:
-    fontFamily: Outfit
+    fontFamily: Switzer
     fontSize: 18px
     fontWeight: 400
     lineHeight: 28px
   copy-16:
-    fontFamily: Outfit
+    fontFamily: Switzer
     fontSize: 16px
     fontWeight: 400
     lineHeight: 28px
   copy-14:
-    fontFamily: Outfit
+    fontFamily: Switzer
     fontSize: 14px
     fontWeight: 400
     lineHeight: 24px
   copy-13:
-    fontFamily: Outfit
+    fontFamily: Switzer
     fontSize: 13px
     fontWeight: 400
     lineHeight: 20px
   label-14:
-    fontFamily: Outfit
+    fontFamily: Switzer
     fontSize: 14px
     fontWeight: 500
     lineHeight: 20px
   label-13:
-    fontFamily: Outfit
+    fontFamily: Switzer
     fontSize: 13px
     fontWeight: 500
     lineHeight: 20px
   label-12:
-    fontFamily: Outfit
+    fontFamily: Switzer
     fontSize: 12px
     fontWeight: 500
     lineHeight: 16px
@@ -300,53 +308,55 @@ components:
 
 ## Overview
 
-Rubani is an institutional intelligence platform with a light-first public design language. The system uses neutral surfaces, thin borders, product media, and a single navy action color. Typography is Outfit throughout, with JetBrains Mono reserved for labels, metadata, and technical context.
+Rubani is the sovereign AI platform for African enterprise. The public design language follows the editorial enterprise-AI style of sites like Cohere: warm paper surfaces, generous whitespace, light-weight grotesk display type, near-black ink actions, and large rounded media cards carrying floating product UI. Switzer, a Swiss neo-grotesk in the tradition of Neue Haas Grotesk and Söhne, sets everything from display to UI; JetBrains Mono is reserved for uppercase eyebrows, labels, and technical metadata.
 
 ## Color Use
 
-Use `primary` for actions, selected states, links, and short emphasis. Do not use navy as a general background texture. Use `background`, `card`, and `border` to create most layout hierarchy.
+`paper` is the default page surface and `stone` alternates sections. `ink` is the action color: primary buttons are ink pills, secondary actions are underlined text links. `midnight` is used for exactly one feature band per page (the principles bento) and `ink` for the stats band and footer.
+
+`brand` navy is the Rubani identity accent: eyebrow dots, check marks, icon tiles (on `brand-soft`), and the "Built for Africa" chip. `coral` is a scarce warm highlight for active states and eyebrows on dark surfaces. `lilac`, `brand`, and `coral` together form the glassy gradient shapes used only in the closing CTA.
 
 Logo colors are separate from UI colors. `logo-blue`, `logo-ink`, and `logo-cream` are for the Rubani mark, wordmark, and brand asset presentation.
 
-Dark mode keeps the same roles with darker surfaces. It should feel like the same system in lower light, not a separate neon palette.
-
 ## Typography Use
 
-Outfit is the default typeface for interface, display, prose, navigation, cards, pricing, legal copy, updates, and blog content. JetBrains Mono is reserved for labels, metadata, and technical context.
-
-Use 400 for body, 500 for labels and supportive emphasis, and 600 for headings. Avoid heavier weights. Use negative letter spacing only on sans headings, not on body copy.
+Switzer (Indian Type Foundry, ITF Free Font License, self-hosted from `src/fonts/switzer`) is the single brand typeface. Page heroes use weight 300 at 44-76px with -0.045em tracking; section headings use weight 400 with -0.035em tracking and a muted second line (`ink` at 40% opacity). Body copy uses weight 400 at 15-20px with relaxed leading at 60-65% ink. Eyebrows use JetBrains Mono, 11px, uppercase, 0.14em tracking, preceded by a small dot.
 
 ## Layout
 
-Use a 4px spacing scale. Keep tight groups at 8-16px, card padding at 20-32px, section padding at 48-96px, and large hero rhythm at 96-128px.
+Content sits in an 80rem container with 20px (mobile) / 32px (desktop) gutters. Sections use 80-112px vertical padding and alternate `paper`, `stone`, and one `midnight` band.
 
-Public pages should be product-led. Use screenshots, workflow previews, logo strips, pricing tables, docs, and changelog content as proof. Avoid abstract decoration when real product state can carry the page.
+Page templates:
 
-## Elevation
+- **Home**: centred hero with media cards, stats band, product rows, principles bento, solutions tabs, comparison, security, FAQ, CTA.
+- **Platform overview** (`/platform`): hero with layered architecture diagram, product cards, comparison, integrations, rollout steps, CTA.
+- **Product** (`/platform/[slug]`): split hero (copy + art card with floating product UI), capability grid, dark "how it works" steps, specs table, related industries, other products, CTA.
+- **Industry** (`/solutions/[slug]`): full-bleed photographic hero with audience chips, numbered challenges, use-case grid, dark outcomes, platform components, other industries, CTA.
+- **Trust** (`/security`): photographic hero, commitments, sticky-nav controls catalogue, deployment-model table, regulatory alignment, disclosure cards.
+- **Company, Pricing, Contact, Legal**: text-led hero; pricing tiers with the middle tier inverted; contact as a split layout with next steps and a form card; legal as a sidebar plus prose column.
 
-Depth comes from borders, neutral surfaces, and restrained shadows. Use shadows for floating navigation, menus, dialogs, and active controls. Use borders for cards, pricing, product frames, prose sections, and grids.
+Navigation uses mega menus for Platform and Solutions: overview column, described links, and a featured art card.
 
-The navy `hero-gradient` is the only page-level atmospheric effect. Do not add extra gradient blobs or decorative background orbs.
+## Elevation and Shape
 
-## Shapes
+Media cards and panels use `rounded-2xl` (16px); the CTA panel uses 24px. Buttons, chips, and tags are full pills. Depth comes from photography, hairline borders (ink at 8-10%), and soft long shadows on floating UI overlays. Avoid hard grid borders and hatch textures.
 
-Use tight radii. Default controls use `sm` or `md`. Product frames use `md`. Marketing CTAs use `squircle`. Navigation and brand cards may use `xl`. Pricing grids and table-like layouts use `none`. Pills, avatars, badges, and segmented controls use `full`.
+## Imagery
+
+Brand graphics are rendered 3D scenes in the brand palette: glass and satin forms, soft studio lighting, coral emissive accents, and a midnight or paper background. Heroes use ultra-wide variants (`*-wide.webp`) with the subject in the right third so headlines sit on clear space; cards use 16:9 or 5:4 variants with the subject centred.
 
 ## Voice
 
-Copy should be concrete, short, and product-specific. Prefer direct outcomes such as "Connect institutional systems", "Automate governed reporting", and "Deliver trusted intelligence".
-
-Avoid generic AI marketing language such as "revolutionize", "unlock", "supercharge", "seamless", "effortless", and "transform your workflow".
+Copy should be concrete, short, and product-specific. Avoid generic AI marketing language such as "revolutionize", "unlock", "supercharge", "seamless", and "effortless".
 
 ## Do's and Don'ts
 
 - Use the tokens in this file before inventing new visual values.
-- Keep navy scarce and role-based.
-- Use JetBrains Mono only for metadata and technical context.
-- Use product media as primary visual proof.
-- Keep section structure crisp with borders and hatch texture.
-- Do not use multiple accent colors for marketing emphasis.
-- Do not use decorative gradients beyond `hero-gradient`.
+- Keep primary actions ink, and pair each with one underlined text link at most.
+- Keep navy and coral scarce and role-based.
+- Use JetBrains Mono only for eyebrows, metadata, and technical context.
+- Use content-specific 3D renders from `public/landing/art/` (Africa edge network, labelled orchestration router, data fabric, industry still lifes, security shield) or clean photography as visual proof. Each graphic should depict the subject of its page. Never use watermarked or unlicensed stock imagery.
+- Use gradient shapes for the closing CTA, the 404, and product art panels only.
 - Do not nest cards inside cards.
 - Do not center long-form prose.
 - Do not remove visible focus states.

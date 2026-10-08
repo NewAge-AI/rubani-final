@@ -1,0 +1,565 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<style>@font-face{font-family:Switzer;src:url(./Switzer-Variable.woff2) format("woff2");font-weight:100 900}
+html,body{margin:0;background:#000;overflow:hidden}canvas{display:block}</style>
+<script type="importmap">
+{ "imports": {
+  "three": "./node_modules/three/build/three.module.js",
+  "three/addons/": "./node_modules/three/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<script type="module">
+import * as THREE from "three";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+
+const params = new URLSearchParams(location.search);
+const sceneName = params.get("scene");
+const W = +(params.get("w") || 2000);
+const H = +(params.get("h") || 1250);
+
+// Brand palette
+const C = {
+  ink: 0x17171c, midnight: 0x0c1720, navy: 0x1b3a6b, navyLight: 0x5b7fc4,
+  sky: 0xa9c1ee, coral: 0xe5683f, peach: 0xffc2a3, lilac: 0xd9cff5,
+  lilacDeep: 0x8f7bd1, paper: 0xfafaf7, emerald: 0x34d399,
+};
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1);
+renderer.setSize(W, H);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+const camera = new THREE.PerspectiveCamera(32, W / H, 0.1, 200);
+
+function gradientBackground(stops, { radial = false, cx = 0.7, cy = 0.2 } = {}) {
+  const cv = document.createElement("canvas");
+  cv.width = 1024; cv.height = 640;
+  const g = cv.getContext("2d");
+  const grad = radial
+    ? g.createRadialGradient(cx * 1024, cy * 640, 0, cx * 1024, cy * 640, 1100)
+    : g.createLinearGradient(0, 0, 0, 640);
+  for (const [o, c] of stops) grad.addColorStop(o, c);
+  g.fillStyle = grad; g.fillRect(0, 0, 1024, 640);
+  // fine grain
+  const img = g.getImageData(0, 0, 1024, 640);
+  for (let i = 0; i < img.data.length; i += 4) {
+    const n = (Math.random() - 0.5) * 6;
+    img.data[i] += n; img.data[i + 1] += n; img.data[i + 2] += n;
+  }
+  g.putImageData(img, 0, 0);
+  const tex = new THREE.CanvasTexture(cv);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  scene.background = tex;
+}
+
+function glass(color, opts = {}) {
+  return new THREE.MeshPhysicalMaterial({
+    color, metalness: 0, roughness: opts.roughness ?? 0.12,
+    transmission: opts.transmission ?? 0.92, thickness: opts.thickness ?? 1.2,
+    ior: 1.45, clearcoat: 1, clearcoatRoughness: 0.08,
+    attenuationColor: new THREE.Color(opts.attenuation ?? color),
+    attenuationDistance: opts.attDist ?? 2.5,
+    iridescence: opts.iridescence ?? 0.25, iridescenceIOR: 1.3,
+    envMapIntensity: opts.env ?? 1.2, transparent: false,
+  });
+}
+function satin(color, opts = {}) {
+  return new THREE.MeshPhysicalMaterial({
+    color, metalness: opts.metalness ?? 0.05, roughness: opts.roughness ?? 0.35,
+    clearcoat: opts.clearcoat ?? 0.6, clearcoatRoughness: 0.2,
+    sheen: 0.4, sheenColor: new THREE.Color(0xffffff), envMapIntensity: opts.env ?? 1,
+  });
+}
+function glow(color, intensity = 3) {
+  return new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: intensity });
+}
+function lights({ key = 0xffffff, keyI = 2.2, rim = C.coral, rimI = 1.6, fill = C.sky, fillI = 0.6 } = {}) {
+  const k = new THREE.DirectionalLight(key, keyI); k.position.set(4, 6, 5);
+  k.castShadow = true; k.shadow.mapSize.set(2048, 2048); k.shadow.radius = 8;
+  const s = 8; Object.assign(k.shadow.camera, { left: -s, right: s, top: s, bottom: -s });
+  const r = new THREE.DirectionalLight(rim, rimI); r.position.set(-6, 2, -4);
+  const f = new THREE.DirectionalLight(fill, fillI); f.position.set(-3, -2, 6);
+  scene.add(k, r, f);
+}
+function shadowFloor(y = -1.6, opacity = 0.25) {
+  const m = new THREE.ShadowMaterial({ opacity });
+  const p = new THREE.Mesh(new THREE.PlaneGeometry(60, 60), m);
+  p.rotation.x = -Math.PI / 2; p.position.y = y; p.receiveShadow = true; scene.add(p);
+}
+function add(mesh, { x = 0, y = 0, z = 0, rx = 0, ry = 0, rz = 0, s = 1, shadow = true } = {}) {
+  mesh.position.set(x, y, z); mesh.rotation.set(rx, ry, rz); mesh.scale.setScalar(s);
+  mesh.castShadow = shadow; scene.add(mesh); return mesh;
+}
+function tube(points, radius, material) {
+  const curve = new THREE.CatmullRomCurve3(points.map((p) => new THREE.Vector3(...p)));
+  return new THREE.Mesh(new THREE.TubeGeometry(curve, 120, radius, 16, false), material);
+}
+const rand = (() => { let s = 7; return () => (s = (s * 16807) % 2147483647) / 2147483647; })();
+
+await document.fonts.load('500 64px Switzer');
+const AFRICA_DOTS = await (await fetch("./africa-dots.json")).json();
+
+function label(text, { w = 3, h = 0.7, size = 64, color = "#ffffff", bg = null, weight = 500, align = "center", mono = false } = {}) {
+  const cv = document.createElement("canvas");
+  const scale = 256;
+  cv.width = Math.round(w * scale); cv.height = Math.round(h * scale);
+  const g = cv.getContext("2d");
+  if (bg) {
+    g.fillStyle = bg;
+    const r = cv.height * 0.3;
+    g.beginPath(); g.roundRect(0, 0, cv.width, cv.height, r); g.fill();
+  }
+  g.fillStyle = color;
+  g.font = `${weight} ${size}px ${mono ? "ui-monospace, monospace" : "Switzer"}`;
+  g.textBaseline = "middle";
+  g.textAlign = align;
+  g.fillText(text, align === "center" ? cv.width / 2 : cv.height * 0.35, cv.height / 2 + 2);
+  const tex = new THREE.CanvasTexture(cv);
+  tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
+  const m = new THREE.MeshBasicMaterial({ map: tex, color: 0xe4e8f0, transparent: true, toneMapped: false, depthWrite: false });
+  return new THREE.Mesh(new THREE.PlaneGeometry(w, h), m);
+}
+
+const CITIES = {
+  Nairobi: [36.82, -1.29], Lagos: [3.38, 6.52], Johannesburg: [28.05, -26.2], Cairo: [31.24, 30.04],
+  Kinshasa: [15.27, -4.32], "Addis Ababa": [38.75, 9.03], Accra: [-0.19, 5.6], Dakar: [-17.45, 14.69],
+  Casablanca: [-7.59, 33.57], Kigali: [30.06, -1.94], "Dar es Salaam": [39.28, -6.79], Luanda: [13.23, -8.84],
+  Kampala: [32.58, 0.35], Lusaka: [28.32, -15.39], Abidjan: [-4.0, 5.35],
+};
+
+const SCENES = {
+  // Dot-matrix Africa with sovereign edge nodes and links
+  africa() {
+    const wide = params.get("layout") !== "square";
+    gradientBackground([[0, "#16305c"], [0.5, "#0c1720"], [1, "#070d15"]], { radial: true, cx: wide ? 0.62 : 0.5, cy: 0.35 });
+    lights({ rim: C.coral, rimI: 1.2, keyI: 1.4 });
+    const ox = wide ? 3.6 : 0;
+    if (wide) { camera.position.set(0, 17.5, 14.5); camera.lookAt(0, 0, -0.6); } else { camera.position.set(0, 22, 18.5); camera.lookAt(0, 0, 0.6); }
+    const toXZ = ([lon, lat]) => [(lon - 16) * 0.19 + ox, -(lat - 1) * 0.19];
+    const dotGeo = new THREE.CylinderGeometry(0.062, 0.062, 0.05, 12);
+    const dotMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.4, metalness: 0.1, envMapIntensity: 0.6 });
+    const inst = new THREE.InstancedMesh(dotGeo, dotMat, AFRICA_DOTS.length);
+    const m4 = new THREE.Matrix4(); const col = new THREE.Color();
+    const cityXZ = Object.values(CITIES).map(toXZ);
+    AFRICA_DOTS.forEach((d, i) => {
+      const [x, z] = toXZ(d);
+      const near = Math.min(...cityXZ.map(([cx, cz]) => Math.hypot(cx - x, cz - z)));
+      const lift = Math.max(0, 0.35 - near * 0.18);
+      m4.makeTranslation(x, lift, z); inst.setMatrixAt(i, m4);
+      const t = Math.min(1, near / 2.2);
+      col.set(C.coral).lerp(new THREE.Color(C.navyLight), t).lerp(new THREE.Color(0x2b4677), t * 0.55);
+      inst.setColorAt(i, col);
+    });
+    inst.instanceColor.needsUpdate = true; scene.add(inst);
+    const hub = toXZ(CITIES.Nairobi);
+    for (const [name, ll] of Object.entries(CITIES)) {
+      const [x, z] = toXZ(ll);
+      const isHub = name === "Nairobi";
+      add(new THREE.Mesh(new THREE.SphereGeometry(isHub ? 0.2 : 0.12, 32, 32), glow(isHub ? C.coral : C.peach, isHub ? 5 : 3.5)), { x, y: 0.45, z, shadow: false });
+      add(new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, isHub ? 2.2 : 1.1, 8), glow(C.peach, 2)), { x, y: (isHub ? 2.2 : 1.1) / 2 + 0.45, z, shadow: false });
+      if (!isHub) {
+        const d = Math.hypot(x - hub[0], z - hub[1]);
+        add(tube([[hub[0], 0.45, hub[1]], [(x + hub[0]) / 2, 0.45 + d * 0.32, (z + hub[1]) / 2], [x, 0.45, z]], 0.02, glow(C.coral, 2.2)), { shadow: false });
+      }
+    }
+  },
+
+  // Tasks routed through a policy router to right-sized models
+  orchestrationLabeled() {
+    gradientBackground([[0, "#163364"], [0.5, "#0d1a2c"], [1, "#070d15"]], { radial: true, cx: 0.5, cy: 0.05 });
+    lights({ rim: C.sky, rimI: 2.2, fill: C.lilac });
+    camera.position.set(0, 10.5, 19.5); camera.lookAt(0, 0.6, 0);
+    const tasks = ["KYC check", "Credit memo", "Swahili support"];
+    tasks.forEach((t, i) => {
+      const x = (i - 1) * 3.4;
+      add(new THREE.Mesh(new RoundedBoxGeometry(2.8, 0.18, 1.1, 6, 0.08), glass(C.sky, { attDist: 2, thickness: 0.4 })), { x, y: 2.6, z: -2.6 });
+      const l = label(t, { w: 2.6, h: 0.62, size: 92, bg: "rgba(12,23,32,0.82)" }); l.rotation.x = -0.55; l.position.set(x, 3.25, -2.3); scene.add(l);
+    });
+    add(new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 0.3, 96), glass(C.lilac, { attDist: 1.4, iridescence: 0.6 })), { y: 0.9, z: 0 });
+    add(new THREE.Mesh(new THREE.TorusGeometry(1.55, 0.04, 16, 128), glow(C.coral, 2.5)), { y: 1.06, rx: Math.PI / 2, shadow: false });
+    const rl = label("Policy router", { w: 2.6, h: 0.6, size: 88, bg: "rgba(12,23,32,0.82)" }); rl.rotation.x = -0.55; rl.position.set(0, 1.75, 0.9); scene.add(rl);
+    const models = [["Edge · 1B", 0.7, C.coral], ["Small · 3B", 1.0, C.navyLight], ["Medium · 8B", 1.35, C.navy]];
+    models.forEach(([name, size, c], i) => {
+      const x = (i - 1) * 3.6;
+      add(new THREE.Mesh(new RoundedBoxGeometry(size * 1.6, size, size * 1.6, 6, 0.14), satin(c, { clearcoat: 1, env: 0.45, roughness: 0.3 })), { x, y: -1.4 + size / 2, z: 2.6 });
+      const l = label(name, { w: 2.6, h: 0.6, size: 84, bg: "rgba(12,23,32,0.85)" }); l.position.set(x, -1.4 + size + 0.55, 2.6 + size * 0.8); l.rotation.x = -0.5; scene.add(l);
+    });
+    const route = glow(C.coral, 2.4), faint = glow(0xffffff, 1.0);
+    tasks.forEach((_, i) => add(tube([[(i - 1) * 3.4, 2.5, -2.6], [(i - 1) * 1.6, 1.8, -1.2], [0, 1.1, -0.3]], 0.03, i === 1 ? route : faint), { shadow: false }));
+    models.forEach(([, size], i) => add(tube([[0, 0.8, 0.4], [(i - 1) * 1.8, 0.4, 1.4], [(i - 1) * 3.6, -1.4 + size, 2.6]], 0.03, i === 0 ? route : faint), { shadow: false }));
+    shadowFloor(-1.4, 0.35);
+  },
+
+  // Source systems streaming into one governed fabric
+  fabric() {
+    gradientBackground([[0, "#1d3f78"], [0.55, "#0c1720"], [1, "#060b11"]], { radial: true, cx: 0.5, cy: 0.0 });
+    lights({ rim: C.sky, rimI: 2.2, fill: C.lilac, fillI: 0.8 });
+    camera.position.set(0, 10, 16); camera.lookAt(0, -0.2, 0);
+    const geo = new RoundedBoxGeometry(0.5, 0.18, 0.5, 4, 0.06);
+    const mats = [satin(C.navyLight, { clearcoat: 1, env: 0.5 }), satin(C.navy, { clearcoat: 1, env: 0.45 }), glass(C.sky, { attDist: 0.5, env: 1.3 })];
+    for (let ix = -8; ix <= 8; ix++) for (let iz = -3; iz <= 4; iz++) {
+      const x = ix * 0.56, z = iz * 0.56 + 1.4;
+      const y = -1.2 + Math.sin(ix * 0.5 + iz * 0.3) * 0.12;
+      const hot = (ix * 7 + iz * 13) % 17 === 0;
+      add(new THREE.Mesh(geo, hot ? glow(C.coral, 1.4) : mats[(ix + iz * 2 + 40) % 3]), { x, y, z, shadow: false });
+    }
+    const sources = ["Core banking", "CRM", "OSS/BSS", "EHR"];
+    sources.forEach((name, i) => {
+      const x = (i - 1.5) * 2.6, z = -3.2;
+      add(new THREE.Mesh(new RoundedBoxGeometry(1.1, 2.4, 1.1, 6, 0.14), glass([C.sky, C.lilac, C.sky, C.lilac][i], { attDist: 1.2 })), { x, y: 0.1, z });
+      const l = label(name, { w: 2.2, h: 0.5, size: 84, bg: "rgba(12,23,32,0.7)" }); l.position.set(x, 1.75, z + 0.2); l.rotation.x = -0.45; scene.add(l);
+      add(tube([[x, -0.9, z + 0.55], [x * 0.7, -0.6, -1.0], [x * 0.35, -1.05, 1.0]], 0.035, glow(i % 2 ? C.coral : C.peach, 2.2)), { shadow: false });
+    });
+  },
+
+  // Security: glass shield with a lock, framed by orbit rings
+  security() {
+    gradientBackground([[0, "#1f3f78"], [0.5, "#0f1b2d"], [1, "#081019"]], { radial: true, cx: 0.66, cy: 0.35 });
+    lights({ rim: C.sky, rimI: 2.4 });
+    camera.position.set(-0.6, 0.4, 14.5); camera.lookAt(-0.6, 0, 0);
+    const s = new THREE.Shape();
+    s.moveTo(0, 2.1); s.bezierCurveTo(0.9, 1.7, 1.6, 1.6, 1.8, 1.55);
+    s.bezierCurveTo(1.8, 0.2, 1.4, -1.2, 0, -2.0);
+    s.bezierCurveTo(-1.4, -1.2, -1.8, 0.2, -1.8, 1.55);
+    s.bezierCurveTo(-1.6, 1.6, -0.9, 1.7, 0, 2.1);
+    const geo = new THREE.ExtrudeGeometry(s, { depth: 0.5, bevelEnabled: true, bevelSize: 0.12, bevelThickness: 0.12, bevelSegments: 12, curveSegments: 64 });
+    geo.center();
+    const X = 1.2;
+    add(new THREE.Mesh(geo, glass(C.sky, { attDist: 2.2, iridescence: 0.5 })), { x: X, ry: -0.3, s: 1.15 });
+    add(new THREE.Mesh(new RoundedBoxGeometry(1.2, 0.95, 0.5, 6, 0.14), satin(C.coral, { clearcoat: 1 })), { x: X, y: -0.35, z: 0.55, ry: -0.3 });
+    add(new THREE.Mesh(new THREE.TorusGeometry(0.4, 0.11, 24, 64, Math.PI), satin(0xf1f0eb, { metalness: 0.6, roughness: 0.25 })), { x: X, y: 0.1, z: 0.55, ry: -0.3 });
+    add(new THREE.Mesh(new THREE.TorusGeometry(3.2, 0.015, 16, 220), glow(C.sky, 1.4)), { x: X, rx: 1.3, ry: 0.25, shadow: false });
+    add(new THREE.Mesh(new THREE.TorusGeometry(3.9, 0.012, 16, 220), glow(C.coral, 1.6)), { x: X, rx: 1.15, ry: -0.35, shadow: false });
+    [[X - 3.4, 1.6, -1.5, 0.35, C.lilac], [X + 3.4, -1.3, -1, 0.5, C.navyLight], [X + 2.9, 1.9, -2, 0.22, C.coral]].forEach(([x, y, z, r, c]) =>
+      add(new THREE.Mesh(new THREE.SphereGeometry(r, 64, 64), satin(c, { clearcoat: 1 })), { x, y, z }));
+  },
+
+  // Financial services: vault door, glass card, and coin stack
+  finance() {
+    gradientBackground([[0, "#24345c"], [0.55, "#111a2a"], [1, "#0a0f17"]], { radial: true, cx: 0.66, cy: 0.3 });
+    lights({ rim: C.coral, rimI: 2 });
+    camera.position.set(-0.6, 1.6, 14); camera.lookAt(-0.6, -0.1, 0);
+    const X = 1.6;
+    const vault = new THREE.Group();
+    vault.add(new THREE.Mesh(new THREE.CylinderGeometry(2.3, 2.3, 0.6, 128), satin(C.navy, { metalness: 0.7, roughness: 0.3, env: 1 })));
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(2.3, 0.14, 32, 160), satin(0xc9d4ea, { metalness: 0.9, roughness: 0.2 })); ring.rotation.x = Math.PI / 2; ring.position.y = 0.3; vault.add(ring);
+    const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 0.3, 64), satin(0xc9d4ea, { metalness: 0.9, roughness: 0.2 })); hub.position.y = 0.42; vault.add(hub);
+    for (let i = 0; i < 3; i++) { const spoke = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 2.4, 16), satin(0xc9d4ea, { metalness: 0.9, roughness: 0.2 })); spoke.rotation.z = Math.PI / 2; spoke.rotation.y = (i * Math.PI) / 3; spoke.position.y = 0.55; vault.add(spoke); }
+    for (let i = 0; i < 12; i++) { const a = (i / 12) * Math.PI * 2; const b = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.2, 24), glow(C.peach, 0.6)); b.position.set(Math.cos(a) * 1.85, 0.36, Math.sin(a) * 1.85); vault.add(b); }
+    vault.traverse((o) => { o.castShadow = true; });
+    vault.rotation.set(Math.PI / 2 - 0.25, 0, -0.35); vault.position.set(X + 0.9, 0.3, -1.2); scene.add(vault);
+    const card = add(new THREE.Mesh(new RoundedBoxGeometry(3.2, 2.0, 0.08, 6, 0.04), glass(C.lilac, { attDist: 1.4, iridescence: 0.8 })), { x: X - 1.0, y: -0.4, z: 1.2, rx: -0.15, ry: 0.45, rz: 0.12 });
+    const chip = new THREE.Mesh(new RoundedBoxGeometry(0.45, 0.35, 0.05, 4, 0.04), satin(0xe8c88a, { metalness: 0.9, roughness: 0.25 })); chip.position.set(-0.9, 0.25, 0.05); card.add(chip);
+    for (let i = 0; i < 7; i++) add(new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.55, 0.14, 64), satin(C.coral, { metalness: 0.5, roughness: 0.25, clearcoat: 1 })), { x: X + 2.4 + (i % 2) * 0.03, y: -1.9 + i * 0.16, z: 1.5 });
+    shadowFloor(-2.0, 0.35);
+  },
+
+  // Healthcare: glass medical cross, heartbeat trace, and capsule
+  healthcare() {
+    gradientBackground([[0, "#1f3d4f"], [0.55, "#0e1a24"], [1, "#081017"]], { radial: true, cx: 0.66, cy: 0.3 });
+    lights({ rim: C.coral, rimI: 1.8, fill: C.sky });
+    camera.position.set(-0.4, 0.8, 14); camera.lookAt(-0.4, -0.1, 0);
+    const X = 1.6;
+    const cross = new THREE.Group();
+    cross.add(new THREE.Mesh(new RoundedBoxGeometry(1.2, 3.6, 1.0, 8, 0.3), glass(C.sky, { attDist: 1.6, iridescence: 0.5 })));
+    cross.add(new THREE.Mesh(new RoundedBoxGeometry(3.6, 1.2, 1.0, 8, 0.3), glass(C.sky, { attDist: 1.6, iridescence: 0.5 })));
+    cross.rotation.set(0.15, -0.5, 0.05); cross.position.set(X + 0.6, 0.4, -0.6); cross.traverse((o) => { o.castShadow = true; }); scene.add(cross);
+    const base = -0.2, z = 1.2;
+    const shape = [[-6, 0], [-2.2, 0], [-1.9, 0.18], [-1.6, 0], [-1.2, 0], [-1.05, -0.35], [-0.75, 2.1], [-0.45, -1.1], [-0.2, 0], [0.4, 0], [0.8, 0.45], [1.2, 0], [6, 0]];
+    const linePts = shape.map(([x, y]) => new THREE.Vector3(X - 1.0 + x, base + y, z));
+    const path = new THREE.CurvePath();
+    for (let i = 0; i < linePts.length - 1; i++) path.add(new THREE.LineCurve3(linePts[i], linePts[i + 1]));
+    add(new THREE.Mesh(new THREE.TubeGeometry(path, 400, 0.035, 12, false), glow(C.coral, 2.6)), { shadow: false });
+    const cap = new THREE.Group();
+    const a = new THREE.Mesh(new THREE.CapsuleGeometry(0.42, 0.9, 16, 32), satin(C.peach, { clearcoat: 1 }));
+    cap.add(a); cap.rotation.set(0.6, 0.3, 1.1); cap.position.set(X + 2.5, -1.5, 1.2); cap.traverse((o) => { o.castShadow = true; }); scene.add(cap);
+    add(new THREE.Mesh(new THREE.SphereGeometry(0.3, 48, 48), satin(C.lilac, { clearcoat: 1 })), { x: X - 2.4, y: 1.8, z: -1.2 });
+    shadowFloor(-2.4, 0.3);
+  },
+
+  // Government: civic portico and a digital ID card
+  government() {
+    gradientBackground([[0, "#2a2a48"], [0.55, "#12141f"], [1, "#0a0c14"]], { radial: true, cx: 0.66, cy: 0.25 });
+    lights({ rim: C.lilac, rimI: 2 });
+    camera.position.set(-0.4, 1.8, 15); camera.lookAt(-0.4, 0.1, 0);
+    const X = 1.8;
+    const civic = new THREE.Group();
+    const stone = satin(0xb9b6cc, { roughness: 0.5, env: 0.45 });
+    const base = new THREE.Mesh(new RoundedBoxGeometry(5.2, 0.3, 2.0, 4, 0.06), stone); base.position.y = -1.6; civic.add(base);
+    const base2 = new THREE.Mesh(new RoundedBoxGeometry(5.6, 0.25, 2.3, 4, 0.06), stone); base2.position.y = -1.85; civic.add(base2);
+    for (let i = 0; i < 5; i++) { const c = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.25, 2.7, 32), glass(C.sky, { attDist: 2.5 })); c.position.set(-2 + i, -0.1, 0); civic.add(c); }
+    const ent = new THREE.Mesh(new RoundedBoxGeometry(5.2, 0.3, 2.0, 4, 0.06), stone); ent.position.y = 1.35; civic.add(ent);
+    const tri = new THREE.Shape(); tri.moveTo(-2.75, 0); tri.lineTo(2.75, 0); tri.lineTo(0, 1.05); tri.lineTo(-2.75, 0);
+    const roofGeo = new THREE.ExtrudeGeometry(tri, { depth: 1.9, bevelEnabled: true, bevelSize: 0.05, bevelThickness: 0.05, bevelSegments: 4 });
+    roofGeo.translate(0, 0, -0.95);
+    const roof = new THREE.Mesh(roofGeo, satin(C.navyLight, { clearcoat: 1, env: 0.5 })); roof.position.set(0, 1.5, 0); civic.add(roof);
+    civic.traverse((o) => { o.castShadow = true; });
+    civic.rotation.y = -0.45; civic.position.set(X + 0.6, 0, -1.0); scene.add(civic);
+    const card = add(new THREE.Mesh(new RoundedBoxGeometry(2.8, 1.75, 0.08, 6, 0.06), glass(C.lilac, { attDist: 1.3, iridescence: 0.7 })), { x: X - 1.9, y: -1.0, z: 1.6, rx: -0.25, ry: 0.5, rz: 0.08 });
+    const photo = new THREE.Mesh(new RoundedBoxGeometry(0.6, 0.75, 0.04, 4, 0.08), satin(C.coral, { clearcoat: 1 })); photo.position.set(-0.85, 0.1, 0.06); card.add(photo);
+    for (let i = 0; i < 3; i++) { const line = new THREE.Mesh(new RoundedBoxGeometry(1.2 - i * 0.25, 0.08, 0.02, 2, 0.03), glow(0xffffff, 0.8)); line.position.set(0.35 - i * 0.12, 0.3 - i * 0.25, 0.06); card.add(line); }
+    shadowFloor(-1.98, 0.35);
+  },
+
+  // Telecom and utilities: signal mast with radio rings and a power bolt
+  telecom() {
+    gradientBackground([[0, "#3a2a40"], [0.5, "#16141f"], [1, "#0a0c14"]], { radial: true, cx: 0.66, cy: 0.25 });
+    lights({ rim: C.coral, rimI: 2.2 });
+    camera.position.set(-0.4, 1.4, 16); camera.lookAt(-0.4, 0.5, 0);
+    const X = 1.8;
+    const mast = new THREE.Group();
+    const steel = satin(0xd7dbe8, { metalness: 0.8, roughness: 0.25 });
+    const legs = [[-0.7, -0.7], [0.7, -0.7], [0, 0.7]];
+    legs.forEach(([x, z]) => { const l = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.08, 4.6, 12), steel); l.position.set(x * 0.55, 0, z * 0.55); l.rotation.set(-z * 0.12, 0, x * 0.12); mast.add(l); });
+    for (let i = 0; i < 6; i++) { const r = new THREE.Mesh(new THREE.TorusGeometry(0.62 - i * 0.07, 0.025, 8, 3), steel); r.rotation.x = Math.PI / 2; r.position.y = -2.0 + i * 0.75; mast.add(r); }
+    for (let i = 0; i < 3; i++) { const p = new THREE.Mesh(new RoundedBoxGeometry(0.22, 0.8, 0.12, 4, 0.04), satin(0xffffff, { clearcoat: 1 })); const a = (i / 3) * Math.PI * 2; p.position.set(Math.cos(a) * 0.32, 1.9, Math.sin(a) * 0.32); p.rotation.y = -a; mast.add(p); }
+    const tip = new THREE.Mesh(new THREE.SphereGeometry(0.14, 32, 32), glow(C.coral, 5)); tip.position.y = 2.55; mast.add(tip);
+    mast.traverse((o) => { o.castShadow = true; });
+    mast.position.set(X, 0, -0.5); scene.add(mast);
+    for (let i = 1; i <= 4; i++) add(new THREE.Mesh(new THREE.TorusGeometry(0.55 * i, 0.018, 16, 160, Math.PI * 0.7), glow(i % 2 ? C.coral : C.peach, 2.4 - i * 0.35)), { x: X, y: 2.55, z: -0.5, rz: Math.PI * 0.15 + Math.PI, ry: 0.4, shadow: false });
+    for (let i = 1; i <= 4; i++) add(new THREE.Mesh(new THREE.TorusGeometry(0.55 * i, 0.018, 16, 160, Math.PI * 0.7), glow(i % 2 ? C.coral : C.peach, 2.4 - i * 0.35)), { x: X, y: 2.55, z: -0.5, rz: -Math.PI * 0.15 + Math.PI * 0.3, ry: 0.4, shadow: false });
+    const bolt = new THREE.Shape();
+    bolt.moveTo(0.2, 1.0); bolt.lineTo(-0.45, -0.05); bolt.lineTo(0.0, -0.05); bolt.lineTo(-0.25, -1.0); bolt.lineTo(0.5, 0.15); bolt.lineTo(0.05, 0.15); bolt.lineTo(0.2, 1.0);
+    const bg = new THREE.ExtrudeGeometry(bolt, { depth: 0.25, bevelEnabled: true, bevelSize: 0.05, bevelThickness: 0.05, bevelSegments: 6 }); bg.center();
+    add(new THREE.Mesh(bg, glass(C.peach, { attDist: 0.9, attenuation: C.coral })), { x: X - 2.6, y: -0.9, z: 1.4, ry: 0.4, s: 1.3 });
+    add(new THREE.Mesh(new THREE.SphereGeometry(0.4, 48, 48), satin(C.navyLight, { clearcoat: 1 })), { x: X + 2.6, y: -1.4, z: 0.8 });
+    shadowFloor(-2.3, 0.35);
+  },
+
+  // Conversational agents: glass message bubbles and an avatar orb
+  agents() {
+    gradientBackground([[0, "#3a2f5c"], [0.45, "#1c1a2b"], [1, "#0c1720"]], { radial: true, cx: 0.75, cy: 0.15 });
+    lights({ rim: C.lilac, rimI: 2 });
+    camera.position.set(0, 0.6, 11); camera.lookAt(0, 0, 0);
+    const bubble = (w, h, color, pos, rot) =>
+      add(new THREE.Mesh(new RoundedBoxGeometry(w, h, 0.32, 8, 0.16), glass(color, { attenuation: color, attDist: 1.5 })), { ...pos, ...rot });
+    bubble(4.2, 1.3, C.lilac, { x: -1.4, y: 1.2, z: 0 }, { ry: 0.25, rz: 0.04 });
+    bubble(3.2, 1.1, C.sky, { x: 1.6, y: -0.2, z: 0.8 }, { ry: -0.3, rz: -0.05 });
+    bubble(2.6, 0.9, C.lilac, { x: -0.8, y: -1.5, z: 1.2 }, { ry: 0.2, rz: 0.03 });
+    // typing dots
+    for (let i = 0; i < 3; i++) add(new THREE.Mesh(new THREE.SphereGeometry(0.13, 32, 32), glow(0xffffff, 1.2)), { x: 1.1 + i * 0.42, y: -0.2, z: 1.05 });
+    // lines of "text"
+    for (let i = 0; i < 3; i++) add(new THREE.Mesh(new RoundedBoxGeometry(2.8 - i * 0.7, 0.1, 0.05, 4, 0.04), glow(0xffffff, 0.6)), { x: -1.55 - i * 0.2, y: 1.5 - i * 0.28, z: 0.3, ry: 0.25 });
+    add(new THREE.Mesh(new THREE.SphereGeometry(0.85, 64, 64), satin(C.coral, { clearcoat: 1 })), { x: 3.4, y: 1.7, z: -1.2 });
+    add(new THREE.Mesh(new THREE.SphereGeometry(0.35, 64, 64), satin(C.peach)), { x: -3.9, y: -1.4, z: 0.4 });
+    add(new THREE.Mesh(new THREE.TorusGeometry(1.25, 0.04, 16, 128), glow(C.lilac, 1.2)), { x: 3.4, y: 1.7, z: -1.2, rx: 1.2, ry: 0.3 });
+  },
+
+  // Model orchestration: stacked translucent layers with glowing routes
+  orchestration() {
+    gradientBackground([[0, "#163364"], [0.5, "#0d1a2c"], [1, "#070d15"]], { radial: true, cx: 0.3, cy: 0.1 });
+    lights({ rim: C.sky, rimI: 2.2, fill: C.lilac });
+    camera.position.set(7, 6.5, 9); camera.lookAt(0, -0.2, 0);
+    const colors = [C.sky, C.lilac, C.navyLight];
+    colors.forEach((c, i) => {
+      add(new THREE.Mesh(new RoundedBoxGeometry(5.5, 0.22, 3.6, 6, 0.1), glass(c, { attDist: 3, thickness: 0.6 })), { y: i * 1.25 - 1.2 });
+    });
+    const nodes = [[-1.8, -1.0, -0.9], [0.4, 0.05, 0.6], [1.9, 1.3, -0.7], [-1.4, 1.3, 0.9], [1.6, -1.0, 1.0], [-0.2, 0.05, -1.0]];
+    nodes.forEach(([x, y, z], i) => add(new THREE.Mesh(new THREE.SphereGeometry(0.2, 32, 32), glow(i % 2 ? C.coral : 0xffffff, 2.5)), { x, y: y + 0.2, z }));
+    const route = glow(C.coral, 2.2);
+    add(tube([[-1.8, -0.8, -0.9], [-1.0, -0.2, -0.2], [0.4, 0.25, 0.6]], 0.035, route));
+    add(tube([[0.4, 0.25, 0.6], [1.3, 0.9, 0.0], [1.9, 1.5, -0.7]], 0.035, route));
+    add(tube([[1.6, -0.8, 1.0], [0.9, -0.2, 0.9], [0.4, 0.25, 0.6]], 0.035, glow(0xffffff, 1.5)));
+    add(tube([[-0.2, 0.25, -1.0], [-0.9, 0.8, 0.0], [-1.4, 1.5, 0.9]], 0.035, glow(0xffffff, 1.5)));
+    shadowFloor(-2.2, 0.35);
+  },
+
+  // Data fabric: a woven wave of glass cubes
+  data() {
+    gradientBackground([[0, "#1d3f78"], [0.55, "#0c1720"], [1, "#060b11"]], { radial: true, cx: 0.5, cy: 0.0 });
+    lights({ rim: C.sky, rimI: 2.4, fill: C.lilac, fillI: 0.8 });
+    camera.position.set(0, 7.5, 10.5); camera.lookAt(0, -0.6, 0);
+    const geo = new RoundedBoxGeometry(0.66, 0.66, 0.66, 5, 0.12);
+    const mats = [satin(C.navyLight, { clearcoat: 1, roughness: 0.3, env: 0.45 }), glass(C.sky, { attDist: 0.5, env: 1.3 }), satin(C.navy, { clearcoat: 1, roughness: 0.3, env: 0.4 }), glass(C.lilac, { attDist: 0.6, env: 1.3 })];
+    const extra = new THREE.PointLight(C.coral, 40, 12); extra.position.set(2, 2.5, 1); scene.add(extra);
+    for (let ix = -6; ix <= 6; ix++) for (let iz = -3; iz <= 3; iz++) {
+      if (rand() < 0.18) continue;
+      const x = ix * 0.95, z = iz * 0.95;
+      const y = Math.sin(ix * 0.45) * 0.55 + Math.cos(iz * 0.6 + ix * 0.2) * 0.35;
+      const hot = (ix === 2 && iz === -1) || (ix === -3 && iz === 1) || (ix === 5 && iz === 2);
+      add(new THREE.Mesh(geo, hot ? glow(C.coral, 1.6) : mats[(ix * 3 + iz + 40) % 4]), { x, y, z, shadow: false });
+    }
+  },
+
+  // Edge reach: a dusk terrain of nodes with arcs of light
+  reach() {
+    gradientBackground([[0, "#f2a27e"], [0.28, "#b8657a"], [0.55, "#3b2d4f"], [1, "#0c1720"]]);
+    scene.fog = new THREE.Fog(0x2c2340, 18, 46);
+    lights({ key: C.peach, keyI: 1.6, rim: C.coral, rimI: 2.4 });
+    camera.position.set(0, 4.2, 14); camera.lookAt(0, -0.2, -4);
+    const terrain = new THREE.PlaneGeometry(60, 40, 160, 110);
+    const pos = terrain.attributes.position;
+    for (let i = 0; i < pos.count; i++) {
+      const x = pos.getX(i), y = pos.getY(i);
+      pos.setZ(i, Math.sin(x * 0.18) * 0.7 + Math.cos(y * 0.22 + x * 0.05) * 0.6 + Math.sin(x * 0.5 + y * 0.4) * 0.15);
+    }
+    terrain.computeVertexNormals();
+    const land = add(new THREE.Mesh(terrain, new THREE.MeshStandardMaterial({ color: 0x0d1220, roughness: 0.95, metalness: 0.1, envMapIntensity: 0.25 })), { y: -1.6, rx: -Math.PI / 2, shadow: false });
+    land.receiveShadow = true;
+    const pts = [];
+    for (let i = 0; i < 80; i++) {
+      const x = (rand() - 0.5) * 30, z = -rand() * 26 + 6;
+      const y = -1.6 + Math.sin(x * 0.18) * 0.7 + Math.cos(-z * 0.22 + x * 0.05) * 0.6 + 0.15;
+      pts.push([x, y, z]);
+      add(new THREE.Mesh(new THREE.SphereGeometry(0.07 + rand() * 0.07, 16, 16), glow(rand() > 0.3 ? C.peach : 0xffffff, 4)), { x, y, z, shadow: false });
+    }
+    const arcMat = glow(C.coral, 2.5);
+    for (let i = 0; i < 90; i++) {
+      const a = pts[Math.floor(rand() * pts.length)], b = pts[Math.floor(rand() * pts.length)];
+      const d = Math.hypot(a[0] - b[0], a[2] - b[2]);
+      if (d < 3 || d > 12 || Math.abs(a[2] - b[2]) > 4) continue;
+      const mid = [(a[0] + b[0]) / 2, Math.max(a[1], b[1]) + d * 0.22, (a[2] + b[2]) / 2];
+      add(tube([a, mid, b], 0.018, arcMat), { shadow: false });
+    }
+  },
+
+  // Small models: an ensemble of satin orbs of different sizes, linked
+  model() {
+    gradientBackground([[0, "#24345c"], [0.5, "#121a2a"], [1, "#0a0f17"]], { radial: true, cx: 0.65, cy: 0.25 });
+    lights({ rim: C.coral, rimI: 2 });
+    camera.position.set(0, 0.5, 12); camera.lookAt(0, 0, 0);
+    const orbs = [[0, 0.1, 0, 1.25, C.navyLight], [-3.1, 0.9, -0.8, 0.6, C.lilac], [3.0, -0.6, -0.4, 0.75, C.coral], [-2.2, -1.5, 0.8, 0.45, C.sky], [2.4, 1.7, -1.2, 0.4, C.lilac], [-0.6, 2.0, -1.5, 0.32, C.peach]];
+    orbs.forEach(([x, y, z, r, c], i) => add(new THREE.Mesh(new THREE.SphereGeometry(r, 96, 96), i === 0 ? glass(c, { attDist: 1.8 }) : satin(c, { clearcoat: 1 })), { x, y, z }));
+    const mat = glow(0xffffff, 0.9);
+    orbs.slice(1).forEach(([x, y, z]) => add(tube([[0, 0.1, 0], [x * 0.5, y * 0.5 + 0.4, z * 0.5], [x, y, z]], 0.012, mat), { shadow: false }));
+    add(new THREE.Mesh(new THREE.TorusGeometry(2.2, 0.015, 16, 200), glow(C.sky, 1.2)), { rx: 1.35, ry: 0.2, shadow: false });
+  },
+
+  // Audit: a glass lens over a stack of record slabs
+  audit() {
+    gradientBackground([[0, "#ece9f6"], [0.6, "#d8dcea"], [1, "#b9c3da"]], { radial: true, cx: 0.3, cy: 0.1 });
+    lights({ keyI: 2.6, rim: C.lilac, rimI: 1.2 });
+    camera.position.set(4.5, 6.5, 9); camera.lookAt(0, -0.4, 0);
+    for (let i = 0; i < 6; i++) add(new THREE.Mesh(new RoundedBoxGeometry(3.6, 0.14, 2.6, 4, 0.05), satin(i % 2 ? 0xffffff : 0xeef1f8, { roughness: 0.5 })), { y: -1.4 + i * 0.17, ry: (i - 3) * 0.05, x: (i % 3) * 0.06 });
+    for (let i = 0; i < 4; i++) add(new THREE.Mesh(new RoundedBoxGeometry(2.4 - i * 0.4, 0.04, 0.12, 2, 0.02), satin(C.navy, { roughness: 0.4 })), { y: -0.38, z: -0.8 + i * 0.4, x: -0.4, ry: 0.15 });
+    const lens = new THREE.Group();
+    lens.add(new THREE.Mesh(new THREE.CylinderGeometry(1.35, 1.35, 0.16, 96), glass(0xffffff, { attDist: 6, iridescence: 0.5 })));
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(1.4, 0.11, 32, 128), satin(C.navy, { metalness: 0.6, roughness: 0.25 }));
+    ring.rotation.x = Math.PI / 2; lens.add(ring);
+    const handle = new THREE.Mesh(new RoundedBoxGeometry(0.32, 0.26, 2.2, 4, 0.12), satin(C.coral, { clearcoat: 1 }));
+    handle.position.set(0, 0, 2.5); lens.add(handle);
+    lens.traverse((o) => { o.castShadow = true; });
+    lens.position.set(0.5, 0.6, 0.2); lens.rotation.set(0.35, -0.6, 0.1); scene.add(lens);
+    shadowFloor(-1.5, 0.18);
+  },
+
+  // Compliance: an extruded glass shield with a satin check
+  compliance() {
+    gradientBackground([[0, "#1f3f78"], [0.5, "#0f1b2d"], [1, "#081019"]], { radial: true, cx: 0.5, cy: 0.1 });
+    lights({ rim: C.sky, rimI: 2.4 });
+    camera.position.set(0, 0.3, 11); camera.lookAt(0, 0, 0);
+    const s = new THREE.Shape();
+    s.moveTo(0, 2.1); s.bezierCurveTo(0.9, 1.7, 1.6, 1.6, 1.8, 1.55);
+    s.bezierCurveTo(1.8, 0.2, 1.4, -1.2, 0, -2.0);
+    s.bezierCurveTo(-1.4, -1.2, -1.8, 0.2, -1.8, 1.55);
+    s.bezierCurveTo(-1.6, 1.6, -0.9, 1.7, 0, 2.1);
+    const geo = new THREE.ExtrudeGeometry(s, { depth: 0.5, bevelEnabled: true, bevelSize: 0.12, bevelThickness: 0.12, bevelSegments: 12, curveSegments: 64 });
+    geo.center();
+    add(new THREE.Mesh(geo, glass(C.sky, { attDist: 2.2, iridescence: 0.5 })), { ry: -0.35, rx: 0.08 });
+    const check = tube([[-0.75, 0.05, 0.6], [-0.2, -0.5, 0.6], [0.9, 0.75, 0.6]], 0.16, satin(C.coral, { clearcoat: 1 }));
+    check.rotation.y = -0.35; scene.add(check);
+    [[-3.6, 1.4, -1.5, 0.5, C.lilac], [3.5, -1.2, -1, 0.65, C.navyLight], [3.1, 1.8, -2, 0.3, C.coral]].forEach(([x, y, z, r, c]) =>
+      add(new THREE.Mesh(new THREE.SphereGeometry(r, 64, 64), satin(c, { clearcoat: 1 })), { x, y, z }));
+  },
+
+  // Governance, risk, compliance: three interlocking glass rings
+  compliance1() {
+    gradientBackground([[0, "#f6efe9"], [0.55, "#e9e2ef"], [1, "#cfd6e6"]], { radial: true, cx: 0.7, cy: 0.2 });
+    lights({ keyI: 2.4, rim: C.coral, rimI: 1.4 });
+    camera.position.set(0, 1.2, 11); camera.lookAt(0, 0, 0);
+    const ringGeo = new THREE.TorusGeometry(1.6, 0.34, 64, 160);
+    add(new THREE.Mesh(ringGeo, glass(C.navyLight, { attDist: 1.2 })), { x: -1.25, y: 0.55, rx: 0.3, ry: 0.5 });
+    add(new THREE.Mesh(ringGeo, glass(C.coral, { attDist: 1.4, attenuation: C.coral })), { x: 1.25, y: 0.55, rx: -0.2, ry: -0.6 });
+    add(new THREE.Mesh(ringGeo, glass(C.lilacDeep, { attDist: 1.3 })), { x: 0, y: -1.3, rx: 1.2, rz: 0.2 });
+    shadowFloor(-3.3, 0.15);
+  },
+
+  // Cost: descending glass columns, the smallest glowing coral
+  cost() {
+    gradientBackground([[0, "#26304f"], [0.6, "#11182a"], [1, "#0a0f17"]], { radial: true, cx: 0.2, cy: 0.1 });
+    lights({ rim: C.coral, rimI: 2.2 });
+    camera.position.set(6.5, 4.5, 10); camera.lookAt(0.3, 0.2, 0);
+    const heights = [4.2, 3.2, 2.3, 1.5, 0.9, 0.5];
+    heights.forEach((h, i) => {
+      const last = i === heights.length - 1;
+      add(new THREE.Mesh(new RoundedBoxGeometry(0.85, h, 0.85, 6, 0.12), last ? satin(C.coral, { clearcoat: 1 }) : glass(i < 2 ? C.sky : C.lilac, { attDist: 2 })), { x: -2.6 + i * 1.05, y: -1.6 + h / 2 });
+    });
+    add(tube([[-2.6, 3.0, 0.6], [-0.5, 1.4, 0.7], [1.6, 0.2, 0.7], [2.9, -0.4, 0.6]], 0.03, glow(C.coral, 2.4)), { shadow: false });
+    shadowFloor(-1.6, 0.4);
+  },
+
+  // One giant model versus a constellation of small ones
+  llm() {
+    gradientBackground([[0, "#2b2148"], [0.5, "#141327"], [1, "#0a0d16"]], { radial: true, cx: 0.25, cy: 0.3 });
+    lights({ rim: C.lilac, rimI: 2.2 });
+    camera.position.set(0, 0.4, 13); camera.lookAt(0, 0, 0);
+    add(new THREE.Mesh(new THREE.SphereGeometry(2.3, 128, 128), glass(C.lilac, { attDist: 2.2, iridescence: 0.6 })), { x: -2.4, y: 0.1 });
+    for (let i = 0; i < 26; i++) {
+      const a = rand() * Math.PI * 2, r = 0.6 + rand() * 2.2;
+      const c = [C.coral, C.sky, C.peach, C.navyLight][i % 4];
+      add(new THREE.Mesh(new THREE.SphereGeometry(0.12 + rand() * 0.22, 48, 48), satin(c, { clearcoat: 1 })), { x: 3 + Math.cos(a) * r * 0.9, y: Math.sin(a) * r * 0.75, z: (rand() - 0.5) * 2 });
+    }
+    add(new THREE.Mesh(new THREE.TorusGeometry(2.6, 0.012, 16, 200), glow(C.sky, 1.1)), { x: 3, rx: 1.4, ry: 0.15, shadow: false });
+  },
+
+  // Risk: a graded gauge arc from navy to coral
+  risk() {
+    gradientBackground([[0, "#f3eee8"], [0.6, "#e6e3ee"], [1, "#cdd5e6"]], { radial: true, cx: 0.5, cy: 0.1 });
+    lights({ keyI: 2.5, rim: C.lilac, rimI: 1.2 });
+    camera.position.set(0, 0.8, 11); camera.lookAt(0, 0.2, 0);
+    const segs = [C.navy, C.navyLight, C.sky, C.peach, C.coral];
+    segs.forEach((c, i) => {
+      const start = Math.PI - i * (Math.PI / 5) - 0.03;
+      const geo = new THREE.TorusGeometry(2.6, 0.42, 48, 64, Math.PI / 5 - 0.08);
+      const m = add(new THREE.Mesh(geo, i < 3 ? glass(c, { attDist: 1.2 }) : satin(c, { clearcoat: 1 })), { y: -0.8 });
+      m.rotation.z = start - (Math.PI / 5 - 0.08);
+    });
+    const needle = new THREE.Group();
+    const n = new THREE.Mesh(new RoundedBoxGeometry(0.12, 2.3, 0.12, 4, 0.05), satin(C.ink, { metalness: 0.4 }));
+    n.position.y = 1.15; needle.add(n);
+    needle.add(new THREE.Mesh(new THREE.SphereGeometry(0.28, 48, 48), satin(C.ink, { metalness: 0.5 })));
+    needle.position.y = -0.8; needle.rotation.z = -0.55; needle.traverse((o) => { o.castShadow = true; }); scene.add(needle);
+    shadowFloor(-1.4, 0.15);
+  },
+};
+
+SCENES[sceneName]();
+// Ultra-wide hero framing: pull back and slide the subject to the right third
+if (params.get("hero") === "1") {
+  const dir = new THREE.Vector3(); camera.getWorldDirection(dir);
+  camera.position.addScaledVector(dir, -2.5);
+  camera.position.x -= 2.6;
+  camera.updateMatrixWorld();
+}
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const LIGHT_SCENES = ["audit", "compliance1", "risk"];
+if (!LIGHT_SCENES.includes(sceneName)) {
+  composer.addPass(new UnrealBloomPass(new THREE.Vector2(W, H), sceneName === "reach" ? 0.3 : 0.5, 0.55, 0.97));
+}
+composer.addPass(new OutputPass());
+// Render twice so transmission picks up the first pass
+composer.render();
+composer.render();
+window.__done = true;
+</script>
+</body>
+</html>

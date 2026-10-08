@@ -7,36 +7,12 @@ import { Navbar } from "./navbar";
 
 export function SiteShell({ children }: SiteShellProps) {
   const pathname = usePathname();
-  const isLanding = pathname === "/";
-
-  if (isLanding) {
-    return (
-      <div className="relative flex min-h-screen w-full flex-col bg-black">
-        <div className="absolute inset-x-0 top-0 z-50">
-          <Navbar variant="landing" />
-        </div>
-        {children}
-        <FooterSection variant="landing" />
-      </div>
-    );
-  }
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col items-center justify-start bg-background">
-      <div className="relative isolate flex w-full flex-col items-center justify-start">
-        <div className="relative flex w-full max-w-none flex-col items-start justify-start px-4 sm:px-6 md:px-8 lg:max-w-7xl lg:px-0">
-          <div className="absolute top-0 left-4 z-0 h-full w-px bg-border/60 [-webkit-mask-image:linear-gradient(to_bottom,transparent,#fff_40vh)] [mask-image:linear-gradient(to_bottom,transparent,#fff_40vh)] sm:left-6 md:left-8 lg:left-0" />
-          <div className="absolute top-0 right-4 z-0 h-full w-px bg-border/60 [-webkit-mask-image:linear-gradient(to_bottom,transparent,#fff_40vh)] [mask-image:linear-gradient(to_bottom,transparent,#fff_40vh)] sm:right-6 md:right-8 lg:right-0" />
-
-          <div className="relative z-10 flex flex-col items-center self-stretch pt-4 pb-8 md:pb-12">
-            <Navbar />
-            {children}
-            <div className="w-full">
-              <FooterSection />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="relative flex min-h-screen w-full flex-col bg-background">
+      <Navbar variant={pathname === "/" ? "landing" : undefined} />
+      <div className="flex w-full flex-1 flex-col">{children}</div>
+      <FooterSection />
     </div>
   );
 }

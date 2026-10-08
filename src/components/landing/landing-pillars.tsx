@@ -1,9 +1,12 @@
 import {
   AiBrain01Icon,
+  ArrowRight01Icon,
   Globe02Icon,
   Shield01Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { MediaBackground } from "../marketing/media";
+import Link from "next/link";
 import { LandingSectionFrame, LandingSectionHeader } from "./landing-section";
 
 const PRINCIPLES = [
@@ -27,47 +30,100 @@ const PRINCIPLES = [
   },
 ] as const;
 
-export function LandingPillars() {
+function PrincipleText({
+  principle,
+}: {
+  principle: (typeof PRINCIPLES)[number];
+}) {
   return (
-    <LandingSectionFrame
-      backgroundImage="/landing/solutions/government.webp"
-      id="features"
-    >
+    <div className="flex flex-col gap-3">
+      <p className="font-display text-[1.375rem] text-white leading-tight tracking-[-0.02em] md:text-[1.5rem]">
+        {principle.title}
+      </p>
+      <p className="max-w-md text-[0.9375rem] text-white/60 leading-relaxed">
+        {principle.description}
+      </p>
+    </div>
+  );
+}
+
+function PrincipleIcon({ icon }: { icon: (typeof PRINCIPLES)[number]["icon"] }) {
+  return (
+    <span className="flex size-11 items-center justify-center rounded-xl border border-white/15 text-[#a9c1ee]">
+      <HugeiconsIcon className="size-5" icon={icon} />
+    </span>
+  );
+}
+
+export function LandingPillars() {
+  const [sovereignty, orchestration, edge] = PRINCIPLES;
+
+  return (
+    <LandingSectionFrame id="features" tone="dark">
+      <div
+        aria-hidden="true"
+        className="landing-grain pointer-events-none absolute inset-0 opacity-60"
+      />
       <LandingSectionHeader
-        description="Three beliefs that shape how Rubani is built: sovereignty over data, orchestration over lock-in, and the edge over the data centre."
-        eyebrow="Core Founding Principles"
+        description="Three beliefs shape how Rubani is built: sovereignty over data, orchestration over lock-in, and the edge over the data centre."
+        eyebrow="Founding principles"
         titleLines={[
-          { text: "Engineered for sovereignty," },
-          { muted: true, text: "not experimentation." },
+          { text: "Sovereign. Orchestrated. Edge-first." },
+          { muted: true, text: "Engineered for institutions, not experiments." },
         ]}
         tone="dark"
       />
 
-      <div className="landing-reveal-stagger mt-12 grid grid-cols-1 gap-px overflow-hidden border border-white/15 bg-white/10 sm:grid-cols-3">
-        {PRINCIPLES.map((principle) => (
+      <div className="landing-reveal-stagger relative mt-14 grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="landing-card-media relative flex min-h-[24rem] flex-col justify-end overflow-hidden rounded-2xl md:col-span-2">
+          <MediaBackground
+            sizes="(max-width: 768px) 100vw, 66vw"
+            src="/landing/art/security.webp"
+          />
           <div
-            className="group relative flex flex-col gap-6 bg-[#05070c]/70 p-6 backdrop-blur-md transition-colors duration-300 hover:bg-[#05070c]/50 md:p-8"
-            key={principle.title}
-          >
-            <div className="relative flex size-12 items-center justify-center rounded-full bg-[#8eb4ff] text-black ring-4 ring-[#8eb4ff]/15 transition-transform duration-300 group-hover:scale-105">
-              <HugeiconsIcon className="size-6" icon={principle.icon} />
-            </div>
-
-            <div className="relative flex flex-col gap-3">
-              <p className="font-medium text-[1.25rem] text-white tracking-[-0.02em]">
-                {principle.title}
-              </p>
-              <p className="text-[0.9375rem] text-white/60 leading-relaxed">
-                {principle.description}
-              </p>
-            </div>
-
-            <span
-              aria-hidden="true"
-              className="absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 bg-[#8eb4ff] transition-transform duration-300 group-hover:scale-x-100"
-            />
+            aria-hidden="true"
+            className="absolute inset-0 bg-linear-to-t from-midnight via-midnight/60 to-midnight/5"
+          />
+          <div className="relative p-7 md:p-9">
+            <PrincipleText principle={sovereignty} />
           </div>
-        ))}
+        </div>
+
+        <div className="flex min-h-[24rem] flex-col justify-between gap-10 rounded-2xl border border-white/12 bg-white/[0.02] p-7 md:p-9">
+          <PrincipleIcon icon={orchestration.icon} />
+          <PrincipleText principle={orchestration} />
+        </div>
+
+        <div className="flex min-h-[22rem] flex-col justify-between gap-10 rounded-2xl border border-white/12 bg-white/[0.02] p-7 md:p-9">
+          <PrincipleIcon icon={edge.icon} />
+          <PrincipleText principle={edge} />
+        </div>
+
+        <div className="landing-card-media relative flex min-h-[22rem] flex-col justify-between overflow-hidden rounded-2xl p-7 md:col-span-2 md:p-9">
+          <MediaBackground
+            sizes="(max-width: 768px) 100vw, 66vw"
+            src="/landing/art/africa-network.webp"
+          />
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-linear-to-r from-midnight via-midnight/75 to-midnight/10"
+          />
+          <p className="relative font-mono text-[0.6875rem] text-white/60 uppercase tracking-[0.14em]">
+            The Rubani thesis
+          </p>
+          <div className="relative flex flex-col gap-6">
+            <p className="max-w-lg font-display text-[1.75rem] text-white leading-[1.12] tracking-[-0.03em] md:text-[2.25rem]">
+              Africa&apos;s next billion AI users will be reached at the edge.
+            </p>
+            <Link
+              className="landing-link inline-flex w-fit items-center gap-1.5 font-medium text-[0.9375rem] text-white"
+              href="/contact"
+            >
+              Request a briefing
+              <HugeiconsIcon className="size-4" icon={ArrowRight01Icon} />
+            </Link>
+          </div>
+        </div>
       </div>
     </LandingSectionFrame>
   );

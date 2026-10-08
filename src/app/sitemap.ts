@@ -1,17 +1,31 @@
 import type { MetadataRoute } from "next";
+import { PLATFORM_PRODUCTS } from "@/data/platform";
+import { SOLUTIONS } from "@/data/solutions";
 import { SITE_URL } from "@/utils/urls";
 
-const STATIC_PAGE_LAST_MODIFIED = new Date("2026-04-24");
+const STATIC_PAGE_LAST_MODIFIED = new Date("2026-10-08");
+
+const STATIC_PATHS = [
+  "",
+  "/platform",
+  "/solutions",
+  "/security",
+  "/pricing",
+  "/about",
+  "/contact",
+  "/privacy",
+  "/terms",
+] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
-    {
-      url: SITE_URL,
-      lastModified: STATIC_PAGE_LAST_MODIFIED,
-    },
-    {
-      url: `${SITE_URL}/contact`,
-      lastModified: STATIC_PAGE_LAST_MODIFIED,
-    },
+  const paths = [
+    ...STATIC_PATHS,
+    ...PLATFORM_PRODUCTS.map((product) => `/platform/${product.slug}`),
+    ...SOLUTIONS.map((solution) => `/solutions/${solution.slug}`),
   ];
+
+  return paths.map((path) => ({
+    url: `${SITE_URL}${path}`,
+    lastModified: STATIC_PAGE_LAST_MODIFIED,
+  }));
 }

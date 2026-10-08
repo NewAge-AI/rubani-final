@@ -1,7 +1,8 @@
 import { C15tPrefetch } from "@c15t/nextjs";
 import { Databuddy, FlagsProvider } from "@databuddy/sdk/react";
 import type { Metadata, Viewport } from "next";
-import { JetBrains_Mono, Outfit } from "next/font/google";
+import { JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import { Toaster } from "sonner";
 import { ConsentManager } from "../components/consent-manager";
 import { SiteShell } from "../components/site-shell";
@@ -17,10 +18,21 @@ import { SITE_URL } from "../utils/urls";
 
 import "@/styles/globals.css";
 
-const outfit = Outfit({
-  subsets: ["latin"],
-  variable: "--font-outfit",
-  weight: ["300", "400", "500", "600"],
+// Switzer by Indian Type Foundry (ITF Free Font License, self-hosted).
+const switzer = localFont({
+  src: [
+    {
+      path: "../fonts/switzer/Switzer-Variable.woff2",
+      weight: "100 900",
+      style: "normal",
+    },
+    {
+      path: "../fonts/switzer/Switzer-VariableItalic.woff2",
+      weight: "100 900",
+      style: "italic",
+    },
+  ],
+  variable: "--font-switzer",
   display: "swap",
   preload: true,
 });
@@ -35,8 +47,8 @@ const jetBrainsMono = JetBrains_Mono({
 
 export const viewport: Viewport = {
   themeColor: [
-    { color: "#f7f5f3", media: "(prefers-color-scheme: light)" },
-    { color: "#1f1a17", media: "(prefers-color-scheme: dark)" },
+    { color: "#fafaf7", media: "(prefers-color-scheme: light)" },
+    { color: "#111317", media: "(prefers-color-scheme: dark)" },
   ],
 };
 
@@ -107,13 +119,14 @@ export default function RootLayout({
         <C15tPrefetch backendURL="/api/c15t" />
       </head>
       <body
-        className={`${outfit.variable} ${jetBrainsMono.variable} antialiased`}
+        className={`${switzer.variable} ${jetBrainsMono.variable} font-sans antialiased`}
       >
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
           disableTransitionOnChange
           enableSystem={false}
+          forcedTheme="light"
         >
           <FlagsProvider
             clientId={databuddyClientId ?? ""}

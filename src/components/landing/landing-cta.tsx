@@ -1,47 +1,46 @@
-import { Button } from "@notra/ui/components/ui/button";
-import Link from "next/link";
-import { LandingEyebrow } from "./landing-section";
+import {
+  LandingButton,
+  LandingContainer,
+  LandingEyebrow,
+  LandingShapes,
+  LandingTextLink,
+} from "./landing-section";
 
-export function LandingCTA() {
+type LandingCTAProps = {
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  secondary?: { label: string; href: string };
+};
+
+export function LandingCTA({
+  eyebrow = "Get started",
+  title = "Own your intelligence, end to end.",
+  description = "Deploy AI agents your customers can actually reach, on infrastructure you actually control, at a cost your business can actually sustain. No leaked IP. No vendor lock-in. No data centre required.",
+  secondary = { label: "Explore the platform", href: "/platform" },
+}: LandingCTAProps = {}) {
   return (
-    <section
-      className="relative w-full overflow-hidden border-white/12 border-t"
-      id="cta"
-    >
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-[url('/landing/hero-field.webp')] bg-center bg-cover"
-      />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-linear-to-b from-black/75 via-black/85 to-black"
-      />
-      <div className="landing-abacus-dots absolute inset-0 opacity-30" />
-
-      <div className="relative mx-auto max-w-[75rem] px-4 py-20 text-center md:py-24 xl:px-8">
-        <LandingEyebrow className="justify-center" tone="dark">
-          Value proposition
-        </LandingEyebrow>
-        <h2 className="mt-4 font-medium text-[2.25rem] text-white leading-[1.1] tracking-[-0.03em] md:text-[3.5rem] md:leading-[1.05]">
-          Own your intelligence,
-          <span className="block text-[#8eb4ff]">end to end.</span>
-        </h2>
-        <p className="mx-auto mt-5 max-w-2xl text-base text-white/65 leading-relaxed">
-          Rubani lets you deploy AI agents your customers can actually reach, on
-          infrastructure you actually control, at a cost your business can
-          actually sustain. No leaked IP. No vendor lock-in. No data centre
-          required.
-        </p>
-        <div className="mt-8 flex justify-center">
-          <Button
-            className="landing-btn-shimmer h-11 rounded-full border-0 bg-white px-8 text-black hover:bg-white/90"
-            nativeButton={false}
-            render={<Link href="/contact" />}
-          >
-            Request a demo
-          </Button>
+    <section className="w-full bg-paper py-20 md:py-28" id="cta">
+      <LandingContainer>
+        <div className="landing-reveal relative overflow-hidden rounded-3xl bg-[#ecebf4]">
+          <LandingShapes className="top-0 right-[-12%] bottom-0 hidden w-[58%] md:block" />
+          <div className="relative flex min-h-[26rem] flex-col justify-between gap-12 p-8 md:min-h-[30rem] md:max-w-[52%] md:p-14">
+            <div className="flex flex-col gap-5">
+              <LandingEyebrow>{eyebrow}</LandingEyebrow>
+              <h2 className="font-normal text-[2.25rem] text-ink leading-[1.06] tracking-[-0.035em] md:text-[3.25rem]">
+                {title}
+              </h2>
+              <p className="max-w-md text-base text-ink/65 leading-relaxed">
+                {description}
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
+              <LandingButton href="/contact">Request a demo</LandingButton>
+              <LandingTextLink href={secondary.href}>{secondary.label}</LandingTextLink>
+            </div>
+          </div>
         </div>
-      </div>
+      </LandingContainer>
     </section>
   );
 }

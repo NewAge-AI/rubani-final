@@ -1,4 +1,4 @@
-import { LandingSectionFrame } from "./landing-section";
+import { LandingContainer } from "./landing-section";
 
 const STATS = [
   {
@@ -27,25 +27,24 @@ const STATS = [
 
 export function LandingStats() {
   return (
-    <LandingSectionFrame padding="compact" tone="dark">
-      <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
-        {STATS.map((stat) => (
-          <div
-            className="border-white/10 border-b pb-8 last:border-b-0 md:border-r md:border-b-0 md:pr-8 md:pb-0 md:last:border-r-0 lg:pr-8"
-            key={stat.label}
-          >
-            <div className="font-medium text-4xl text-white tracking-[-0.03em] md:text-5xl">
-              {stat.value}
+    <section className="w-full bg-ink py-14 text-white md:py-16">
+      <LandingContainer>
+        <div className="landing-reveal-stagger grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4 lg:gap-x-10">
+          {STATS.map((stat) => (
+            <div className="flex flex-col" key={stat.label}>
+              <p className="font-mono text-[0.6875rem] text-white/50 uppercase tracking-[0.14em]">
+                {stat.label}
+              </p>
+              <p className="mt-3 font-display font-light text-[2.75rem] leading-none tracking-[-0.04em] md:text-[3.5rem]">
+                {stat.value}
+              </p>
+              <p className="mt-4 max-w-[16rem] text-[0.875rem] text-white/55 leading-relaxed">
+                {stat.detail}
+              </p>
             </div>
-            <div className="mt-2 font-mono text-[0.6875rem] text-white/55 uppercase tracking-[0.18em]">
-              {stat.label}
-            </div>
-            <p className="mt-3 text-sm text-white/45 leading-relaxed">
-              {stat.detail}
-            </p>
-          </div>
-        ))}
-      </div>
-    </LandingSectionFrame>
+          ))}
+        </div>
+      </LandingContainer>
+    </section>
   );
 }
