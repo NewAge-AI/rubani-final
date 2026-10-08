@@ -17,8 +17,7 @@ const SOLUTIONS = [
     tab: "Financial Services",
     description:
       "Banks, SACCOs, insurers, and digital lenders run credit, KYC, and fraud agents inside their own infrastructure, cutting review time without sending customer data to a foreign cloud.",
-    href: "/contact",
-    cta: "See how banks use Rubani",
+        cta: "See how banks use Rubani",
     image: "/landing/solutions/financial-services.webp",
   },
   {
@@ -26,8 +25,7 @@ const SOLUTIONS = [
     tab: "Healthcare",
     description:
       "Hospitals, clinics, and health networks deploy clinical copilots and records intelligence on-premise, keeping patient data sovereign while still reaching frontline staff at the edge.",
-    href: "/contact",
-    cta: "See how healthcare uses Rubani",
+        cta: "See how healthcare uses Rubani",
     image: "/landing/solutions/healthcare.webp",
   },
   {
@@ -35,8 +33,7 @@ const SOLUTIONS = [
     tab: "Government",
     description:
       "Ministries, agencies, and parastatals modernise citizen services with orchestrated, auditable AI that stays in-country and satisfies public-sector governance requirements.",
-    href: "/contact",
-    cta: "See how government uses Rubani",
+        cta: "See how government uses Rubani",
     image: "/landing/solutions/government.webp",
   },
   {
@@ -44,8 +41,7 @@ const SOLUTIONS = [
     tab: "Telecommunications & Utilities",
     description:
       "Networks, billing, and utility operators orchestrate OSS/BSS and customer-care agents at the edge, reaching low-bandwidth regions without routing traffic through distant data centres.",
-    href: "/contact",
-    cta: "See how operators use Rubani",
+        cta: "See how operators use Rubani",
     image: "/landing/solutions/telecom-utilities.webp",
   },
 ] as const;
@@ -112,7 +108,7 @@ export function LandingSolutions() {
                       {solution.description}
                     </p>
                     <div className="pb-6">
-                      <LandingTextLink href={solution.href}>
+                      <LandingTextLink href={`/solutions/${solution.id}`}>
                         {solution.cta}
                         <HugeiconsIcon
                           className="size-4"

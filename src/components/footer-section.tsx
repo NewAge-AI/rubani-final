@@ -3,6 +3,8 @@ import { Linkedin } from "@notra/ui/components/ui/svgs/linkedin";
 import { XTwitter } from "@notra/ui/components/ui/svgs/twitter";
 import { Youtube } from "@notra/ui/components/ui/svgs/youtube";
 import Link from "next/link";
+import { PLATFORM_PRODUCTS } from "@/data/platform";
+import { SOLUTIONS } from "@/data/solutions";
 import { SOCIAL_LINKS } from "../utils/social-links";
 import { RubaniMark } from "./notra-mark";
 
@@ -10,34 +12,37 @@ const FOOTER_COLUMNS = [
   {
     title: "Platform",
     links: [
-      { label: "Agents & Copilots", href: "/#platform" },
-      { label: "Model Orchestration", href: "/#platform" },
-      { label: "360° Data Fabric", href: "/#platform" },
-      { label: "Principles", href: "/#features" },
+      { label: "Overview", href: "/platform" },
+      ...PLATFORM_PRODUCTS.map((product) => ({
+        label: product.name,
+        href: `/platform/${product.slug}`,
+      })),
     ],
   },
   {
     title: "Solutions",
     links: [
-      { label: "Financial Services", href: "/#solutions" },
-      { label: "Healthcare", href: "/#solutions" },
-      { label: "Government", href: "/#solutions" },
-      { label: "Telecom & Utilities", href: "/#solutions" },
-    ],
-  },
-  {
-    title: "Trust",
-    links: [
-      { label: "Security", href: "/#security" },
-      { label: "Data sovereignty", href: "/#security" },
-      { label: "FAQ", href: "/#faq" },
+      { label: "All industries", href: "/solutions" },
+      ...SOLUTIONS.map((solution) => ({
+        label: solution.short,
+        href: `/solutions/${solution.slug}`,
+      })),
     ],
   },
   {
     title: "Company",
     links: [
+      { label: "About", href: "/about" },
+      { label: "Security", href: "/security" },
+      { label: "Pricing", href: "/pricing" },
       { label: "Contact sales", href: "/contact" },
-      { label: "Request a demo", href: "/contact" },
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      { label: "Privacy policy", href: "/privacy" },
+      { label: "Terms of service", href: "/terms" },
     ],
   },
 ] as const;

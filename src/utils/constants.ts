@@ -72,9 +72,7 @@ export const HTML_ENTITY_MAP: Record<string, string> = {
   nbsp: " ",
 };
 
-export const ANNUAL_DISCOUNT_PERCENT = 17;
 
-export const ANNUAL_FREE_MONTHS = 2;
 
 export const PRICING_PLANS = {
   basic: {

@@ -5,7 +5,7 @@ import {
   Shield01Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import Image from "next/image";
+import { MediaBackground } from "../marketing/media";
 import Link from "next/link";
 import { LandingSectionFrame, LandingSectionHeader } from "./landing-section";
 
@@ -76,12 +76,9 @@ export function LandingPillars() {
 
       <div className="landing-reveal-stagger relative mt-14 grid grid-cols-1 gap-4 md:grid-cols-3">
         <div className="landing-card-media relative flex min-h-[24rem] flex-col justify-end overflow-hidden rounded-2xl md:col-span-2">
-          <Image
-            alt=""
-            className="object-cover"
-            fill
+          <MediaBackground
             sizes="(max-width: 768px) 100vw, 66vw"
-            src="/landing/solutions/data.webp"
+            src="art:sovereign"
           />
           <div
             aria-hidden="true"
@@ -103,12 +100,9 @@ export function LandingPillars() {
         </div>
 
         <div className="landing-card-media relative flex min-h-[22rem] flex-col justify-between overflow-hidden rounded-2xl p-7 md:col-span-2 md:p-9">
-          <Image
-            alt=""
-            className="object-cover"
-            fill
+          <MediaBackground
             sizes="(max-width: 768px) 100vw, 66vw"
-            src="/landing/solutions/reach.webp"
+            src="/landing/hero-field.webp"
           />
           <div
             aria-hidden="true"

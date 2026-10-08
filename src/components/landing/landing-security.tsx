@@ -5,7 +5,11 @@ import {
   Tick02Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { LandingSectionFrame, LandingSectionHeader } from "./landing-section";
+import {
+  LandingSectionFrame,
+  LandingSectionHeader,
+  LandingTextLink,
+} from "./landing-section";
 
 const BLOCKS = [
   {
@@ -69,6 +73,10 @@ export function LandingSecurity() {
           { muted: true, text: "Security institutions can defend." },
         ]}
       />
+
+      <LandingTextLink className="mt-8" href="/security">
+        Visit the trust center
+      </LandingTextLink>
 
       <div className="landing-reveal-stagger mt-14 grid grid-cols-1 gap-4 md:grid-cols-2">
         {BLOCKS.map((block) => (

@@ -1,7 +1,7 @@
 ---
 version: alpha
 name: Rubani
-description: Rubani's public design system. Editorial enterprise style on warm paper surfaces, near-black ink actions, navy brand accents, rounded media cards, a single midnight feature band, Space Grotesk display type, Inter UI type, and JetBrains Mono metadata.
+description: Rubani's public design system. Editorial enterprise style on warm paper surfaces, near-black ink actions, navy brand accents, rounded media cards, a single midnight feature band, Switzer (a Swiss neo-grotesk) for display and UI type, and JetBrains Mono metadata.
 colors:
   paper: "#FAFAF7"
   stone: "#F1F0EB"
@@ -59,95 +59,95 @@ colors:
   chart-5: "oklch(0.769 0.188 70.08)"
 typography:
   display-serif-80:
-    fontFamily: Space Grotesk
+    fontFamily: Switzer
     fontSize: 80px
     fontWeight: 400
     lineHeight: 96px
     letterSpacing: 0
   display-serif-52:
-    fontFamily: Space Grotesk
+    fontFamily: Switzer
     fontSize: 52px
     fontWeight: 400
     lineHeight: 62px
     letterSpacing: 0
   heading-56:
-    fontFamily: Space Grotesk
+    fontFamily: Switzer
     fontSize: 56px
     fontWeight: 600
     lineHeight: 64px
     letterSpacing: -1.4px
   heading-48:
-    fontFamily: Space Grotesk
+    fontFamily: Switzer
     fontSize: 48px
     fontWeight: 600
     lineHeight: 60px
     letterSpacing: -1.2px
   heading-36:
-    fontFamily: Space Grotesk
+    fontFamily: Switzer
     fontSize: 36px
     fontWeight: 600
     lineHeight: 44px
     letterSpacing: -0.9px
   heading-30:
-    fontFamily: Space Grotesk
+    fontFamily: Switzer
     fontSize: 30px
     fontWeight: 600
     lineHeight: 38px
     letterSpacing: -0.75px
   heading-24:
-    fontFamily: Space Grotesk
+    fontFamily: Switzer
     fontSize: 24px
     fontWeight: 600
     lineHeight: 32px
     letterSpacing: -0.6px
   heading-20:
-    fontFamily: Space Grotesk
+    fontFamily: Switzer
     fontSize: 20px
     fontWeight: 600
     lineHeight: 28px
     letterSpacing: -0.4px
   heading-18:
-    fontFamily: Space Grotesk
+    fontFamily: Switzer
     fontSize: 18px
     fontWeight: 500
     lineHeight: 28px
   copy-20:
-    fontFamily: Inter
+    fontFamily: Switzer
     fontSize: 20px
     fontWeight: 500
     lineHeight: 32px
   copy-18:
-    fontFamily: Inter
+    fontFamily: Switzer
     fontSize: 18px
     fontWeight: 400
     lineHeight: 28px
   copy-16:
-    fontFamily: Inter
+    fontFamily: Switzer
     fontSize: 16px
     fontWeight: 400
     lineHeight: 28px
   copy-14:
-    fontFamily: Inter
+    fontFamily: Switzer
     fontSize: 14px
     fontWeight: 400
     lineHeight: 24px
   copy-13:
-    fontFamily: Inter
+    fontFamily: Switzer
     fontSize: 13px
     fontWeight: 400
     lineHeight: 20px
   label-14:
-    fontFamily: Inter
+    fontFamily: Switzer
     fontSize: 14px
     fontWeight: 500
     lineHeight: 20px
   label-13:
-    fontFamily: Inter
+    fontFamily: Switzer
     fontSize: 13px
     fontWeight: 500
     lineHeight: 20px
   label-12:
-    fontFamily: Inter
+    fontFamily: Switzer
     fontSize: 12px
     fontWeight: 500
     lineHeight: 16px
@@ -308,7 +308,7 @@ components:
 
 ## Overview
 
-Rubani is the sovereign AI platform for African enterprise. The public design language follows the editorial enterprise-AI style of sites like Cohere: warm paper surfaces, generous whitespace, light-weight grotesk display type, near-black ink actions, and large rounded media cards carrying floating product UI. Space Grotesk sets display and headings, Inter sets interface and prose, and JetBrains Mono is reserved for uppercase eyebrows, labels, and technical metadata.
+Rubani is the sovereign AI platform for African enterprise. The public design language follows the editorial enterprise-AI style of sites like Cohere: warm paper surfaces, generous whitespace, light-weight grotesk display type, near-black ink actions, and large rounded media cards carrying floating product UI. Switzer, a Swiss neo-grotesk in the tradition of Neue Haas Grotesk and Söhne, sets everything from display to UI; JetBrains Mono is reserved for uppercase eyebrows, labels, and technical metadata.
 
 ## Color Use
 
@@ -320,11 +320,22 @@ Logo colors are separate from UI colors. `logo-blue`, `logo-ink`, and `logo-crea
 
 ## Typography Use
 
-Display and section headings use Space Grotesk at weight 400 with tight negative tracking (about -0.035em) and a muted second line (`ink` at 40% opacity) for emphasis. Body copy uses Inter at 15-18px with relaxed leading at 60-65% ink. Eyebrows use JetBrains Mono, 11px, uppercase, 0.14em tracking, preceded by a small dot.
+Switzer (Indian Type Foundry, ITF Free Font License, self-hosted from `src/fonts/switzer`) is the single brand typeface. Page heroes use weight 300 at 44-76px with -0.045em tracking; section headings use weight 400 with -0.035em tracking and a muted second line (`ink` at 40% opacity). Body copy uses weight 400 at 15-20px with relaxed leading at 60-65% ink. Eyebrows use JetBrains Mono, 11px, uppercase, 0.14em tracking, preceded by a small dot.
 
 ## Layout
 
-Content sits in an 80rem container with 20px (mobile) / 32px (desktop) gutters. Sections use 80-112px vertical padding. Feature content alternates text and media in two-column rows; principles use a bento grid; FAQ uses a sticky heading column beside a hairline accordion.
+Content sits in an 80rem container with 20px (mobile) / 32px (desktop) gutters. Sections use 80-112px vertical padding and alternate `paper`, `stone`, and one `midnight` band.
+
+Page templates:
+
+- **Home**: centred hero with media cards, stats band, product rows, principles bento, solutions tabs, comparison, security, FAQ, CTA.
+- **Platform overview** (`/platform`): hero with layered architecture diagram, product cards, comparison, integrations, rollout steps, CTA.
+- **Product** (`/platform/[slug]`): split hero (copy + art card with floating product UI), capability grid, dark "how it works" steps, specs table, related industries, other products, CTA.
+- **Industry** (`/solutions/[slug]`): full-bleed photographic hero with audience chips, numbered challenges, use-case grid, dark outcomes, platform components, other industries, CTA.
+- **Trust** (`/security`): photographic hero, commitments, sticky-nav controls catalogue, deployment-model table, regulatory alignment, disclosure cards.
+- **Company, Pricing, Contact, Legal**: text-led hero; pricing tiers with the middle tier inverted; contact as a split layout with next steps and a form card; legal as a sidebar plus prose column.
+
+Navigation uses mega menus for Platform and Solutions: overview column, described links, and a featured art card.
 
 ## Elevation and Shape
 
@@ -340,8 +351,8 @@ Copy should be concrete, short, and product-specific. Avoid generic AI marketing
 - Keep primary actions ink, and pair each with one underlined text link at most.
 - Keep navy and coral scarce and role-based.
 - Use JetBrains Mono only for eyebrows, metadata, and technical context.
-- Use photography plus floating product UI as primary visual proof.
-- Use gradient shapes only in the closing CTA.
+- Use clean photography or generated gradient art plus floating product UI as visual proof. Never use watermarked stock imagery.
+- Use gradient shapes for the closing CTA, the 404, and product art panels only.
 - Do not nest cards inside cards.
 - Do not center long-form prose.
 - Do not remove visible focus states.

@@ -33,7 +33,7 @@ export const consentTheme = {
   colors,
   dark: colors,
   typography: {
-    fontFamily: "var(--font-inter)",
+    fontFamily: "var(--font-switzer)",
   },
   radius,
   slots: {

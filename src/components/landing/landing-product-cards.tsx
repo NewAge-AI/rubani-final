@@ -1,8 +1,8 @@
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { cn } from "@notra/ui/lib/utils";
-import Image from "next/image";
 import type { ReactNode } from "react";
+import { MediaBackground } from "../marketing/media";
 import {
   LandingEyebrow,
   LandingSectionFrame,
@@ -102,24 +102,70 @@ function FabricOverlay() {
   );
 }
 
+const EDGE_NODES = [
+  { site: "Kisumu branch", status: "Online" },
+  { site: "Field agent 214", status: "Offline · queued" },
+  { site: "Nairobi DC", status: "Online" },
+] as const;
+
+function EdgeOverlay() {
+  return (
+    <OverlayCard>
+      <p className="font-mono text-[0.625rem] text-white/50 uppercase tracking-[0.14em]">
+        Edge nodes
+      </p>
+      <ul className="mt-3 flex flex-col divide-y divide-white/10">
+        {EDGE_NODES.map((node) => (
+          <li
+            className="flex items-center justify-between gap-3 py-2 text-[0.8125rem]"
+            key={node.site}
+          >
+            <span className="text-white/85">{node.site}</span>
+            <span className="flex items-center gap-1.5 font-mono text-[0.6875rem] text-white/55">
+              <span
+                className={
+                  node.status === "Online"
+                    ? "size-1.5 rounded-full bg-emerald-400"
+                    : "size-1.5 rounded-full bg-amber-400"
+                }
+              />
+              {node.status}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </OverlayCard>
+  );
+}
+
+export const PRODUCT_OVERLAYS: Record<string, ReactNode> = {
+  agents: <AgentsOverlay />,
+  orchestration: <OrchestrationOverlay />,
+  "data-fabric": <FabricOverlay />,
+  edge: <EdgeOverlay />,
+};
+
 const PRODUCTS = [
   {
+    slug: "agents",
     tag: "Applications",
     title: "Agents & Copilots",
     description:
       "Credit, savings, customer, and SME agents, plus developer APIs, deployed as copilots across the business.",
-    image: "/landing/solutions/agents.webp",
+    image: "art:agents",
     overlay: <AgentsOverlay />,
   },
   {
+    slug: "orchestration",
     tag: "Orchestration",
     title: "Smart Model Orchestration",
     description:
       "The right-sized model for every task, balancing accuracy, cost, privacy, and latency.",
-    image: "/landing/solutions/orchestration.webp",
+    image: "art:orchestration",
     overlay: <OrchestrationOverlay />,
   },
   {
+    slug: "data-fabric",
     tag: "Data",
     title: "360° Data Fabric",
     description:
@@ -155,17 +201,14 @@ export function LandingProductCards() {
               <p className="mt-4 text-[1.0625rem] text-ink/65 leading-relaxed">
                 {product.description}
               </p>
-              <LandingTextLink className="mt-7" href="/contact">
-                Talk to an expert
+              <LandingTextLink className="mt-7" href={`/platform/${product.slug}`}>
+                Explore {product.title}
                 <HugeiconsIcon className="size-4" icon={ArrowRight01Icon} />
               </LandingTextLink>
             </div>
 
             <div className="landing-card-media relative flex aspect-[5/4] items-end overflow-hidden rounded-2xl bg-ink p-5 md:p-8">
-              <Image
-                alt=""
-                className="object-cover"
-                fill
+              <MediaBackground
                 sizes="(max-width: 768px) 100vw, 50vw"
                 src={product.image}
               />

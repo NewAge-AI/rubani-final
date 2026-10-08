@@ -1,8 +1,20 @@
-const PUBLIC_PAGE_PATHS = new Set(["/", "/contact"]);
+const PUBLIC_PAGE_PATHS = new Set([
+  "/",
+  "/contact",
+  "/platform",
+  "/solutions",
+  "/security",
+  "/about",
+  "/pricing",
+  "/privacy",
+  "/terms",
+]);
 
 const PUBLIC_PREFIXES = [
   "/api",
   "/_next",
+  "/platform",
+  "/solutions",
   "/brand",
   "/landing",
   "/logos",

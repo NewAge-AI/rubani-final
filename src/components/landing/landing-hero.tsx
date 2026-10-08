@@ -113,7 +113,7 @@ export function LandingHero() {
         <div className="landing-hero-reveal flex flex-col items-center text-center">
           <Link
             className="group inline-flex items-center gap-2 rounded-full border border-ink/10 bg-white py-1 pr-3 pl-1 text-[0.8125rem] text-ink/70 transition-colors hover:border-ink/20 hover:text-ink"
-            href="#security"
+            href="/security"
           >
             <span className="whitespace-nowrap rounded-full bg-brand px-2 py-0.5 font-mono text-[0.625rem] text-white uppercase tracking-[0.12em]">
               Built for Africa
@@ -144,7 +144,7 @@ export function LandingHero() {
 
           <div className="mt-9 flex flex-wrap items-center justify-center gap-x-6 gap-y-4">
             <LandingButton href="/contact">Request a demo</LandingButton>
-            <LandingTextLink href="#platform">Explore the platform</LandingTextLink>
+            <LandingTextLink href="/platform">Explore the platform</LandingTextLink>
           </div>
         </div>
 
