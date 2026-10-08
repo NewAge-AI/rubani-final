@@ -86,6 +86,7 @@ export default async function SolutionPage({
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.6fr] lg:gap-20">
           <LandingSectionHeader
             eyebrow="The challenge"
+            sticky
             titleLines={[
               { text: "Why AI has been" },
               { muted: true, text: "hard to adopt here." },
@@ -94,7 +95,7 @@ export default async function SolutionPage({
           <ol className="landing-reveal-stagger flex flex-col">
             {solution.challenges.map((challenge, index) => (
               <li
-                className="grid grid-cols-[3rem_1fr] gap-4 border-ink/10 border-t py-7 last:border-b"
+                className="grid grid-cols-[2.25rem_1fr] gap-3 border-ink/10 border-t py-6 last:border-b md:grid-cols-[3rem_1fr] md:gap-4 md:py-7"
                 key={challenge.title}
               >
                 <span className="font-mono text-[0.75rem] text-brand">
@@ -138,7 +139,8 @@ export default async function SolutionPage({
         <div className="landing-reveal-stagger mt-14 grid grid-cols-1 gap-4 md:grid-cols-3">
           {solution.outcomes.map((outcome) => (
             <div
-              className="flex min-h-[16rem] flex-col justify-between rounded-2xl border border-white/12 bg-white/[0.02] p-7 md:p-8"
+              data-spotlight="dark"
+              className="flex flex-col justify-between gap-8 rounded-2xl border border-white/12 bg-white/[0.02] p-6 md:min-h-[16rem] md:p-8"
               key={outcome.title}
             >
               <span aria-hidden="true" className="h-px w-10 bg-coral" />

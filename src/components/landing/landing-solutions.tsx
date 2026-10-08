@@ -62,7 +62,7 @@ export function LandingSolutions() {
         ]}
       />
 
-      <div className="mt-14 grid grid-cols-1 gap-8 lg:grid-cols-[1fr_1.25fr] lg:gap-16">
+      <div className="mt-10 grid grid-cols-1 gap-8 md:mt-14 lg:grid-cols-[1fr_1.25fr] lg:gap-16">
         <div className="flex flex-col border-ink/10 border-t" role="tablist">
           {SOLUTIONS.map((solution) => {
             const isActive = solution.id === activeId;
@@ -79,7 +79,7 @@ export function LandingSolutions() {
                 >
                   <span
                     className={cn(
-                      "font-display text-[1.375rem] tracking-[-0.02em] transition-colors md:text-[1.625rem]",
+                      "font-display text-[1.25rem] tracking-[-0.02em] transition-colors md:text-[1.625rem]",
                       isActive ? "text-ink" : "text-ink/40 hover:text-ink/70"
                     )}
                   >
@@ -132,7 +132,7 @@ export function LandingSolutions() {
           })}
         </div>
 
-        <div className="relative hidden min-h-[34rem] overflow-hidden rounded-2xl bg-ink lg:block">
+        <div className="relative hidden h-[min(34rem,calc(100vh-8rem))] overflow-hidden rounded-2xl bg-ink lg:sticky lg:top-24 lg:block lg:self-start">
           {SOLUTIONS.map((solution) => (
             <div
               aria-hidden="true"

@@ -1,3 +1,4 @@
+import { CountUp } from "../marketing/count-up";
 import { LandingContainer } from "./landing-section";
 
 const STATS = [
@@ -27,7 +28,7 @@ const STATS = [
 
 export function LandingStats() {
   return (
-    <section className="w-full bg-ink py-14 text-white md:py-16">
+    <section className="w-full bg-ink py-12 text-white md:py-16">
       <LandingContainer>
         <div className="landing-reveal-stagger grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4 lg:gap-x-10">
           {STATS.map((stat) => (
@@ -35,10 +36,10 @@ export function LandingStats() {
               <p className="font-mono text-[0.6875rem] text-white/50 uppercase tracking-[0.14em]">
                 {stat.label}
               </p>
-              <p className="mt-3 font-display font-light text-[2.75rem] leading-none tracking-[-0.04em] md:text-[3.5rem]">
-                {stat.value}
+              <p className="mt-3 font-display font-light text-[2.25rem] leading-none tracking-[-0.04em] sm:text-[2.75rem] md:text-[3.5rem]">
+                <CountUp value={stat.value} />
               </p>
-              <p className="mt-4 max-w-[16rem] text-[0.875rem] text-white/55 leading-relaxed">
+              <p className="mt-3 max-w-[16rem] text-[0.8125rem] text-white/55 leading-relaxed md:mt-4 md:text-[0.875rem]">
                 {stat.detail}
               </p>
             </div>

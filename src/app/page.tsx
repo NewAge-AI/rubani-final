@@ -4,7 +4,8 @@ import { LandingCTA } from "../components/landing/landing-cta";
 import { LandingFAQ } from "../components/landing/landing-faq";
 import { LandingHero } from "../components/landing/landing-hero";
 import { LandingPillars } from "../components/landing/landing-pillars";
-import { LandingProductCards } from "../components/landing/landing-product-cards";
+import { LandingPlatformScrolly } from "../components/landing/landing-platform-scrolly";
+import { LandingSectors } from "../components/landing/landing-sectors";
 import { LandingSecurity } from "../components/landing/landing-security";
 import { LandingSolutions } from "../components/landing/landing-solutions";
 import { LandingStats } from "../components/landing/landing-stats";
@@ -150,12 +151,13 @@ function LandingPageJsonLd() {
 
 export default function LandingPage() {
   return (
-    <div className="w-full overflow-hidden bg-paper">
+    <div className="w-full overflow-clip bg-paper">
       <LandingPageJsonLd />
       <main className="flex w-full flex-col">
         <LandingHero />
+        <LandingSectors />
         <LandingStats />
-        <LandingProductCards />
+        <LandingPlatformScrolly />
         <LandingPillars />
         <LandingSolutions />
         <LandingComparison />

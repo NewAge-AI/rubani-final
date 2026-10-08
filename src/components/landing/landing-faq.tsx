@@ -56,7 +56,7 @@ export function LandingFAQ() {
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.6fr] lg:gap-20">
         <div className="flex flex-col gap-5 lg:sticky lg:top-28 lg:self-start">
           <LandingEyebrow>FAQ</LandingEyebrow>
-          <h2 className="font-normal text-[2.25rem] text-ink leading-[1.08] tracking-[-0.035em] md:text-[3rem]">
+          <h2 className="font-normal text-[2rem] text-ink leading-[1.08] tracking-[-0.035em] sm:text-[2.5rem] md:text-[3rem]">
             Questions, answered.
           </h2>
           <p className="max-w-sm text-base text-ink/60 leading-relaxed">

@@ -1,3 +1,5 @@
+import type { CSSProperties } from "react";
+
 const LAYERS = [
   {
     label: "Applications",
@@ -33,9 +35,14 @@ export function ArchitectureDiagram() {
         <ol className="flex flex-col gap-3">
           {LAYERS.map((layer, index) => (
             <li
-              className="grid grid-cols-1 items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:grid-cols-[13rem_1fr] md:p-6"
+              className="landing-sweep grid grid-cols-1 items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:grid-cols-[13rem_1fr] md:p-6"
               key={layer.label}
-              style={{ marginInline: `${index * 0.75}rem` }}
+              style={
+                {
+                  marginInline: `${index * 0.75}rem`,
+                  "--sweep-delay": `${index * 0.35}s`,
+                } as CSSProperties
+              }
             >
               <div>
                 <p className="font-mono text-[0.625rem] text-white/50 uppercase tracking-[0.14em]">

@@ -35,7 +35,7 @@ export const metadata: Metadata = {
 export default function TermsPage() {
   return (
     <>
-      <h1 className="not-prose mb-10 font-light text-[2.75rem] text-ink leading-[1.04] tracking-[-0.045em] md:text-[3.75rem]">
+      <h1 className="not-prose mb-8 font-light text-[2.375rem] text-ink leading-[1.04] tracking-[-0.04em] md:mb-10 md:text-[3.75rem]">
         Terms of Service
       </h1>
       <TermsContent />

@@ -61,13 +61,14 @@ export default function PlatformPage() {
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.3fr] lg:gap-20">
           <LandingSectionHeader
             description="Rubani connects to the systems you already run. No rip-and-replace, no data copied to a third-party cloud."
+            sticky
             eyebrow="Integrations"
             titleLines={[
               { text: "Works with the systems" },
               { muted: true, text: "you already trust." },
             ]}
           />
-          <ul className="landing-reveal-stagger grid grid-cols-2 gap-3 self-end sm:grid-cols-3">
+          <ul className="landing-reveal-stagger grid grid-cols-2 gap-3 sm:grid-cols-3">
             {INTEGRATIONS.map((integration) => (
               <li
                 className="flex h-16 items-center rounded-xl border border-ink/8 bg-white px-4 text-[0.9375rem] text-ink"

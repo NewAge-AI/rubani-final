@@ -43,7 +43,7 @@ export function LandingSectionFrame({
   return (
     <section
       className={cn(
-        "relative w-full scroll-mt-16 overflow-hidden py-20 md:py-28",
+        "relative w-full scroll-mt-16 overflow-clip py-16 md:py-28",
         FRAME_BG[tone],
         className
       )}
@@ -90,7 +90,10 @@ export function LandingSectionHeader({
   className,
   tone = "paper",
   align = "left",
+  sticky = false,
 }: {
+  /** Pin the header while the neighbouring column scrolls (desktop only). */
+  sticky?: boolean;
   eyebrow: string;
   titleLines: TitleLine[];
   description?: string;
@@ -105,11 +108,12 @@ export function LandingSectionHeader({
       className={cn(
         "landing-reveal flex max-w-3xl flex-col gap-5",
         align === "center" && "mx-auto items-center text-center",
+        sticky && "lg:sticky lg:top-28 lg:self-start",
         className
       )}
     >
       <LandingEyebrow tone={tone}>{eyebrow}</LandingEyebrow>
-      <h2 className="text-balance font-normal text-[2.25rem] leading-[1.08] tracking-[-0.035em] md:text-[3.25rem] md:leading-[1.04]">
+      <h2 className="text-balance font-normal text-[2rem] leading-[1.08] tracking-[-0.035em] sm:text-[2.5rem] md:text-[3.25rem] md:leading-[1.04]">
         {titleLines.map((line) => (
           <span
             className={cn(
@@ -131,7 +135,7 @@ export function LandingSectionHeader({
       {description ? (
         <p
           className={cn(
-            "max-w-xl text-pretty text-base leading-relaxed md:text-[1.0625rem]",
+            "max-w-xl text-pretty text-[0.9375rem] leading-relaxed sm:text-base md:text-[1.0625rem]",
             isDark ? "text-white/65" : "text-ink/65"
           )}
         >

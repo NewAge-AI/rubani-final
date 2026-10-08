@@ -150,6 +150,8 @@ const CONTROL_GROUPS = [
   },
 ] as const;
 
+const DEPLOYMENT_HEADINGS = ["On-premise", "Private cloud", "Edge"] as const;
+
 const DEPLOYMENT_MODELS = [
   {
     label: "Where data lives",
@@ -223,7 +225,7 @@ export default function SecurityPage() {
               ))}
             </nav>
           </div>
-          <div className="flex flex-col gap-12">
+          <div className="flex flex-col gap-8 md:gap-12">
             {CONTROL_GROUPS.map((group) => (
               <section className="scroll-mt-24" id={group.id} key={group.id}>
                 <h3 className="font-normal text-[1.5rem] text-ink tracking-[-0.02em]">
@@ -232,14 +234,14 @@ export default function SecurityPage() {
                 <ul className="landing-reveal mt-5 divide-y divide-ink/8 overflow-hidden rounded-2xl border border-ink/8 bg-white">
                   {group.controls.map((control) => (
                     <li
-                      className="grid grid-cols-1 gap-2 px-6 py-5 sm:grid-cols-[1fr_1.4fr] sm:gap-8 md:px-7"
+                      className="grid grid-cols-1 gap-2 px-5 py-3.5 sm:grid-cols-[1fr_1.4fr] sm:gap-8 sm:px-6 sm:py-5 md:px-7"
                       key={control.title}
                     >
                       <p className="flex items-center gap-2.5 text-[1rem] text-ink">
                         <span className="size-1.5 shrink-0 rounded-full bg-brand" />
                         {control.title}
                       </p>
-                      <p className="text-[0.9375rem] text-ink/60 leading-relaxed">
+                      <p className="hidden text-[0.9375rem] text-ink/60 leading-relaxed sm:block">
                         {control.description}
                       </p>
                     </li>
@@ -257,14 +259,38 @@ export default function SecurityPage() {
           eyebrow="Deployment models"
           titleLines={[{ text: "Deploy where" }, { muted: true, text: "your risk posture requires." }]}
         />
-        <div className="landing-reveal mt-14 overflow-x-auto rounded-2xl border border-ink/8 bg-white">
+        <div className="landing-reveal-stagger mt-10 grid grid-cols-1 gap-3 md:hidden">
+          {DEPLOYMENT_HEADINGS.map((heading, column) => (
+            <div
+              className="rounded-2xl border border-ink/8 bg-white p-6"
+              key={heading}
+            >
+              <p className="font-display text-[1.25rem] text-ink tracking-[-0.02em]">
+                {heading}
+              </p>
+              <dl className="mt-4 flex flex-col divide-y divide-ink/8">
+                {DEPLOYMENT_MODELS.map((row) => (
+                  <div className="flex flex-col gap-1 py-3" key={row.label}>
+                    <dt className="font-mono text-[0.625rem] text-ink/50 uppercase tracking-[0.14em]">
+                      {row.label}
+                    </dt>
+                    <dd className="text-[0.9375rem] text-ink/80">
+                      {row.values[column]}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          ))}
+        </div>
+        <div className="landing-reveal mt-14 hidden overflow-x-auto rounded-2xl border border-ink/8 bg-white md:block">
           <table className="w-full min-w-[44rem] text-left">
             <thead>
               <tr className="border-ink/8 border-b">
                 <th className="w-[22%] px-6 py-5 md:px-8" scope="col">
                   <span className="sr-only">Attribute</span>
                 </th>
-                {["On-premise", "Private cloud", "Edge"].map((heading) => (
+                {DEPLOYMENT_HEADINGS.map((heading) => (
                   <th
                     className="px-6 py-5 font-normal font-display text-[1.25rem] text-ink tracking-[-0.02em] md:px-8"
                     key={heading}
@@ -302,6 +328,7 @@ export default function SecurityPage() {
       <LandingSectionFrame tone="dark">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.3fr] lg:gap-20">
           <LandingSectionHeader
+            sticky
             description="Deployments are architected to help institutions meet their obligations under African data protection law and sector regulation. Your counsel and regulators remain the final word on compliance."
             eyebrow="Regulatory alignment"
             titleLines={[
@@ -310,7 +337,7 @@ export default function SecurityPage() {
             ]}
             tone="dark"
           />
-          <ul className="landing-reveal-stagger grid grid-cols-1 gap-3 self-end sm:grid-cols-2">
+          <ul className="landing-reveal-stagger grid grid-cols-1 gap-3 sm:grid-cols-2">
             {REGIMES.map((regime) => (
               <li
                 className="flex min-h-16 items-center rounded-xl border border-white/12 bg-white/[0.03] px-5 py-4 text-[0.9375rem] text-white/85"
