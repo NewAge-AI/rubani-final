@@ -43,11 +43,11 @@ const OTHER_TOPICS = [
 export default function ContactPage() {
   return (
     <main className="w-full bg-paper">
-      <LandingContainer className="pt-12 pb-20 md:pt-16 md:pb-28">
+      <LandingContainer className="pt-10 pb-16 md:pt-16 md:pb-28">
         <div className="grid grid-cols-1 gap-14 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
           <div className="landing-hero-reveal flex flex-col">
             <LandingEyebrow>Contact sales</LandingEyebrow>
-            <h1 className="mt-6 text-balance font-light text-[2.75rem] text-ink leading-[1.02] tracking-[-0.045em] md:text-[4rem]">
+            <h1 className="mt-6 text-balance font-light text-[2.375rem] text-ink leading-[1.04] tracking-[-0.04em] md:text-[4rem]">
               Let&apos;s talk about your institution.
             </h1>
             <p className="mt-6 max-w-lg text-pretty text-[1.0625rem] text-ink/65 leading-relaxed md:text-lg">

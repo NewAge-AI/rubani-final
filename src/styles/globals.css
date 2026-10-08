@@ -379,29 +379,14 @@
   }
 }
 
-@keyframes landingReveal {
-  from {
-    opacity: 0;
-    transform: translateY(28px);
-    filter: blur(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-    filter: blur(0);
-  }
-}
-
 @keyframes landingHeroReveal {
   from {
     opacity: 0;
     transform: translateY(18px) scale(0.985);
-    filter: blur(8px);
   }
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
-    filter: blur(0);
   }
 }
 
@@ -409,32 +394,144 @@
   animation: landingHeroReveal 820ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.landing-reveal {
-  animation: landingReveal 720ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-timeline: view();
-  animation-range: entry 0% cover 28%;
+/*
+ * One-shot reveals. MotionController adds `motion-ready` to <html> and
+ * `is-inview` to each element as it enters the viewport, so content is never
+ * hidden without JavaScript and never gets stuck part-way like a
+ * scroll-linked timeline can at the bottom of a page.
+ */
+.landing-reveal,
+.landing-reveal-stagger > * {
+  transition:
+    opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1000ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.landing-reveal-stagger > * {
-  animation: landingReveal 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-timeline: view();
-  animation-range: entry 0% cover 24%;
+.motion-ready .landing-reveal:not(.is-inview),
+.motion-ready .landing-reveal-stagger:not(.is-inview) > * {
+  opacity: 0;
+  transform: translateY(28px);
 }
 
 .landing-reveal-stagger > *:nth-child(2) {
-  animation-delay: 60ms;
+  transition-delay: 70ms;
 }
 
 .landing-reveal-stagger > *:nth-child(3) {
-  animation-delay: 120ms;
+  transition-delay: 140ms;
 }
 
 .landing-reveal-stagger > *:nth-child(4) {
-  animation-delay: 180ms;
+  transition-delay: 210ms;
 }
 
 .landing-reveal-stagger > *:nth-child(5) {
-  animation-delay: 240ms;
+  transition-delay: 280ms;
+}
+
+.landing-reveal-stagger > *:nth-child(n + 6) {
+  transition-delay: 350ms;
+}
+
+/* Cursor-following spotlight on cards (pointer position set by MotionController). */
+[data-spotlight] {
+  position: relative;
+  isolation: isolate;
+}
+
+[data-spotlight]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(
+    420px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    var(--spot-color, color-mix(in oklab, var(--brand) 9%, transparent)),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 300ms ease;
+  pointer-events: none;
+}
+
+[data-spotlight]:hover::after {
+  opacity: 1;
+}
+
+[data-spotlight="dark"] {
+  --spot-color: rgba(169, 193, 238, 0.12);
+}
+
+/* Step rules fill in sequence once their list is in view. */
+.landing-step-fill {
+  background: linear-gradient(90deg, var(--brand), var(--coral));
+  box-shadow: 0 0 12px rgba(229, 104, 63, 0.55);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 900ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.is-inview .landing-step-fill,
+html:not(.motion-ready) .landing-step-fill {
+  transform: scaleX(1);
+}
+
+@keyframes landingKenBurns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08) translate3d(-1%, -1%, 0);
+  }
+}
+
+.landing-kenburns {
+  animation: landingKenBurns 24s ease-in-out infinite alternate;
+}
+
+@keyframes landingFloatCard {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, -8px, 0);
+  }
+}
+
+.landing-float {
+  animation: landingFloatCard 5.5s ease-in-out infinite alternate;
+}
+
+@keyframes landingSweep {
+  0%,
+  70% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+.landing-sweep {
+  position: relative;
+  overflow: hidden;
+}
+
+.landing-sweep::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    rgba(169, 193, 238, 0.14) 50%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  animation: landingSweep 6s ease-in-out infinite;
+  animation-delay: var(--sweep-delay, 0s);
+  pointer-events: none;
 }
 
 /* Soft, glassy gradient forms, an homage to editorial enterprise-AI art direction. */
@@ -500,6 +597,42 @@
   background-size: 22px 22px;
 }
 
+@keyframes landingChipIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.landing-chip-in {
+  animation: landingChipIn 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.landing-marquee-mask {
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.landing-marquee-track {
+  animation: landingMarquee 48s linear infinite;
+}
+
+.landing-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes landingMarquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 .landing-link {
   background-image: linear-gradient(currentColor, currentColor);
   background-position: 0 100%;
@@ -520,13 +653,6 @@
 
 .landing-card-media:hover img {
   transform: scale(1.03);
-}
-
-@supports not (animation-timeline: view()) {
-  .landing-reveal,
-  .landing-reveal-stagger > * {
-    animation: landingReveal 720ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  }
 }
 
 ::view-transition-group(*) {
@@ -559,7 +685,12 @@
   .landing-reveal,
   .landing-reveal-stagger > *,
   .landing-hero-reveal,
-  .landing-shape {
+  .landing-shape,
+  .landing-marquee-track,
+  .landing-chip-in,
+  .landing-kenburns,
+  .landing-float,
+  .landing-sweep::before {
     animation: none !important;
   }
 }

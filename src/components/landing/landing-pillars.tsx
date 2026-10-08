@@ -5,6 +5,7 @@ import {
   Shield01Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { LiveAfricaMap } from "../marketing/live-africa-map";
 import { MediaBackground } from "../marketing/media";
 import Link from "next/link";
 import { LandingSectionFrame, LandingSectionHeader } from "./landing-section";
@@ -37,7 +38,7 @@ function PrincipleText({
 }) {
   return (
     <div className="flex flex-col gap-3">
-      <p className="font-display text-[1.375rem] text-white leading-tight tracking-[-0.02em] md:text-[1.5rem]">
+      <p className="font-display text-[1.25rem] text-white leading-tight tracking-[-0.02em] md:text-[1.5rem]">
         {principle.title}
       </p>
       <p className="max-w-md text-[0.9375rem] text-white/60 leading-relaxed">
@@ -68,14 +69,14 @@ export function LandingPillars() {
         description="Three beliefs shape how Rubani is built: sovereignty over data, orchestration over lock-in, and the edge over the data centre."
         eyebrow="Founding principles"
         titleLines={[
-          { text: "Sovereign. Orchestrated. Edge-first." },
-          { muted: true, text: "Engineered for institutions, not experiments." },
+          { text: "Sovereign. Orchestrated." },
+          { muted: true, text: "Edge-first by design." },
         ]}
         tone="dark"
       />
 
       <div className="landing-reveal-stagger relative mt-14 grid grid-cols-1 gap-4 md:grid-cols-3">
-        <div className="landing-card-media relative flex min-h-[24rem] flex-col justify-end overflow-hidden rounded-2xl md:col-span-2">
+        <div className="landing-card-media relative flex min-h-[20rem] flex-col justify-end overflow-hidden rounded-2xl md:col-span-2 md:min-h-[24rem]">
           <MediaBackground
             sizes="(max-width: 768px) 100vw, 66vw"
             src="/landing/art/security.webp"
@@ -84,26 +85,27 @@ export function LandingPillars() {
             aria-hidden="true"
             className="absolute inset-0 bg-linear-to-t from-midnight via-midnight/60 to-midnight/5"
           />
-          <div className="relative p-7 md:p-9">
+          <div className="relative p-6 md:p-9">
             <PrincipleText principle={sovereignty} />
           </div>
         </div>
 
-        <div className="flex min-h-[24rem] flex-col justify-between gap-10 rounded-2xl border border-white/12 bg-white/[0.02] p-7 md:p-9">
+        <div className="flex flex-col justify-between gap-8 rounded-2xl border border-white/12 bg-white/[0.02] p-6 md:min-h-[24rem] md:gap-10 md:p-9" data-spotlight="dark">
           <PrincipleIcon icon={orchestration.icon} />
           <PrincipleText principle={orchestration} />
         </div>
 
-        <div className="flex min-h-[22rem] flex-col justify-between gap-10 rounded-2xl border border-white/12 bg-white/[0.02] p-7 md:p-9">
+        <div className="flex flex-col justify-between gap-8 rounded-2xl border border-white/12 bg-white/[0.02] p-6 md:min-h-[22rem] md:gap-10 md:p-9" data-spotlight="dark">
           <PrincipleIcon icon={edge.icon} />
           <PrincipleText principle={edge} />
         </div>
 
-        <div className="landing-card-media relative flex min-h-[22rem] flex-col justify-between overflow-hidden rounded-2xl p-7 md:col-span-2 md:p-9">
-          <MediaBackground
-            sizes="(max-width: 768px) 100vw, 66vw"
-            src="/landing/art/africa-network.webp"
-          />
+        <div className="landing-card-media relative flex min-h-[20rem] flex-col justify-between overflow-hidden rounded-2xl p-6 md:col-span-2 md:min-h-[22rem] md:p-9">
+          <div aria-hidden="true" className="absolute inset-0 bg-midnight">
+            <div className="absolute inset-y-0 right-0 w-full opacity-60 md:w-[62%] md:opacity-100">
+              <LiveAfricaMap />
+            </div>
+          </div>
           <div
             aria-hidden="true"
             className="absolute inset-0 bg-linear-to-r from-midnight via-midnight/75 to-midnight/10"
@@ -112,7 +114,7 @@ export function LandingPillars() {
             The Rubani thesis
           </p>
           <div className="relative flex flex-col gap-6">
-            <p className="max-w-lg font-display text-[1.75rem] text-white leading-[1.12] tracking-[-0.03em] md:text-[2.25rem]">
+            <p className="max-w-lg font-display text-[1.5rem] text-white leading-[1.15] tracking-[-0.03em] sm:text-[1.75rem] md:text-[2.25rem]">
               Africa&apos;s next billion AI users will be reached at the edge.
             </p>
             <Link

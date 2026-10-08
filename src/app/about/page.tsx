@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { LiveAfricaMap } from "@/components/marketing/live-africa-map";
 import { PageHero } from "@/components/marketing/page-hero";
 import { LandingCTA } from "@/components/landing/landing-cta";
 import {
@@ -82,7 +83,7 @@ export default function AboutPage() {
       <LandingSectionFrame>
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_2fr] lg:gap-20">
           <LandingEyebrow className="self-start lg:pt-3">Our mission</LandingEyebrow>
-          <p className="landing-reveal text-balance font-display font-light text-[1.75rem] text-ink leading-[1.25] tracking-[-0.025em] md:text-[2.5rem]">
+          <p className="landing-reveal text-balance font-display font-light text-[1.5rem] text-ink leading-[1.3] tracking-[-0.025em] sm:text-[1.75rem] md:text-[2.5rem]">
             We help African institutions put AI to work on their own terms:
             inside their infrastructure, under their governance, and within
             reach of every customer and citizen they serve.
@@ -106,7 +107,7 @@ export default function AboutPage() {
         <ol className="landing-reveal-stagger mt-14 grid grid-cols-1 gap-4 md:grid-cols-3">
           {BELIEFS.map((belief, index) => (
             <li
-              className="flex min-h-[20rem] flex-col justify-between rounded-2xl border border-white/12 bg-white/[0.02] p-7 md:p-8"
+              className="flex flex-col justify-between gap-8 rounded-2xl border border-white/12 bg-white/[0.02] p-6 md:min-h-[20rem] md:p-8"
               key={belief.title}
             >
               <span className="font-mono text-[0.75rem] text-coral">
@@ -126,15 +127,9 @@ export default function AboutPage() {
       </LandingSectionFrame>
 
       <LandingSectionFrame>
-        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-20">
-          <div className="landing-card-media relative aspect-[5/4] overflow-hidden rounded-2xl bg-ink">
-            <Image
-              alt="Dot-matrix map of Africa with connected edge nodes"
-              className="object-cover"
-              fill
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              src="/landing/art/africa-network-square.webp"
-            />
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-20">
+          <div className="relative aspect-[5/4] overflow-hidden rounded-2xl bg-midnight lg:sticky lg:top-24 lg:self-start">
+            <LiveAfricaMap />
           </div>
           <div>
             <LandingSectionHeader
@@ -186,10 +181,10 @@ export default function AboutPage() {
       </LandingSectionFrame>
 
       <LandingSectionFrame>
-        <div className="landing-reveal grid grid-cols-1 gap-10 overflow-hidden rounded-3xl bg-ink p-8 text-white md:grid-cols-[1.4fr_1fr] md:items-end md:p-14">
+        <div className="landing-reveal grid grid-cols-1 gap-8 overflow-hidden rounded-3xl bg-ink p-7 text-white md:grid-cols-[1.4fr_1fr] md:items-end md:gap-10 md:p-14">
           <div>
             <LandingEyebrow tone="dark">Join us</LandingEyebrow>
-            <h2 className="mt-5 font-normal text-[2.25rem] leading-[1.06] tracking-[-0.035em] md:text-[3rem]">
+            <h2 className="mt-5 font-normal text-[2rem] leading-[1.06] tracking-[-0.035em] sm:text-[2.5rem] md:text-[3rem]">
               Build the intelligence layer for a continent.
             </h2>
             <p className="mt-5 max-w-lg text-base text-white/65 leading-relaxed">

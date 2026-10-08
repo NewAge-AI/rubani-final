@@ -86,8 +86,9 @@ export default function PricingPage() {
         <div className="landing-reveal-stagger grid grid-cols-1 gap-4 lg:grid-cols-3">
           {TIERS.map(({ key, plan, featured }) => (
             <div
+              data-spotlight={featured ? "dark" : ""}
               className={cn(
-                "flex flex-col rounded-2xl border p-7 md:p-8",
+                "flex flex-col rounded-2xl border p-6 md:p-8",
                 featured
                   ? "border-ink bg-ink text-white"
                   : "border-ink/8 bg-white text-ink"
@@ -112,7 +113,7 @@ export default function PricingPage() {
               >
                 {plan.description}
               </p>
-              <p className="mt-8 font-display font-light text-[2.25rem] tracking-[-0.035em]">
+              <p className="mt-6 font-display font-light text-[2rem] tracking-[-0.035em] md:mt-8 md:text-[2.25rem]">
                 Custom
               </p>
               <p
@@ -125,7 +126,7 @@ export default function PricingPage() {
               </p>
               <Link
                 className={cn(
-                  "mt-8 inline-flex h-11 items-center justify-center rounded-full font-medium text-[0.9375rem] transition-colors",
+                  "mt-6 inline-flex h-11 items-center justify-center rounded-full font-medium text-[0.9375rem] transition-colors md:mt-8",
                   featured
                     ? "bg-white text-ink hover:bg-white/90"
                     : "bg-ink text-white hover:bg-black"
@@ -136,7 +137,7 @@ export default function PricingPage() {
               </Link>
               <ul
                 className={cn(
-                  "mt-8 flex flex-col gap-3 border-t pt-6",
+                  "mt-6 flex flex-col gap-2.5 border-t pt-5 md:mt-8 md:gap-3 md:pt-6",
                   featured ? "border-white/15" : "border-ink/8"
                 )}
               >
@@ -173,7 +174,38 @@ export default function PricingPage() {
           eyebrow="Compare"
           titleLines={[{ text: "What each engagement" }, { muted: true, text: "includes." }]}
         />
-        <div className="landing-reveal mt-14 overflow-x-auto rounded-2xl border border-ink/8 bg-white">
+        <div className="landing-reveal mt-10 flex flex-col gap-3 md:hidden">
+          {COMPARISON_FEATURES.map((group) => (
+            <div
+              className="overflow-hidden rounded-2xl border border-ink/8 bg-white"
+              key={group.category}
+            >
+              <p className="bg-stone/50 px-5 py-3 font-mono text-[0.6875rem] text-ink/50 uppercase tracking-[0.14em]">
+                {group.category}
+              </p>
+              <dl className="divide-y divide-ink/8">
+                {group.features.map((feature) => (
+                  <div className="px-5 py-4" key={feature.name}>
+                    <dt className="text-[0.9375rem] text-ink">{feature.name}</dt>
+                    <dd className="mt-3 grid grid-cols-3 gap-2">
+                      {TIERS.map(({ key, plan }) => (
+                        <span className="flex flex-col gap-1" key={key}>
+                          <span className="font-mono text-[0.5625rem] text-ink/45 uppercase tracking-[0.12em]">
+                            {plan.name}
+                          </span>
+                          <span className="text-[0.875rem] text-ink/75">
+                            {renderCell(feature[key])}
+                          </span>
+                        </span>
+                      ))}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          ))}
+        </div>
+        <div className="landing-reveal mt-14 hidden overflow-x-auto rounded-2xl border border-ink/8 bg-white md:block">
           <table className="w-full min-w-[40rem] text-left">
             <thead>
               <tr className="border-ink/8 border-b">
@@ -230,7 +262,7 @@ export default function PricingPage() {
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.6fr] lg:gap-20">
           <div className="flex flex-col gap-5 lg:sticky lg:top-28 lg:self-start">
             <LandingEyebrow>FAQ</LandingEyebrow>
-            <h2 className="font-normal text-[2.25rem] text-ink leading-[1.08] tracking-[-0.035em] md:text-[3rem]">
+            <h2 className="font-normal text-[2rem] text-ink leading-[1.08] tracking-[-0.035em] sm:text-[2.5rem] md:text-[3rem]">
               Pricing questions.
             </h2>
             <p className="max-w-sm text-base text-ink/60 leading-relaxed">

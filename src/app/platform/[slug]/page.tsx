@@ -7,9 +7,10 @@ import {
   StepList,
   TextLinkCard,
 } from "@/components/marketing/blocks";
+import { LiveAfricaMap } from "@/components/marketing/live-africa-map";
 import { SplitHero } from "@/components/marketing/page-hero";
 import { LandingCTA } from "@/components/landing/landing-cta";
-import { PRODUCT_OVERLAYS } from "@/components/landing/landing-product-cards";
+import { PRODUCT_OVERLAYS } from "@/components/landing/product-overlays";
 import {
   LandingSectionFrame,
   LandingSectionHeader,
@@ -73,6 +74,11 @@ export default async function PlatformProductPage({
         primary={{ label: "Request a demo", href: "/contact" }}
         secondary={{ label: "Talk to an expert", href: "/contact" }}
         title={product.headline}
+        visual={
+          product.slug === "edge" ? (
+            <LiveAfricaMap className="absolute inset-0 -translate-y-6" />
+          ) : undefined
+        }
       />
 
       <LandingSectionFrame>
@@ -102,6 +108,7 @@ export default async function PlatformProductPage({
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
           <LandingSectionHeader
             description="The essentials your architecture, security, and risk teams will ask about."
+            sticky
             eyebrow="At a glance"
             titleLines={[{ text: "Built for" }, { muted: true, text: "regulated estates." }]}
           />

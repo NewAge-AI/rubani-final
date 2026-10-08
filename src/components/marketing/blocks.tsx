@@ -17,14 +17,15 @@ export function CapabilityGrid({
   return (
     <div
       className={cn(
-        "landing-reveal-stagger mt-14 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border sm:grid-cols-2 lg:grid-cols-3",
+        "landing-reveal-stagger mt-10 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border sm:grid-cols-2 md:mt-14 lg:grid-cols-3",
         isDark ? "border-white/10 bg-white/10" : "border-ink/8 bg-ink/8"
       )}
     >
       {items.map((item) => (
         <div
+          data-spotlight={isDark ? "dark" : ""}
           className={cn(
-            "flex flex-col p-7 transition-colors md:p-8",
+            "flex flex-col p-6 transition-colors md:p-8",
             isDark ? "bg-midnight hover:bg-[#101e29]" : "bg-white hover:bg-[#fdfdfb]"
           )}
           key={item.title}
@@ -39,7 +40,7 @@ export function CapabilityGrid({
           </span>
           <h3
             className={cn(
-              "mt-10 font-normal text-[1.25rem] tracking-[-0.02em]",
+              "mt-5 font-normal text-[1.1875rem] tracking-[-0.02em] sm:mt-8 sm:text-[1.25rem]",
               isDark ? "text-white" : "text-ink"
             )}
           >
@@ -69,15 +70,21 @@ export function StepList({
 }) {
   const isDark = tone === "dark";
   return (
-    <ol className="landing-reveal-stagger mt-14 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+    <ol className="landing-reveal-stagger mt-10 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 md:mt-14 md:gap-y-10 lg:grid-cols-4">
       {steps.map((step, index) => (
-        <li
-          className={cn(
-            "flex flex-col border-t pt-6",
-            isDark ? "border-white/20" : "border-ink/15"
-          )}
-          key={step.title}
-        >
+        <li className="relative flex flex-col pt-6" key={step.title}>
+          <span
+            aria-hidden="true"
+            className={cn(
+              "absolute inset-x-0 top-0 h-px overflow-hidden",
+              isDark ? "bg-white/15" : "bg-ink/12"
+            )}
+          >
+            <span
+              className="landing-step-fill block h-full w-full"
+              style={{ transitionDelay: `${300 + index * 420}ms` }}
+            />
+          </span>
           <span
             className={cn(
               "font-mono text-[0.6875rem] uppercase tracking-[0.14em]",
@@ -150,7 +157,7 @@ export function MediaLinkCard({
   return (
     <Link
       className={cn(
-        "landing-card-media group relative flex min-h-[22rem] flex-col justify-end overflow-hidden rounded-2xl bg-ink p-6 md:p-7",
+        "landing-card-media group relative flex min-h-[18rem] flex-col justify-end overflow-hidden rounded-2xl bg-ink p-6 md:min-h-[22rem] md:p-7",
         className
       )}
       href={href}
@@ -167,7 +174,7 @@ export function MediaLinkCard({
         <h3 className="mt-2 font-normal text-[1.5rem] text-white leading-tight tracking-[-0.02em]">
           {title}
         </h3>
-        <p className="mt-2 max-w-sm text-[0.875rem] text-white/70 leading-relaxed">
+        <p className="mt-2 line-clamp-3 max-w-sm text-[0.875rem] text-white/70 leading-relaxed md:line-clamp-none">
           {description}
         </p>
         <span className="mt-5 inline-flex items-center gap-1.5 font-medium text-[0.875rem] text-white">
@@ -196,7 +203,8 @@ export function TextLinkCard({
 }) {
   return (
     <Link
-      className="group flex flex-col justify-between gap-10 rounded-2xl border border-ink/8 bg-white p-7 transition-shadow duration-300 hover:shadow-[0_24px_48px_-28px_rgba(23,23,28,0.25)]"
+      data-spotlight=""
+      className="group flex flex-col justify-between gap-6 rounded-2xl border border-ink/8 bg-white p-6 transition-shadow duration-300 hover:shadow-[0_24px_48px_-28px_rgba(23,23,28,0.25)] md:gap-10 md:p-7"
       href={href}
     >
       <div>
