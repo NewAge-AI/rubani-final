@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowDown01Icon } from "@hugeicons/core-free-icons";
+import { ArrowRight01Icon, PlusSignIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Collapsible,
@@ -9,7 +9,11 @@ import {
 } from "@notra/ui/components/ui/collapsible";
 import { useState } from "react";
 import type { FAQItem } from "~types/faq";
-import { LandingEyebrow } from "./landing-section";
+import {
+  LandingEyebrow,
+  LandingSectionFrame,
+  LandingTextLink,
+} from "./landing-section";
 
 const faqData: FAQItem[] = [
   {
@@ -48,49 +52,54 @@ export function LandingFAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section
-      className="w-full relative bg-[#fafafa] px-6 py-16 md:px-10 md:py-20 lg:px-12"
-      id="faq"
-    >
-            <img
-        alt=""
-        aria-hidden="true"
-        className="pointer-events-none absolute -bottom-32 -right-24 hidden w-[34rem] max-w-none opacity-80 mix-blend-multiply select-none lg:block"
-        src="/landing/product-bg-3.svg"
-      />
-      <div className="mx-auto max-w-3xl">
-        <div className="flex flex-col items-center text-center">
+    <LandingSectionFrame id="faq" tone="stone">
+      <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.6fr] lg:gap-20">
+        <div className="flex flex-col gap-5 lg:sticky lg:top-28 lg:self-start">
           <LandingEyebrow>FAQ</LandingEyebrow>
-          <h2 className="mt-3 font-medium text-[2rem] text-neutral-950 tracking-[-0.03em] md:text-[3rem]">
-            Frequently asked questions
+          <h2 className="font-normal text-[2.25rem] text-ink leading-[1.08] tracking-[-0.035em] md:text-[3rem]">
+            Questions, answered.
           </h2>
+          <p className="max-w-sm text-base text-ink/60 leading-relaxed">
+            Can&apos;t find what you&apos;re looking for? Our team works with
+            institutions across the continent.
+          </p>
+          <LandingTextLink className="w-fit" href="/contact">
+            Talk to our team
+            <HugeiconsIcon className="size-4" icon={ArrowRight01Icon} />
+          </LandingTextLink>
         </div>
 
-        <div className="mt-10 divide-y divide-neutral-200 rounded-2xl border border-neutral-200 bg-white">
-          {faqData.map((item, index) => (
-            <Collapsible
-              key={item.question}
-              onOpenChange={(open) => setOpenIndex(open ? index : null)}
-              open={openIndex === index}
-            >
-              <CollapsibleTrigger className="flex w-full items-center justify-between gap-4 px-5 py-5 text-left md:px-6">
-                <span className="font-medium text-neutral-950 text-sm md:text-base">
-                  {item.question}
-                </span>
-                <HugeiconsIcon
-                  className={`size-4 shrink-0 text-neutral-400 transition-transform ${
-                    openIndex === index ? "rotate-180" : ""
-                  }`}
-                  icon={ArrowDown01Icon}
-                />
-              </CollapsibleTrigger>
-              <CollapsibleContent className="px-5 pb-5 text-neutral-600 text-sm leading-relaxed md:px-6 md:text-base">
-                {item.answer}
-              </CollapsibleContent>
-            </Collapsible>
-          ))}
+        <div className="border-ink/10 border-t">
+          {faqData.map((item, index) => {
+            const isOpen = openIndex === index;
+            return (
+              <Collapsible
+                className="border-ink/10 border-b"
+                key={item.question}
+                onOpenChange={(open) => setOpenIndex(open ? index : null)}
+                open={isOpen}
+              >
+                <CollapsibleTrigger className="flex w-full items-center justify-between gap-6 py-6 text-left">
+                  <span className="font-display text-[1.125rem] text-ink tracking-[-0.01em] md:text-[1.25rem]">
+                    {item.question}
+                  </span>
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full border border-ink/12 text-ink/70">
+                    <HugeiconsIcon
+                      className={`size-3.5 transition-transform duration-300 ${
+                        isOpen ? "rotate-45" : ""
+                      }`}
+                      icon={PlusSignIcon}
+                    />
+                  </span>
+                </CollapsibleTrigger>
+                <CollapsibleContent className="max-w-2xl pb-6 text-[0.9375rem] text-ink/60 leading-relaxed md:text-base">
+                  {item.answer}
+                </CollapsibleContent>
+              </Collapsible>
+            );
+          })}
         </div>
       </div>
-    </section>
+    </LandingSectionFrame>
   );
 }

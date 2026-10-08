@@ -1,96 +1,62 @@
-import type { IconSvgElement } from "@hugeicons/react";
-import { HugeiconsIcon } from "@hugeicons/react";
 import { cn } from "@notra/ui/lib/utils";
-import Image from "next/image";
-import type { ReactNode } from "react";
+import Link from "next/link";
+import type { CSSProperties, ReactNode } from "react";
 
 type TitleLine = {
   text: string;
   muted?: boolean;
 };
 
-type SectionTone = "light" | "muted" | "dark";
+export type SectionTone = "paper" | "stone" | "dark";
 
 const FRAME_BG: Record<SectionTone, string> = {
-  light: "bg-white",
-  muted: "bg-[#fafafa]",
-  dark: "bg-black",
+  paper: "bg-paper",
+  stone: "bg-stone",
+  dark: "bg-midnight text-white",
 };
 
-const FRAME_BORDER: Record<SectionTone, string> = {
-  light: "border-neutral-200/80",
-  muted: "border-neutral-200/80",
-  dark: "border-white/12",
-};
-
-const FRAME_PADDING: Record<"default" | "compact", string> = {
-  default: "px-4 py-16 xl:px-8 xl:py-20",
-  compact: "px-4 py-10 xl:px-8",
-};
+export function LandingContainer({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={cn("mx-auto w-full max-w-[80rem] px-5 md:px-8", className)}>
+      {children}
+    </div>
+  );
+}
 
 export function LandingSectionFrame({
   children,
   className,
   id,
-  tone = "light",
-  noBorderTop = false,
-  padding = "default",
-  backgroundImage,
+  tone = "paper",
 }: {
   children: ReactNode;
   className?: string;
   id?: string;
   tone?: SectionTone;
-  noBorderTop?: boolean;
-  padding?: "default" | "compact";
-  backgroundImage?: string;
 }) {
   return (
     <section
       className={cn(
-        "relative w-full overflow-hidden",
-        !noBorderTop && "border-t",
-        backgroundImage ? "bg-black" : FRAME_BG[tone],
-        FRAME_BORDER[tone],
+        "relative w-full scroll-mt-16 overflow-hidden py-20 md:py-28",
+        FRAME_BG[tone],
         className
       )}
       id={id}
     >
-      {backgroundImage ? (
-        <>
-          <Image
-            alt=""
-            aria-hidden="true"
-            className="object-cover brightness-[0.35]"
-            fill
-            sizes="100vw"
-            src={backgroundImage}
-          />
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 bg-linear-to-b from-black/80 via-black/70 to-black/90"
-          />
-          <div
-            aria-hidden="true"
-            className="landing-abacus-dots absolute inset-0 opacity-20"
-          />
-        </>
-      ) : null}
-      <div
-        className={cn(
-          "relative mx-auto xl:max-w-[75rem] xl:border-x",
-          FRAME_BORDER[tone]
-        )}
-      >
-        <div className={FRAME_PADDING[padding]}>{children}</div>
-      </div>
+      <LandingContainer className="relative">{children}</LandingContainer>
     </section>
   );
 }
 
 export function LandingEyebrow({
   children,
-  tone = "light",
+  tone = "paper",
   className,
 }: {
   children: ReactNode;
@@ -100,16 +66,16 @@ export function LandingEyebrow({
   return (
     <p
       className={cn(
-        "flex items-center gap-2.5 font-mono text-[0.6875rem] uppercase tracking-[0.18em]",
-        tone === "dark" ? "text-white/50" : "text-neutral-500",
+        "flex items-center gap-2 font-mono text-[0.6875rem] uppercase tracking-[0.14em]",
+        tone === "dark" ? "text-white/60" : "text-ink/55",
         className
       )}
     >
       <span
         aria-hidden="true"
         className={cn(
-          "h-px w-5 shrink-0",
-          tone === "dark" ? "bg-white/40" : "bg-neutral-950/40"
+          "size-1.5 shrink-0 rounded-full",
+          tone === "dark" ? "bg-coral" : "bg-brand"
         )}
       />
       {children}
@@ -117,176 +83,162 @@ export function LandingEyebrow({
   );
 }
 
-function titleLineColor(tone: SectionTone, muted: boolean | undefined) {
-  if (muted) {
-    return tone === "dark" ? "text-white/50" : "text-neutral-500";
-  }
-  return tone === "dark" ? "text-white" : "text-neutral-950";
-}
-
 export function LandingSectionHeader({
   eyebrow,
   titleLines,
   description,
   className,
-  tone = "light",
+  tone = "paper",
+  align = "left",
 }: {
   eyebrow: string;
   titleLines: TitleLine[];
-  description: string;
+  description?: string;
   className?: string;
   tone?: SectionTone;
+  align?: "left" | "center";
 }) {
+  const isDark = tone === "dark";
+
   return (
     <div
-      className={cn("landing-reveal flex max-w-4xl flex-col gap-4", className)}
+      className={cn(
+        "landing-reveal flex max-w-3xl flex-col gap-5",
+        align === "center" && "mx-auto items-center text-center",
+        className
+      )}
     >
       <LandingEyebrow tone={tone}>{eyebrow}</LandingEyebrow>
-      <div>
+      <h2 className="text-balance font-normal text-[2.25rem] leading-[1.08] tracking-[-0.035em] md:text-[3.25rem] md:leading-[1.04]">
         {titleLines.map((line) => (
-          <p
+          <span
             className={cn(
-              "font-medium text-[2rem] leading-[1.12] tracking-[-0.04em] md:text-[3rem] md:leading-[3.5rem]",
-              titleLineColor(tone, line.muted)
+              "block",
+              line.muted
+                ? isDark
+                  ? "text-white/45"
+                  : "text-ink/40"
+                : isDark
+                  ? "text-white"
+                  : "text-ink"
             )}
             key={line.text}
           >
             {line.text}
-          </p>
+          </span>
         ))}
-      </div>
-      <p
-        className={cn(
-          "max-w-2xl text-base leading-relaxed",
-          tone === "dark" ? "text-white/60" : "text-neutral-600"
-        )}
-      >
-        {description}
-      </p>
-    </div>
-  );
-}
-
-export function LandingFeatureGrid({
-  children,
-  columns = 4,
-  className,
-}: {
-  children: ReactNode;
-  columns?: 2 | 3 | 4;
-  className?: string;
-}) {
-  return (
-    <div
-      className={cn(
-        "landing-feature-grid landing-reveal-stagger mt-12 overflow-hidden border border-neutral-200/80 bg-white",
-        columns === 4 && "landing-feature-grid--four",
-        columns === 3 && "landing-feature-grid--three",
-        columns === 2 && "landing-feature-grid--two",
-        className
-      )}
-    >
-      {children}
-    </div>
-  );
-}
-
-export function LandingFeatureCell({
-  children,
-  className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
-  return (
-    <div
-      className={cn(
-        "landing-feature-cell group relative flex flex-col",
-        className
-      )}
-    >
-      {children}
-    </div>
-  );
-}
-
-export function LandingRowNumber({ index }: { index: number }) {
-  return (
-    <span className="font-mono text-[0.6875rem] text-neutral-400 uppercase tracking-[0.16em] transition-colors duration-300 group-hover:text-neutral-950">
-      {String(index).padStart(2, "0")}
-    </span>
-  );
-}
-
-type IconRowVariant = "solid" | "soft";
-
-const ICON_ROW_CIRCLE: Record<SectionTone, Record<IconRowVariant, string>> = {
-  light: {
-    solid: "bg-[#1b3a6b] text-white",
-    soft: "bg-[#1b3a6b]/10 text-[#1b3a6b]",
-  },
-  muted: {
-    solid: "bg-[#1b3a6b] text-white",
-    soft: "bg-[#1b3a6b]/10 text-[#1b3a6b]",
-  },
-  dark: {
-    solid: "bg-[#8eb4ff] text-black",
-    soft: "bg-white/10 text-[#8eb4ff]",
-  },
-};
-
-export function LandingIconRow({
-  icon: Icon,
-  title,
-  description,
-  children,
-  variant = "solid",
-  tone = "light",
-  className,
-}: {
-  icon: IconSvgElement;
-  title: string;
-  description: string;
-  children?: ReactNode;
-  variant?: IconRowVariant;
-  tone?: SectionTone;
-  className?: string;
-}) {
-  return (
-    <div
-      className={cn(
-        "landing-icon-row flex flex-col gap-4 px-4 py-8 first:border-t-0 sm:flex-row sm:items-start sm:gap-6 xl:px-8",
-        tone === "dark" && "landing-icon-row--dark",
-        className
-      )}
-    >
-      <div
-        className={cn(
-          "flex size-10 shrink-0 items-center justify-center rounded-full",
-          ICON_ROW_CIRCLE[tone][variant]
-        )}
-      >
-        <HugeiconsIcon className="size-5" icon={Icon} />
-      </div>
-      <div className="flex flex-1 flex-col gap-2" data-landing-motion>
+      </h2>
+      {description ? (
         <p
           className={cn(
-            "font-medium text-[1.25rem] tracking-[-0.02em]",
-            tone === "dark" ? "text-white" : "text-neutral-950"
-          )}
-        >
-          {title}
-        </p>
-        <p
-          className={cn(
-            "text-[0.9375rem] leading-relaxed",
-            tone === "dark" ? "text-white/60" : "text-neutral-600"
+            "max-w-xl text-pretty text-base leading-relaxed md:text-[1.0625rem]",
+            isDark ? "text-white/65" : "text-ink/65"
           )}
         >
           {description}
         </p>
-        {children}
-      </div>
+      ) : null}
+    </div>
+  );
+}
+
+export function LandingButton({
+  href,
+  children,
+  tone = "paper",
+  className,
+}: {
+  href: string;
+  children: ReactNode;
+  tone?: SectionTone;
+  className?: string;
+}) {
+  return (
+    <Link
+      className={cn(
+        "inline-flex h-11 items-center justify-center gap-2 rounded-full px-6 font-medium text-[0.9375rem] transition-[background-color,transform] duration-200 active:scale-[0.98]",
+        tone === "dark"
+          ? "bg-white text-ink hover:bg-white/90"
+          : "bg-ink text-white hover:bg-black",
+        className
+      )}
+      href={href}
+    >
+      {children}
+    </Link>
+  );
+}
+
+export function LandingTextLink({
+  href,
+  children,
+  tone = "paper",
+  className,
+}: {
+  href: string;
+  children: ReactNode;
+  tone?: SectionTone;
+  className?: string;
+}) {
+  return (
+    <Link
+      className={cn(
+        "landing-link inline-flex items-center gap-1.5 font-medium text-[0.9375rem]",
+        tone === "dark" ? "text-white" : "text-ink",
+        className
+      )}
+      href={href}
+    >
+      {children}
+    </Link>
+  );
+}
+
+/**
+ * Decorative glassy gradient forms used behind hero media and the closing CTA.
+ */
+export function LandingShapes({ className }: { className?: string }) {
+  return (
+    <div
+      aria-hidden="true"
+      className={cn("pointer-events-none absolute", className)}
+    >
+      <span
+        className="landing-shape landing-shape--lilac"
+        style={
+          {
+            width: "62%",
+            height: "58%",
+            left: "2%",
+            bottom: "-8%",
+            "--shape-rotate": "-14deg",
+          } as CSSProperties
+        }
+      />
+      <span
+        className="landing-shape landing-shape--navy"
+        style={
+          {
+            width: "54%",
+            height: "78%",
+            left: "30%",
+            top: "6%",
+            "--shape-rotate": "12deg",
+          } as CSSProperties
+        }
+      />
+      <span
+        className="landing-shape landing-shape--coral"
+        style={
+          {
+            width: "40%",
+            height: "92%",
+            right: "-6%",
+            top: "-10%",
+            "--shape-rotate": "8deg",
+          } as CSSProperties
+        }
+      />
     </div>
   );
 }

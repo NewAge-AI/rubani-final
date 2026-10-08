@@ -2,6 +2,7 @@
 
 import { Cancel01Icon, Menu02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { cn } from "@notra/ui/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -17,69 +18,53 @@ export function Navbar({ variant }: NavbarProps = {}) {
     variant ??
     (pathname === "/" ? "landing" : getNavbarVariantForPath(pathname));
   const isLanding = resolvedVariant === "landing";
+  const isStatic = resolvedVariant === "static";
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    if (!isLanding) {
-      return;
-    }
-
     function onScroll() {
-      setScrolled(window.scrollY > 24);
+      setScrolled(window.scrollY > 8);
     }
 
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [isLanding]);
+  }, []);
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    document.body.style.overflow = isOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
   }, [isOpen]);
 
-  const navLinkClass = isLanding
-    ? "text-white/75 hover:text-white"
-    : "text-neutral-600 hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white";
-
-  const shellClass = isLanding
-    ? scrolled
-      ? "border-white/10 border-b bg-black/80 backdrop-blur-xl"
-      : "bg-transparent"
-    : "bg-background/80 backdrop-blur-xl border-border/60 border-b";
-
   return (
-    <header className={`transition-colors duration-300 ${shellClass}`}>
-      <div
-        className={`mx-auto flex h-16 items-center justify-between gap-4 ${
-          isLanding
-            ? "max-w-[75rem] px-4 xl:px-8"
-            : "max-w-6xl px-6 md:px-10 lg:px-12"
-        }`}
-      >
+    <header
+      className={cn(
+        "top-0 z-50 w-full border-b transition-[background-color,border-color] duration-300",
+        isStatic ? "relative" : "sticky",
+        scrolled || isOpen
+          ? "border-border/80 bg-background/85 backdrop-blur-xl"
+          : "border-transparent bg-background"
+      )}
+    >
+      <div className="mx-auto flex h-16 max-w-[80rem] items-center justify-between gap-6 px-5 md:px-8">
         <Link
           aria-label="Rubani home"
-          className="group flex items-center"
+          className="flex shrink-0 items-center"
           href="/"
         >
-          <RubaniMark
-            className={`h-14 w-auto shrink-0 md:h-16 ${
-              isLanding ? "brightness-0 invert" : ""
-            }`}
-          />
+          <RubaniMark className="h-14 w-auto shrink-0" />
         </Link>
 
-        <nav className="hidden items-center gap-1 lg:flex">
+        <nav
+          aria-label="Primary"
+          className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 lg:flex"
+        >
           {LANDING_NAV.map((item) => (
             <Link
-              className={`rounded-md px-3 py-2 text-sm transition-colors ${navLinkClass}`}
+              className="rounded-full px-3.5 py-2 text-[0.875rem] text-foreground/75 transition-colors hover:bg-foreground/5 hover:text-foreground"
               href={item.href}
               key={item.href}
             >
@@ -89,14 +74,16 @@ export function Navbar({ variant }: NavbarProps = {}) {
         </nav>
 
         <div className="flex items-center justify-end gap-2">
-          <div className="hidden items-center gap-2 lg:flex">
+          <div className="hidden items-center gap-1 lg:flex">
             {!isLanding && <ThemeToggle />}
             <Link
-              className={`rounded-full px-4 py-2 font-medium text-sm transition-colors ${
-                isLanding
-                  ? "bg-white text-black hover:bg-white/90"
-                  : "bg-primary text-primary-foreground hover:bg-primary-hover"
-              }`}
+              className="rounded-full px-3.5 py-2 text-[0.875rem] text-foreground/75 transition-colors hover:text-foreground"
+              href="/contact"
+            >
+              Contact
+            </Link>
+            <Link
+              className="rounded-full bg-primary px-4 py-2 font-medium text-[0.875rem] text-primary-foreground transition-colors hover:bg-primary-hover"
               href="/contact"
             >
               Request a demo
@@ -106,11 +93,7 @@ export function Navbar({ variant }: NavbarProps = {}) {
             aria-controls="mobile-navigation"
             aria-expanded={isOpen}
             aria-label={isOpen ? "Close menu" : "Open menu"}
-            className={`relative inline-flex size-9 items-center justify-center rounded-md lg:hidden ${
-              isLanding
-                ? "text-white hover:bg-white/10"
-                : "text-neutral-500 hover:bg-neutral-100 dark:hover:bg-white/6"
-            }`}
+            className="relative inline-flex size-10 items-center justify-center rounded-full text-foreground hover:bg-foreground/5 lg:hidden"
             onClick={() => setIsOpen((prev) => !prev)}
             type="button"
           >
@@ -124,17 +107,13 @@ export function Navbar({ variant }: NavbarProps = {}) {
 
       {isOpen && (
         <div
-          className={`border-t px-4 py-4 lg:hidden ${
-            isLanding
-              ? "border-white/10 bg-black/95"
-              : "border-border bg-background"
-          }`}
+          className="fixed inset-x-0 top-16 bottom-0 flex flex-col overflow-y-auto bg-background px-5 pt-4 pb-8 lg:hidden"
           id="mobile-navigation"
         >
-          <nav className="flex flex-col gap-1">
+          <nav aria-label="Mobile" className="flex flex-col">
             {LANDING_NAV.map((item) => (
               <Link
-                className={`rounded-md px-3 py-2 text-sm ${navLinkClass}`}
+                className="border-border border-b py-4 font-display text-[1.375rem] text-foreground tracking-[-0.02em]"
                 href={item.href}
                 key={item.href}
                 onClick={() => setIsOpen(false)}
@@ -143,20 +122,23 @@ export function Navbar({ variant }: NavbarProps = {}) {
               </Link>
             ))}
           </nav>
-          <div className="mt-3 border-white/10 border-t pt-3">
+          <div className="mt-auto flex flex-col gap-3 pt-8">
             <Link
-              className={`block rounded-full px-3 py-2 text-center font-medium text-sm ${
-                isLanding
-                  ? "bg-white text-black"
-                  : "bg-primary text-primary-foreground"
-              }`}
+              className="block rounded-full bg-primary px-4 py-3 text-center font-medium text-primary-foreground text-sm"
               href="/contact"
               onClick={() => setIsOpen(false)}
             >
               Request a demo
             </Link>
+            <Link
+              className="block rounded-full border border-border px-4 py-3 text-center font-medium text-foreground text-sm"
+              href="/contact"
+              onClick={() => setIsOpen(false)}
+            >
+              Contact sales
+            </Link>
             {!isLanding && (
-              <div className="mt-3 flex justify-center">
+              <div className="mt-2 flex justify-center">
                 <ThemeToggle />
               </div>
             )}

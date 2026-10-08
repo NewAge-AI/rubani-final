@@ -5,7 +5,6 @@ import {
   Tick02Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import Image from "next/image";
 import { LandingSectionFrame, LandingSectionHeader } from "./landing-section";
 
 const BLOCKS = [
@@ -20,7 +19,6 @@ const BLOCKS = [
       "Zero data egress",
       "No shared training data",
     ],
-    image: "/landing/solutions/data.webp",
   },
   {
     icon: LockIcon,
@@ -33,7 +31,6 @@ const BLOCKS = [
       "Change control",
       "Model-level permissions",
     ],
-    image: "/landing/solutions/model.webp",
   },
   {
     icon: AiBrain01Icon,
@@ -46,7 +43,6 @@ const BLOCKS = [
       "Immutable audit trails",
       "Evidence packs",
     ],
-    image: "/landing/solutions/audit.webp",
   },
   {
     icon: Tick02Icon,
@@ -59,85 +55,50 @@ const BLOCKS = [
       "Lineage tracking",
       "Institution-wide controls",
     ],
-    image: "/landing/solutions/compliance.webp",
   },
-] as const;
-
-const CERTIFICATIONS = [
-  "SOC 2 Type II",
-  "ISO 27001",
-  "GDPR-aligned",
 ] as const;
 
 export function LandingSecurity() {
   return (
-    <LandingSectionFrame tone="muted">
-      <img
-        alt=""
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-32 -left-24 hidden w-[34rem] max-w-none rotate-180 opacity-50 mix-blend-multiply select-none lg:block"
-        src="/landing/product-bg-1.svg"
+    <LandingSectionFrame id="security">
+      <LandingSectionHeader
+        description="Rubani is built for regulated environments where sovereignty, oversight, and auditability are non-negotiable."
+        eyebrow="Enterprise ready"
+        titleLines={[
+          { text: "Private. Governed. Auditable." },
+          { muted: true, text: "Security institutions can defend." },
+        ]}
       />
-      <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-        <LandingSectionHeader
-          description="Rubani is built for regulated environments where sovereignty, oversight, and auditability are non-negotiable."
-          eyebrow="Enterprise Ready"
-          titleLines={[
-            { text: "Security institutions" },
-            { muted: true, text: "can defend." },
-          ]}
-        />
-      </div>
 
-      <div className="landing-reveal-stagger mt-12 grid grid-cols-1 gap-px overflow-hidden border border-neutral-950/10 bg-neutral-950/10 md:grid-cols-2">
+      <div className="landing-reveal-stagger mt-14 grid grid-cols-1 gap-4 md:grid-cols-2">
         {BLOCKS.map((block) => (
           <div
-            className="group relative flex flex-col bg-white"
+            className="flex flex-col rounded-2xl border border-ink/8 bg-white p-7 transition-shadow duration-300 hover:shadow-[0_24px_48px_-28px_rgba(23,23,28,0.25)] md:p-9"
             key={block.title}
           >
-            <div className="relative h-40 w-full overflow-hidden">
-              <Image
-                alt=""
-                className="object-cover opacity-90 transition-transform duration-700 ease-out group-hover:scale-105"
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                src={block.image}
-              />
-              <div
-                aria-hidden="true"
-                className="absolute inset-0 bg-linear-to-t from-black/100 via-black/75 to-black/0"
-              />
-              <div
-                aria-hidden="true"
-                className="landing-abacus-dots absolute inset-0 opacity-20"
-              />
-              <p className="absolute inset-0 flex items-center justify-center font-medium text-[1.125rem] text-white tracking-[-0.02em]">
-                {block.title}
-              </p>
-            </div>
-
-            <div className="relative flex flex-1 flex-col px-6 pt-8 pb-7">
-              <div className="-top-7 absolute left-6 flex size-12 items-center justify-center rounded-full bg-[#1b3a6b] text-white ring-4 ring-white">
-                <HugeiconsIcon className="size-5" icon={block.icon} /> 
-              </div>
-              <p className="text-[0.9375rem] text-neutral-600 leading-relaxed transition-transform duration-300 ease-out group-hover:translate-x-1">
-                {block.description}
-              </p>
-              <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2 border-neutral-200/80 border-t pt-5">
-                {block.items.map((item) => (
-                  <li
-                    className="flex items-center gap-2 text-neutral-700 text-sm"
-                    key={item}
-                  >
-                    <HugeiconsIcon
-                      className="size-3.5 shrink-0 text-[#1b3a6b]"
-                      icon={Tick02Icon}
-                    />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <span className="flex size-11 items-center justify-center rounded-xl bg-brand-soft text-brand">
+              <HugeiconsIcon className="size-5" icon={block.icon} />
+            </span>
+            <h3 className="mt-8 font-normal text-[1.5rem] text-ink tracking-[-0.02em] md:text-[1.75rem]">
+              {block.title}
+            </h3>
+            <p className="mt-3 max-w-md text-[0.9375rem] text-ink/60 leading-relaxed">
+              {block.description}
+            </p>
+            <ul className="mt-8 grid grid-cols-1 gap-x-6 gap-y-3 border-ink/8 border-t pt-6 sm:grid-cols-2">
+              {block.items.map((item) => (
+                <li
+                  className="flex items-center gap-2.5 text-[0.875rem] text-ink/80"
+                  key={item}
+                >
+                  <HugeiconsIcon
+                    className="size-3.5 shrink-0 text-brand"
+                    icon={Tick02Icon}
+                  />
+                  {item}
+                </li>
+              ))}
+            </ul>
           </div>
         ))}
       </div>

@@ -1,7 +1,7 @@
 import { C15tPrefetch } from "@c15t/nextjs";
 import { Databuddy, FlagsProvider } from "@databuddy/sdk/react";
 import type { Metadata, Viewport } from "next";
-import { JetBrains_Mono, Outfit } from "next/font/google";
+import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { Toaster } from "sonner";
 import { ConsentManager } from "../components/consent-manager";
 import { SiteShell } from "../components/site-shell";
@@ -17,10 +17,17 @@ import { SITE_URL } from "../utils/urls";
 
 import "@/styles/globals.css";
 
-const outfit = Outfit({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-outfit",
-  weight: ["300", "400", "500", "600"],
+  variable: "--font-inter",
+  display: "swap",
+  preload: true,
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-display",
+  weight: ["300", "400", "500"],
   display: "swap",
   preload: true,
 });
@@ -35,8 +42,8 @@ const jetBrainsMono = JetBrains_Mono({
 
 export const viewport: Viewport = {
   themeColor: [
-    { color: "#f7f5f3", media: "(prefers-color-scheme: light)" },
-    { color: "#1f1a17", media: "(prefers-color-scheme: dark)" },
+    { color: "#fafaf7", media: "(prefers-color-scheme: light)" },
+    { color: "#111317", media: "(prefers-color-scheme: dark)" },
   ],
 };
 
@@ -107,7 +114,7 @@ export default function RootLayout({
         <C15tPrefetch backendURL="/api/c15t" />
       </head>
       <body
-        className={`${outfit.variable} ${jetBrainsMono.variable} antialiased`}
+        className={`${inter.variable} ${spaceGrotesk.variable} ${jetBrainsMono.variable} font-sans antialiased`}
       >
         <ThemeProvider
           attribute="class"

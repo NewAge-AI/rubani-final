@@ -43,7 +43,7 @@ export default function ContactPage() {
     <div className="flex w-full flex-col items-center justify-start overflow-hidden border-border/70 border-b pt-20 sm:pt-24 md:pt-28 lg:pt-32">
       <section className="flex w-full items-center justify-center px-6 py-12 md:px-24 md:py-16">
         <div className="flex w-full max-w-[640px] flex-col items-center gap-4">
-          <h1 className="text-balance text-center font-sans font-semibold text-4xl text-foreground leading-tight tracking-tight md:text-6xl">
+          <h1 className="text-balance text-center font-display font-normal text-[2.5rem] text-foreground leading-[1.06] tracking-[-0.035em] md:text-[4rem]">
             We read every message.{" "}
             <span className="text-primary">Let's talk.</span>
           </h1>

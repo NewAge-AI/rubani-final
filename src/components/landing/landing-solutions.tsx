@@ -1,13 +1,15 @@
 "use client";
 
-import { ArrowUpRight02Icon } from "@hugeicons/core-free-icons";
+import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { cn } from "@notra/ui/lib/utils";
-import { AnimatePresence, domAnimation, LazyMotion, m } from "motion/react";
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
-import { LandingEyebrow } from "./landing-section";
+import {
+  LandingSectionFrame,
+  LandingSectionHeader,
+  LandingTextLink,
+} from "./landing-section";
 
 const SOLUTIONS = [
   {
@@ -52,95 +54,115 @@ export function LandingSolutions() {
   const [activeId, setActiveId] = useState<(typeof SOLUTIONS)[number]["id"]>(
     SOLUTIONS[0].id
   );
-  const active =
-    SOLUTIONS.find((solution) => solution.id === activeId) ?? SOLUTIONS[0];
 
   return (
-    <section className="relative w-full overflow-hidden border-white/12 border-t bg-black">
-      {SOLUTIONS.map((solution) => (
-        <div
-          aria-hidden="true"
-          className={cn(
-            "absolute inset-0 transition-opacity duration-700 ease-out",
-            solution.id === activeId ? "opacity-100" : "opacity-0"
-          )}
-          key={solution.id}
-        >
-          <Image
-            alt=""
-            className="object-cover brightness-[0.45]"
-            fill
-            priority={solution.id === SOLUTIONS[0].id}
-            sizes="100vw"
-            src={solution.image}
-          />
+    <LandingSectionFrame id="solutions">
+      <LandingSectionHeader
+        description="Purpose-built deployments for the sectors where privacy, uptime, and auditability decide whether AI ships at all."
+        eyebrow="Industry solutions"
+        titleLines={[
+          { text: "AI infrastructure for industries" },
+          { muted: true, text: "that cannot afford to get it wrong." },
+        ]}
+      />
+
+      <div className="mt-14 grid grid-cols-1 gap-8 lg:grid-cols-[1fr_1.25fr] lg:gap-16">
+        <div className="flex flex-col border-ink/10 border-t" role="tablist">
+          {SOLUTIONS.map((solution) => {
+            const isActive = solution.id === activeId;
+            return (
+              <div className="border-ink/10 border-b" key={solution.id}>
+                <button
+                  aria-controls={`solution-${solution.id}`}
+                  aria-selected={isActive}
+                  className="flex w-full items-center justify-between gap-4 py-5 text-left"
+                  id={`solution-tab-${solution.id}`}
+                  onClick={() => setActiveId(solution.id)}
+                  role="tab"
+                  type="button"
+                >
+                  <span
+                    className={cn(
+                      "font-display text-[1.375rem] tracking-[-0.02em] transition-colors md:text-[1.625rem]",
+                      isActive ? "text-ink" : "text-ink/40 hover:text-ink/70"
+                    )}
+                  >
+                    {solution.tab}
+                  </span>
+                  <span
+                    className={cn(
+                      "size-2 shrink-0 rounded-full transition-colors",
+                      isActive ? "bg-coral" : "bg-transparent"
+                    )}
+                  />
+                </button>
+                <div
+                  aria-labelledby={`solution-tab-${solution.id}`}
+                  className={cn(
+                    "grid transition-[grid-template-rows,opacity] duration-500 ease-out",
+                    isActive
+                      ? "grid-rows-[1fr] opacity-100"
+                      : "grid-rows-[0fr] opacity-0"
+                  )}
+                  id={`solution-${solution.id}`}
+                  role="tabpanel"
+                >
+                  <div className="overflow-hidden">
+                    <p className="max-w-lg pb-4 text-[1rem] text-ink/65 leading-relaxed">
+                      {solution.description}
+                    </p>
+                    <div className="pb-6">
+                      <LandingTextLink href={solution.href}>
+                        {solution.cta}
+                        <HugeiconsIcon
+                          className="size-4"
+                          icon={ArrowRight01Icon}
+                        />
+                      </LandingTextLink>
+                    </div>
+                    <div className="relative mb-6 aspect-[16/10] overflow-hidden rounded-xl lg:hidden">
+                      <Image
+                        alt=""
+                        className="object-cover"
+                        fill
+                        sizes="100vw"
+                        src={solution.image}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
-      ))}
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-0 top-0 h-2/5 bg-linear-to-b from-black/85 via-black/40 to-transparent"
-      />
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-black/95 via-black/55 to-transparent"
-      />
 
-      <div className="relative mx-auto flex min-h-[38rem] w-full max-w-[75rem] flex-col justify-end px-4 py-16 md:min-h-[42rem] md:py-20 xl:px-8">
-        <LandingEyebrow tone="dark">Industry Solutions</LandingEyebrow>
-        <h2 className="mt-4 max-w-2xl font-medium text-[2rem] text-white leading-[1.12] tracking-[-0.04em] md:text-[3rem] md:leading-[1.08]">
-          AI infrastructure for industries
-          <span className="block text-white/50">
-            that cannot afford to get it wrong.
-          </span>
-        </h2>
-
-        <div
-          className="mt-8 flex flex-wrap gap-2 overflow-x-auto"
-          role="tablist"
-        >
+        <div className="relative hidden min-h-[34rem] overflow-hidden rounded-2xl bg-ink lg:block">
           {SOLUTIONS.map((solution) => (
-            <button
-              aria-selected={solution.id === activeId}
+            <div
+              aria-hidden="true"
               className={cn(
-                "landing-btn-shimmer inline-flex min-h-[2.75rem] shrink-0 items-center justify-center rounded-full border px-4 py-2 text-sm transition-all",
+                "absolute inset-0 transition-[opacity,transform] duration-700 ease-out",
                 solution.id === activeId
-                  ? "border-white bg-white text-black"
-                  : "border-white/20 bg-transparent text-white/70 hover:border-white/40 hover:text-white"
+                  ? "scale-100 opacity-100"
+                  : "scale-[1.03] opacity-0"
               )}
               key={solution.id}
-              onClick={() => setActiveId(solution.id)}
-              role="tab"
-              type="button"
             >
-              {solution.tab}
-            </button>
+              <Image
+                alt=""
+                className="object-cover"
+                fill
+                sizes="(max-width: 1024px) 100vw, 55vw"
+                src={solution.image}
+              />
+            </div>
           ))}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-linear-to-t from-ink/40 to-transparent"
+          />
         </div>
-
-        <LazyMotion features={domAnimation}>
-          <div className="mt-10 flex max-w-2xl flex-col gap-6 md:mt-12">
-            <AnimatePresence mode="wait">
-              <m.p
-                animate={{ opacity: 1, filter: "blur(0px)" }}
-                className="text-base text-white/80 leading-relaxed md:text-lg"
-                exit={{ opacity: 0, filter: "blur(4px)" }}
-                initial={{ opacity: 0, filter: "blur(4px)" }}
-                key={active.id}
-                transition={{ duration: 0.4, ease: "easeOut" }}
-              >
-                {active.description}
-              </m.p>
-            </AnimatePresence>
-            <Link
-              className="inline-flex items-center gap-2 text-sm text-white hover:text-white/80"
-              href={active.href}
-            >
-              {active.cta}
-              <HugeiconsIcon className="size-4" icon={ArrowUpRight02Icon} />
-            </Link>
-          </div>
-        </LazyMotion>
       </div>
-    </section>
+    </LandingSectionFrame>
   );
 }

@@ -1,86 +1,78 @@
-import { cn } from "@notra/ui/lib/utils";
-import Image from "next/image";
+import { Cancel01Icon, Tick02Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { LandingSectionFrame, LandingSectionHeader } from "./landing-section";
 
 const APPROACH = [
   {
     label: "Data",
-    text: "Stays in-country, inside your infrastructure",
-    image: "/landing/solutions/data.webp",
+    industry: "Sent to third-party clouds and model providers",
+    rubani: "Stays in-country, inside your infrastructure",
   },
   {
     label: "Model strategy",
-    text: "Right-sized model, orchestrated per task",
-    image: "/landing/solutions/model.webp",
+    industry: "One general-purpose LLM for every task",
+    rubani: "Right-sized model, orchestrated per task",
   },
   {
     label: "Cost",
-    text: "Small models first, significantly cheaper",
-    image: "/landing/solutions/llm.webp",
+    industry: "Large-model pricing that scales unpredictably",
+    rubani: "Small models first, significantly cheaper",
   },
   {
     label: "Vendor risk",
-    text: "No single point of vendor lock-in",
-    image: "/landing/solutions/risk.webp",
+    industry: "Locked into a single provider's roadmap",
+    rubani: "No single point of vendor lock-in",
   },
   {
     label: "Reach",
-    text: "Edge inference, on-device, low-bandwidth",
-    image: "/landing/solutions/reach.webp",
+    industry: "Cloud-only, dependent on high bandwidth",
+    rubani: "Edge inference, on-device, low-bandwidth",
   },
 ] as const;
 
 export function LandingComparison() {
   return (
-    <LandingSectionFrame tone="muted">
+    <LandingSectionFrame tone="stone">
       <LandingSectionHeader
         description="Rubani is built against the way the industry defaults: general-purpose models, cloud-only delivery, and unpredictable cost."
-        eyebrow="A Differentiated Approach"
+        eyebrow="A differentiated approach"
         titleLines={[
           { text: "Built against the way" },
-          { text: "the industry defaults." },
+          { muted: true, text: "the industry defaults." },
         ]}
       />
 
-      <div className="landing-reveal-stagger mt-12 grid grid-cols-2 gap-px overflow-hidden border border-neutral-950/10 bg-neutral-950/10 sm:grid-cols-3 lg:grid-cols-5">
-        {APPROACH.map((item, index) => (
-          <div
-            className={cn(
-              "group relative flex aspect-[3/4] flex-col justify-end overflow-hidden bg-neutral-900 p-4",
-              index === APPROACH.length - 1 &&
-                "col-span-2 aspect-[16/9] sm:col-span-1 sm:aspect-[3/4]"
-            )}
-            key={item.label}
-          >
-            <Image
-              alt=""
-              className="object-cover opacity-80 transition-transform duration-700 ease-out group-hover:scale-105"
-              fill
-              sizes={
-                index === APPROACH.length - 1
-                  ? "(max-width: 640px) 100vw, (max-width: 1024px) 33vw, 20vw"
-                  : "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-              }
-              src={item.image}
-            />
-            <div
-              aria-hidden="true"
-              className="absolute inset-0 bg-linear-to-t from-black via-black/75 to-black/10"
-            />
-            <div
-              aria-hidden="true"
-              className="absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-t from-black to-transparent"
-            />
-            <div className="relative transition-transform duration-300 ease-out group-hover:-translate-y-1">
-              <p className="font-mono text-[0.625rem] text-white/60 uppercase tracking-[0.14em]">
+      <div className="landing-reveal mt-14 overflow-hidden rounded-2xl border border-ink/8 bg-white">
+        <div className="hidden grid-cols-[1fr_1.5fr_1.5fr] border-ink/8 border-b px-8 py-4 font-mono text-[0.6875rem] text-ink/50 uppercase tracking-[0.14em] md:grid">
+          <span />
+          <span>Industry default</span>
+          <span className="text-brand">Rubani</span>
+        </div>
+        <ul className="divide-y divide-ink/8">
+          {APPROACH.map((item) => (
+            <li
+              className="grid grid-cols-1 gap-3 px-6 py-6 transition-colors hover:bg-stone/50 md:grid-cols-[1fr_1.5fr_1.5fr] md:items-center md:gap-6 md:px-8"
+              key={item.label}
+            >
+              <p className="font-display text-[1.25rem] text-ink tracking-[-0.02em]">
                 {item.label}
               </p>
-              <p className="mt-2 text-sm text-white leading-snug">
-                {item.text}
+              <p className="flex items-start gap-3 text-[0.9375rem] text-ink/50">
+                <HugeiconsIcon
+                  className="mt-0.5 size-4 shrink-0 text-ink/30"
+                  icon={Cancel01Icon}
+                />
+                {item.industry}
               </p>
-            </div>
-          </div>
-        ))}
+              <p className="flex items-start gap-3 text-[0.9375rem] text-ink">
+                <span className="mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full bg-brand text-white">
+                  <HugeiconsIcon className="size-2.5" icon={Tick02Icon} />
+                </span>
+                {item.rubani}
+              </p>
+            </li>
+          ))}
+        </ul>
       </div>
     </LandingSectionFrame>
   );

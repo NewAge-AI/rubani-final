@@ -1,23 +1,31 @@
 ---
 version: alpha
 name: Rubani
-description: Rubani's public design system. Light-first, institutional, and built from navy action color, neutral surfaces, precise borders, structural hatch texture, Outfit UI typography, and JetBrains Mono metadata type.
+description: Rubani's public design system. Editorial enterprise style on warm paper surfaces, near-black ink actions, navy brand accents, rounded media cards, a single midnight feature band, Space Grotesk display type, Inter UI type, and JetBrains Mono metadata.
 colors:
-  primary: "#1B3A6B"
-  primary-hover: "#13294D"
-  primary-foreground: "oklch(0.997 0 0)"
+  paper: "#FAFAF7"
+  stone: "#F1F0EB"
+  ink: "#17171C"
+  midnight: "#0C1720"
+  brand: "#1B3A6B"
+  brand-soft: "#DFE7F5"
+  coral: "#E5683F"
+  lilac: "#D9CFF5"
+  primary: "#17171C"
+  primary-hover: "#000000"
+  primary-foreground: "#FFFFFF"
   primary-border: "color-mix(in oklab, var(--primary) 12%, transparent)"
-  background: "hsl(0 0% 100%)"
-  foreground: "hsl(0 0% 9%)"
-  card: "hsl(0 0% 100%)"
-  card-foreground: "hsl(0 0% 9%)"
+  background: "#FAFAF7"
+  foreground: "#17171C"
+  card: "#FFFFFF"
+  card-foreground: "#17171C"
   popover: "hsl(0 0% 100%)"
   popover-foreground: "hsl(0 0% 9%)"
-  secondary: "hsl(0 0% 96.1%)"
+  secondary: "#F1F0EB"
   secondary-foreground: "hsl(0 0% 9%)"
-  muted: "hsl(0 0% 96.1%)"
+  muted: "#F1F0EB"
   muted-foreground: "hsl(0 0% 45.1%)"
-  accent: "hsl(0 0% 96.1%)"
+  accent: "#F1F0EB"
   accent-foreground: "hsl(0 0% 9%)"
   border: "hsl(0 0% 89.8%)"
   input: "hsl(0 0% 89.8%)"
@@ -51,95 +59,95 @@ colors:
   chart-5: "oklch(0.769 0.188 70.08)"
 typography:
   display-serif-80:
-    fontFamily: Outfit
+    fontFamily: Space Grotesk
     fontSize: 80px
     fontWeight: 400
     lineHeight: 96px
     letterSpacing: 0
   display-serif-52:
-    fontFamily: Outfit
+    fontFamily: Space Grotesk
     fontSize: 52px
     fontWeight: 400
     lineHeight: 62px
     letterSpacing: 0
   heading-56:
-    fontFamily: Outfit
+    fontFamily: Space Grotesk
     fontSize: 56px
     fontWeight: 600
     lineHeight: 64px
     letterSpacing: -1.4px
   heading-48:
-    fontFamily: Outfit
+    fontFamily: Space Grotesk
     fontSize: 48px
     fontWeight: 600
     lineHeight: 60px
     letterSpacing: -1.2px
   heading-36:
-    fontFamily: Outfit
+    fontFamily: Space Grotesk
     fontSize: 36px
     fontWeight: 600
     lineHeight: 44px
     letterSpacing: -0.9px
   heading-30:
-    fontFamily: Outfit
+    fontFamily: Space Grotesk
     fontSize: 30px
     fontWeight: 600
     lineHeight: 38px
     letterSpacing: -0.75px
   heading-24:
-    fontFamily: Outfit
+    fontFamily: Space Grotesk
     fontSize: 24px
     fontWeight: 600
     lineHeight: 32px
     letterSpacing: -0.6px
   heading-20:
-    fontFamily: Outfit
+    fontFamily: Space Grotesk
     fontSize: 20px
     fontWeight: 600
     lineHeight: 28px
     letterSpacing: -0.4px
   heading-18:
-    fontFamily: Outfit
+    fontFamily: Space Grotesk
     fontSize: 18px
     fontWeight: 500
     lineHeight: 28px
   copy-20:
-    fontFamily: Outfit
+    fontFamily: Inter
     fontSize: 20px
     fontWeight: 500
     lineHeight: 32px
   copy-18:
-    fontFamily: Outfit
+    fontFamily: Inter
     fontSize: 18px
     fontWeight: 400
     lineHeight: 28px
   copy-16:
-    fontFamily: Outfit
+    fontFamily: Inter
     fontSize: 16px
     fontWeight: 400
     lineHeight: 28px
   copy-14:
-    fontFamily: Outfit
+    fontFamily: Inter
     fontSize: 14px
     fontWeight: 400
     lineHeight: 24px
   copy-13:
-    fontFamily: Outfit
+    fontFamily: Inter
     fontSize: 13px
     fontWeight: 400
     lineHeight: 20px
   label-14:
-    fontFamily: Outfit
+    fontFamily: Inter
     fontSize: 14px
     fontWeight: 500
     lineHeight: 20px
   label-13:
-    fontFamily: Outfit
+    fontFamily: Inter
     fontSize: 13px
     fontWeight: 500
     lineHeight: 20px
   label-12:
-    fontFamily: Outfit
+    fontFamily: Inter
     fontSize: 12px
     fontWeight: 500
     lineHeight: 16px
@@ -300,53 +308,40 @@ components:
 
 ## Overview
 
-Rubani is an institutional intelligence platform with a light-first public design language. The system uses neutral surfaces, thin borders, product media, and a single navy action color. Typography is Outfit throughout, with JetBrains Mono reserved for labels, metadata, and technical context.
+Rubani is the sovereign AI platform for African enterprise. The public design language follows the editorial enterprise-AI style of sites like Cohere: warm paper surfaces, generous whitespace, light-weight grotesk display type, near-black ink actions, and large rounded media cards carrying floating product UI. Space Grotesk sets display and headings, Inter sets interface and prose, and JetBrains Mono is reserved for uppercase eyebrows, labels, and technical metadata.
 
 ## Color Use
 
-Use `primary` for actions, selected states, links, and short emphasis. Do not use navy as a general background texture. Use `background`, `card`, and `border` to create most layout hierarchy.
+`paper` is the default page surface and `stone` alternates sections. `ink` is the action color: primary buttons are ink pills, secondary actions are underlined text links. `midnight` is used for exactly one feature band per page (the principles bento) and `ink` for the stats band and footer.
+
+`brand` navy is the Rubani identity accent: eyebrow dots, check marks, icon tiles (on `brand-soft`), and the "Built for Africa" chip. `coral` is a scarce warm highlight for active states and eyebrows on dark surfaces. `lilac`, `brand`, and `coral` together form the glassy gradient shapes used only in the closing CTA.
 
 Logo colors are separate from UI colors. `logo-blue`, `logo-ink`, and `logo-cream` are for the Rubani mark, wordmark, and brand asset presentation.
 
-Dark mode keeps the same roles with darker surfaces. It should feel like the same system in lower light, not a separate neon palette.
-
 ## Typography Use
 
-Outfit is the default typeface for interface, display, prose, navigation, cards, pricing, legal copy, updates, and blog content. JetBrains Mono is reserved for labels, metadata, and technical context.
-
-Use 400 for body, 500 for labels and supportive emphasis, and 600 for headings. Avoid heavier weights. Use negative letter spacing only on sans headings, not on body copy.
+Display and section headings use Space Grotesk at weight 400 with tight negative tracking (about -0.035em) and a muted second line (`ink` at 40% opacity) for emphasis. Body copy uses Inter at 15-18px with relaxed leading at 60-65% ink. Eyebrows use JetBrains Mono, 11px, uppercase, 0.14em tracking, preceded by a small dot.
 
 ## Layout
 
-Use a 4px spacing scale. Keep tight groups at 8-16px, card padding at 20-32px, section padding at 48-96px, and large hero rhythm at 96-128px.
+Content sits in an 80rem container with 20px (mobile) / 32px (desktop) gutters. Sections use 80-112px vertical padding. Feature content alternates text and media in two-column rows; principles use a bento grid; FAQ uses a sticky heading column beside a hairline accordion.
 
-Public pages should be product-led. Use screenshots, workflow previews, logo strips, pricing tables, docs, and changelog content as proof. Avoid abstract decoration when real product state can carry the page.
+## Elevation and Shape
 
-## Elevation
-
-Depth comes from borders, neutral surfaces, and restrained shadows. Use shadows for floating navigation, menus, dialogs, and active controls. Use borders for cards, pricing, product frames, prose sections, and grids.
-
-The navy `hero-gradient` is the only page-level atmospheric effect. Do not add extra gradient blobs or decorative background orbs.
-
-## Shapes
-
-Use tight radii. Default controls use `sm` or `md`. Product frames use `md`. Marketing CTAs use `squircle`. Navigation and brand cards may use `xl`. Pricing grids and table-like layouts use `none`. Pills, avatars, badges, and segmented controls use `full`.
+Media cards and panels use `rounded-2xl` (16px); the CTA panel uses 24px. Buttons, chips, and tags are full pills. Depth comes from photography, hairline borders (ink at 8-10%), and soft long shadows on floating UI overlays. Avoid hard grid borders and hatch textures.
 
 ## Voice
 
-Copy should be concrete, short, and product-specific. Prefer direct outcomes such as "Connect institutional systems", "Automate governed reporting", and "Deliver trusted intelligence".
-
-Avoid generic AI marketing language such as "revolutionize", "unlock", "supercharge", "seamless", "effortless", and "transform your workflow".
+Copy should be concrete, short, and product-specific. Avoid generic AI marketing language such as "revolutionize", "unlock", "supercharge", "seamless", and "effortless".
 
 ## Do's and Don'ts
 
 - Use the tokens in this file before inventing new visual values.
-- Keep navy scarce and role-based.
-- Use JetBrains Mono only for metadata and technical context.
-- Use product media as primary visual proof.
-- Keep section structure crisp with borders and hatch texture.
-- Do not use multiple accent colors for marketing emphasis.
-- Do not use decorative gradients beyond `hero-gradient`.
+- Keep primary actions ink, and pair each with one underlined text link at most.
+- Keep navy and coral scarce and role-based.
+- Use JetBrains Mono only for eyebrows, metadata, and technical context.
+- Use photography plus floating product UI as primary visual proof.
+- Use gradient shapes only in the closing CTA.
 - Do not nest cards inside cards.
 - Do not center long-form prose.
 - Do not remove visible focus states.

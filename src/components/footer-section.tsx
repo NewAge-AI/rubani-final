@@ -1,136 +1,121 @@
-import { buttonVariants } from "@notra/ui/components/ui/button";
-import { Discord } from "@notra/ui/components/ui/svgs/discord";
 import { Github } from "@notra/ui/components/ui/svgs/github";
 import { Linkedin } from "@notra/ui/components/ui/svgs/linkedin";
-import { Reddit } from "@notra/ui/components/ui/svgs/reddit";
 import { XTwitter } from "@notra/ui/components/ui/svgs/twitter";
 import { Youtube } from "@notra/ui/components/ui/svgs/youtube";
 import Link from "next/link";
 import { SOCIAL_LINKS } from "../utils/social-links";
 import { RubaniMark } from "./notra-mark";
 
-type FooterSectionProps = {
-  variant?: "default" | "landing";
-};
+const FOOTER_COLUMNS = [
+  {
+    title: "Platform",
+    links: [
+      { label: "Agents & Copilots", href: "/#platform" },
+      { label: "Model Orchestration", href: "/#platform" },
+      { label: "360° Data Fabric", href: "/#platform" },
+      { label: "Principles", href: "/#features" },
+    ],
+  },
+  {
+    title: "Solutions",
+    links: [
+      { label: "Financial Services", href: "/#solutions" },
+      { label: "Healthcare", href: "/#solutions" },
+      { label: "Government", href: "/#solutions" },
+      { label: "Telecom & Utilities", href: "/#solutions" },
+    ],
+  },
+  {
+    title: "Trust",
+    links: [
+      { label: "Security", href: "/#security" },
+      { label: "Data sovereignty", href: "/#security" },
+      { label: "FAQ", href: "/#faq" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { label: "Contact sales", href: "/contact" },
+      { label: "Request a demo", href: "/contact" },
+    ],
+  },
+] as const;
 
-export default function FooterSection({
-  variant = "default",
-}: FooterSectionProps) {
+const SOCIALS = [
+  { label: "X", href: SOCIAL_LINKS.x, Icon: XTwitter },
+  { label: "LinkedIn", href: SOCIAL_LINKS.linkedin, Icon: Linkedin },
+  { label: "GitHub", href: SOCIAL_LINKS.github, Icon: Github },
+  { label: "YouTube", href: SOCIAL_LINKS.youtube, Icon: Youtube },
+] as const;
+
+export default function FooterSection() {
   const year = new Date().getFullYear();
-  const isLanding = variant === "landing";
 
   return (
-    <footer
-      className={
-        isLanding
-          ? "w-full border-white/12 border-t bg-black px-4 py-12 xl:px-8"
-          : "flex w-full flex-col items-start justify-start pt-10"
-      }
-    >
-      <div
-        className={
-          isLanding
-            ? "mx-auto flex w-full max-w-[75rem] flex-col gap-10 md:flex-row md:items-start md:justify-between"
-            : "flex h-auto w-full flex-col items-stretch justify-between gap-8 self-stretch px-4 pb-8 md:flex-row md:px-8"
-        }
-      >
-        <div className="flex flex-col items-start gap-5">
-          <RubaniMark
-            className={`h-16 w-auto shrink-0 md:h-20 ${
-              isLanding ? "brightness-0 invert" : ""
-            }`}
-          />
-          <p
-            className={
-              isLanding
-                ? "max-w-sm text-sm text-white/55 leading-relaxed"
-                : "font-medium font-sans text-foreground/90 text-sm leading-4.5"
-            }
-          >
-            {isLanding
-              ? "Sovereign AI infrastructure for African enterprise. In-country data, orchestrated models, and edge-first delivery."
-              : "Sovereignty · Orchestration · Edge"}
-          </p>
-          <p
-            className={
-              isLanding
-                ? "text-white/35 text-xs"
-                : "font-normal font-sans text-foreground/60 text-xs leading-5"
-            }
-          >
-            {`© ${year} Rubani. All rights reserved.`}
-          </p>
+    <footer className="w-full bg-ink text-white">
+      <div className="mx-auto w-full max-w-[80rem] px-5 pt-16 pb-10 md:px-8 md:pt-20">
+        <div className="grid grid-cols-1 gap-14 lg:grid-cols-[1.1fr_2fr] lg:gap-20">
+          <div className="flex flex-col items-start gap-5">
+            <p className="font-mono text-[0.6875rem] text-coral uppercase tracking-[0.14em]">
+              Sovereign AI moves fast
+            </p>
+            <p className="max-w-sm font-display text-[1.5rem] leading-tight tracking-[-0.02em]">
+              Talk to us about deploying AI inside your institution.
+            </p>
+            <p className="max-w-sm text-[0.875rem] text-white/55 leading-relaxed">
+              Sovereign AI infrastructure for African enterprise. In-country
+              data, orchestrated models, and edge-first delivery.
+            </p>
+            <Link
+              className="mt-2 inline-flex h-10 items-center rounded-full bg-white px-5 font-medium text-[0.875rem] text-ink transition-colors hover:bg-white/90"
+              href="/contact"
+            >
+              Request a demo
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4">
+            {FOOTER_COLUMNS.map((column) => (
+              <div className="flex flex-col gap-4" key={column.title}>
+                <p className="text-[0.875rem] text-white">{column.title}</p>
+                <ul className="flex flex-col gap-3">
+                  {column.links.map((link) => (
+                    <li key={link.label}>
+                      <Link
+                        className="text-[0.875rem] text-white/55 transition-colors hover:text-white"
+                        href={link.href}
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="flex flex-col items-start gap-6 md:items-end">
-          <Link
-            className={
-              isLanding
-                ? "font-medium text-sm text-white hover:text-white/80"
-                : "font-medium font-sans text-foreground text-sm transition-colors hover:text-primary"
-            }
-            href="/contact"
-          >
-            Contact
-          </Link>
-
-          <div
-            className={`flex items-start gap-2 ${isLanding ? "text-white" : "text-foreground"}`}
-          >
-            <Link
-              aria-label="Visit Rubani on X"
-              className={buttonVariants({ size: "icon", variant: "ghost" })}
-              href={SOCIAL_LINKS.x}
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <XTwitter className="size-5" />
-            </Link>
-            <Link
-              aria-label="Visit Rubani on LinkedIn"
-              className={buttonVariants({ size: "icon", variant: "ghost" })}
-              href={SOCIAL_LINKS.linkedin}
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <Linkedin className="size-5" />
-            </Link>
-            <Link
-              aria-label="Visit Rubani on GitHub"
-              className={buttonVariants({ size: "icon", variant: "ghost" })}
-              href={SOCIAL_LINKS.github}
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <Github className="size-5" />
-            </Link>
-            <Link
-              aria-label="Visit Rubani on Discord"
-              className={buttonVariants({ size: "icon", variant: "ghost" })}
-              href={SOCIAL_LINKS.discord}
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <Discord className="size-5" />
-            </Link>
-            <Link
-              aria-label="Visit Rubani on Reddit"
-              className={buttonVariants({ size: "icon", variant: "ghost" })}
-              href={SOCIAL_LINKS.reddit}
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <Reddit className="size-5" />
-            </Link>
-            <Link
-              aria-label="Visit Rubani on YouTube"
-              className={buttonVariants({ size: "icon", variant: "ghost" })}
-              href={SOCIAL_LINKS.youtube}
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <Youtube className="size-5" />
-            </Link>
+        <div className="mt-16 flex flex-col gap-6 border-white/10 border-t pt-8 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+            <RubaniMark className="h-12 w-auto shrink-0 brightness-0 invert" />
+            <p className="text-[0.8125rem] text-white/45">
+              {`© ${year} Rubani. All rights reserved.`}
+            </p>
+          </div>
+          <div className="flex items-center gap-1">
+            {SOCIALS.map(({ label, href, Icon }) => (
+              <Link
+                aria-label={`Visit Rubani on ${label}`}
+                className="inline-flex size-9 items-center justify-center rounded-full text-white/60 transition-colors hover:bg-white/10 hover:text-white"
+                href={href}
+                key={label}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <Icon className="size-4 [&_path]:fill-current" />
+              </Link>
+            ))}
           </div>
         </div>
       </div>

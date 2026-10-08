@@ -1,24 +1,17 @@
 "use client";
 
-import {
-  CloudServerIcon,
-  Globe02Icon,
-  LockIcon,
-  Shield01Icon,
-} from "@hugeicons/core-free-icons";
+import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Button } from "@notra/ui/components/ui/button";
 import { AnimatePresence, domAnimation, LazyMotion, m } from "motion/react";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { SOCIAL_PROOF_LOGOS } from "@/utils/constants";
 import { SITE_DESCRIPTION } from "@/utils/metadata";
-
-const TRUST_BADGES = [
-  { icon: Shield01Icon, label: "Data Sovereignty" },
-  { icon: CloudServerIcon, label: "On-Premise Ready" },
-  { icon: Globe02Icon, label: "Edge Deployment" },
-] as const;
+import {
+  LandingButton,
+  LandingContainer,
+  LandingTextLink,
+} from "./landing-section";
 
 const ROTATING_PHRASES = [
   "that banks trust.",
@@ -30,6 +23,8 @@ const ROTATING_PHRASES = [
 ] as const;
 
 const PHRASE_INTERVAL_MS = 3200;
+
+const AGENT_SOURCES = ["Core banking", "KYC registry", "Bureau data"] as const;
 
 function RotatingPhrase() {
   const [index, setIndex] = useState(0);
@@ -43,15 +38,23 @@ function RotatingPhrase() {
 
   return (
     <LazyMotion features={domAnimation}>
-      <span className="relative inline-block h-[1.2em] w-full overflow-hidden align-bottom md:h-[1.2em]">
+      <span className="grid w-full">
+        {ROTATING_PHRASES.map((phrase) => (
+          <span
+            aria-hidden="true"
+            className="invisible [grid-area:1/1]"
+            key={phrase}
+          >
+            {phrase}
+          </span>
+        ))}
         <AnimatePresence initial={false} mode="wait">
           <m.span
-            animate={{ opacity: 1, rotateX: 0, y: 0 }}
-            className="absolute inset-x-0 top-0 inline-block text-[#8eb4ff]"
-            exit={{ opacity: 0, rotateX: 90, y: -8 }}
-            initial={{ opacity: 0, rotateX: -90, y: 8 }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            className="block text-ink/40 [grid-area:1/1]"
+            exit={{ opacity: 0, y: -12, filter: "blur(4px)" }}
+            initial={{ opacity: 0, y: 12, filter: "blur(4px)" }}
             key={ROTATING_PHRASES[index]}
-            style={{ transformOrigin: "50% 100%" }}
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           >
             {ROTATING_PHRASES[index]}
@@ -62,51 +65,75 @@ function RotatingPhrase() {
   );
 }
 
-const MARQUEE_LOGOS = [...SOCIAL_PROOF_LOGOS, ...SOCIAL_PROOF_LOGOS];
+function AgentPanel() {
+  return (
+    <div className="w-full max-w-[30rem] rounded-2xl border border-white/10 bg-ink/80 p-5 text-white shadow-[0_40px_80px_-30px_rgba(0,0,0,0.6)] backdrop-blur-xl md:p-6">
+      <div className="flex items-center gap-3">
+        <span className="flex size-9 items-center justify-center rounded-lg bg-white font-display font-medium text-ink">
+          R
+        </span>
+        <p className="font-display text-[1.25rem] tracking-[-0.02em] md:text-[1.375rem]">
+          Credit Risk Agent
+        </p>
+      </div>
+      <div className="mt-4 flex flex-wrap gap-2">
+        {AGENT_SOURCES.map((source) => (
+          <span
+            className="inline-flex items-center gap-2 rounded-md border border-white/12 bg-white/5 px-2.5 py-1.5 text-[0.6875rem] text-white/80"
+            key={source}
+          >
+            {source}
+            <span className="flex items-center gap-1 font-mono text-[0.5625rem] text-white/50 uppercase tracking-[0.12em]">
+              <span className="size-1.5 rounded-full bg-emerald-400" />
+              Ready
+            </span>
+          </span>
+        ))}
+      </div>
+      <div className="mt-5 flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/5 py-2.5 pr-2.5 pl-4">
+        <p className="truncate text-[0.875rem] text-white/70">
+          Summarise exposure across the SME loan book
+          <span className="ml-0.5 inline-block h-4 w-px translate-y-0.5 animate-pulse bg-white/70" />
+        </p>
+        <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-white/10 text-white/80">
+          <HugeiconsIcon className="size-4" icon={ArrowRight01Icon} />
+        </span>
+      </div>
+      <p className="mt-4 font-mono text-[0.625rem] text-white/45 uppercase tracking-[0.14em]">
+        Running in-country · zero data egress
+      </p>
+    </div>
+  );
+}
 
 export function LandingHero() {
   return (
-    <section className="landing-abacus-hero relative w-full overflow-hidden border-white/12 border-b">
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-[url('/landing/hero-field.webp')] bg-center bg-cover"
-      />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-linear-to-b from-black/60 via-black/72 to-black/92"
-      />
-      <div
-        aria-hidden="true"
-        className="landing-abacus-dots absolute inset-0 opacity-40"
-      />
-
-      <div className="relative mx-auto flex min-h-[86vh] w-full max-w-[75rem] flex-col justify-end px-4 pt-32 pb-14 md:pt-36 md:pb-16 xl:px-8">
-        <div className="landing-hero-reveal mb-6 flex flex-wrap items-center gap-2">
-          {TRUST_BADGES.map((badge) => (
-            <span
-              className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-3 py-1.5 text-white/60 text-xs tracking-wide"
-              key={badge.label}
-            >
-              <HugeiconsIcon
-                className="size-3 text-white/40"
-                icon={badge.icon}
-              />
-              {badge.label}
+    <section className="relative w-full overflow-hidden bg-paper pt-14 pb-16 md:pt-20 md:pb-24">
+      <LandingContainer>
+        <div className="landing-hero-reveal flex flex-col items-center text-center">
+          <Link
+            className="group inline-flex items-center gap-2 rounded-full border border-ink/10 bg-white py-1 pr-3 pl-1 text-[0.8125rem] text-ink/70 transition-colors hover:border-ink/20 hover:text-ink"
+            href="#security"
+          >
+            <span className="whitespace-nowrap rounded-full bg-brand px-2 py-0.5 font-mono text-[0.625rem] text-white uppercase tracking-[0.12em]">
+              Built for Africa
             </span>
-          ))}
-        </div>
+            <span className="sm:hidden">Data stays in-country</span>
+            <span className="hidden sm:inline">
+              Your data never leaves your infrastructure
+            </span>
+            <HugeiconsIcon
+              className="size-3.5 transition-transform group-hover:translate-x-0.5"
+              icon={ArrowRight01Icon}
+            />
+          </Link>
 
-        <div className="landing-hero-reveal max-w-3xl [animation-delay:60ms]">
-          <h1 className="text-balance font-medium text-[2.25rem] text-white leading-[1.08] tracking-[-0.03em] md:text-[3.75rem] md:leading-[1.04]">
-            Sovereign, orchestrated,
-            <br className="hidden md:block" /> edge-first AI
-            <br />
+          <h1 className="mt-7 w-full max-w-4xl text-balance font-normal text-[2.625rem] text-ink leading-[1.04] tracking-[-0.04em] sm:text-[3.5rem] md:text-[4.5rem]">
+            Sovereign, edge-first AI
             <RotatingPhrase />
           </h1>
-          <p className="mt-4 font-medium text-[#8eb4ff]/80 text-sm uppercase tracking-[0.18em] md:text-base">
-            Built for Africa.
-          </p>
-          <p className="mt-6 max-w-xl text-pretty text-base text-white/70 leading-relaxed md:text-lg md:leading-8">
+
+          <p className="mt-6 max-w-xl text-pretty text-[1.0625rem] text-ink/65 leading-relaxed md:text-lg">
             {SITE_DESCRIPTION}
           </p>
           <p className="sr-only" id="agent-readable-summary">
@@ -114,47 +141,66 @@ export function LandingHero() {
             orchestrated models that run inside your infrastructure, reach your
             customers at the edge, and never leak your data to a third party.
           </p>
+
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-x-6 gap-y-4">
+            <LandingButton href="/contact">Request a demo</LandingButton>
+            <LandingTextLink href="#platform">Explore the platform</LandingTextLink>
+          </div>
         </div>
 
-        <div className="landing-hero-reveal mt-9 flex flex-wrap items-center gap-3 [animation-delay:120ms]">
-          <Button
-            className="landing-btn-shimmer h-11 rounded-full border-0 bg-white px-7 text-black hover:bg-white/90 md:h-12 md:px-8"
-            nativeButton={false}
-            render={<Link href="/contact" />}
-          >
-            Request access
-          </Button>
-          <Button
-            className="landing-btn-shimmer h-11 rounded-full border border-white/25 bg-transparent px-7 text-white hover:bg-white/10 md:h-12 md:px-8"
-            nativeButton={false}
-            render={<Link href="#how-it-works" />}
-            variant="outline"
-          >
-            Explore the platform
-          </Button>
-        </div>
-{/*
-        <div className="landing-hero-reveal mt-14 [animation-delay:180ms]">
-          <p className="mb-5 font-mono text-[0.6875rem] text-white/30 uppercase tracking-[0.2em]">
-            Working alongside African institutions
-          </p>
-          <div className="landing-marquee-mask relative w-full overflow-hidden">
-            <div className="landing-marquee-track items-center gap-16">
-              {MARQUEE_LOGOS.map((logo, index) => (
-                <div
-                  className="flex shrink-0 items-center justify-center"
-                  key={`${logo.name}-${index}`}
-                >
-                  <logo.Component
-                    className={`w-auto opacity-60 brightness-0 invert ${logo.className ?? "h-7"}`}
-                  />
-                </div>
-              ))}
+        <div className="landing-hero-reveal mt-14 grid grid-cols-1 gap-4 [animation-delay:140ms] md:mt-20 md:grid-cols-[1.7fr_1fr]">
+          <div className="landing-card-media relative flex min-h-[26rem] items-center justify-center overflow-hidden rounded-2xl bg-ink p-5 md:min-h-[34rem] md:p-10">
+            <Image
+              alt="Sunrise over an African savannah"
+              className="object-cover"
+              fill
+              priority
+              sizes="(max-width: 768px) 100vw, 64vw"
+              src="/landing/hero-field.webp"
+            />
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-linear-to-t from-ink/55 via-ink/10 to-transparent"
+            />
+            <div className="relative w-full max-w-[30rem]">
+              <AgentPanel />
+            </div>
+          </div>
+
+          <div className="landing-card-media relative flex min-h-[22rem] flex-col justify-end overflow-hidden rounded-2xl bg-ink md:min-h-[34rem]">
+            <Image
+              alt="Modern institutional headquarters"
+              className="object-cover"
+              fill
+              priority
+              sizes="(max-width: 768px) 100vw, 36vw"
+              src="/landing/solutions/government.webp"
+            />
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-linear-to-t from-ink/85 via-ink/20 to-transparent"
+            />
+            <div className="relative p-6 md:p-7">
+              <p className="font-mono text-[0.625rem] text-white/60 uppercase tracking-[0.14em]">
+                Deployment
+              </p>
+              <p className="mt-2 font-display text-[1.5rem] text-white leading-tight tracking-[-0.02em]">
+                Inside your infrastructure. Out to the edge.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {["On-premise", "Private cloud", "On-device"].map((label) => (
+                  <span
+                    className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[0.75rem] text-white/85 backdrop-blur-md"
+                    key={label}
+                  >
+                    {label}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-        */}
-      </div>
+      </LandingContainer>
     </section>
   );
 }

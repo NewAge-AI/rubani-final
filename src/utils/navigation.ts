@@ -4,8 +4,8 @@ export type LandingNavLink = {
 };
 
 export const LANDING_NAV: readonly LandingNavLink[] = [
-  { href: "/#features", label: "Platform" },
-  { href: "/#how-it-works", label: "Architecture" },
+  { href: "/#platform", label: "Platform" },
+  { href: "/#solutions", label: "Solutions" },
+  { href: "/#security", label: "Security" },
   { href: "/#faq", label: "FAQ" },
-  { href: "/contact", label: "Contact" },
 ];
