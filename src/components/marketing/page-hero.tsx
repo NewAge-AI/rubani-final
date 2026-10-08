@@ -154,7 +154,7 @@ export function ImageHero({
       >
         <Image
           alt=""
-          className="object-cover"
+          className="object-cover object-[72%_50%]"
           fill
           priority
           sizes="100vw"
@@ -162,7 +162,11 @@ export function ImageHero({
         />
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-linear-to-t from-ink/90 via-ink/50 to-ink/45"
+          className="absolute inset-0 bg-linear-to-r from-ink/80 via-ink/35 to-transparent"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-linear-to-t from-ink/70 via-transparent to-transparent"
         />
         <LandingContainer className="relative pt-28 pb-12 md:pb-16">
           <div className="landing-hero-reveal max-w-3xl">

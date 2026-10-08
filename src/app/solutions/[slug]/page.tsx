@@ -62,7 +62,7 @@ export default async function SolutionPage({
           { label: solution.name },
         ]}
         description={solution.description}
-        image={solution.image}
+        image={solution.heroImage}
         primary={{ label: "Request a demo", href: "/contact" }}
         secondary={{ label: "See the platform", href: "/platform" }}
         title={solution.headline}

@@ -78,7 +78,7 @@ export function LandingPillars() {
         <div className="landing-card-media relative flex min-h-[24rem] flex-col justify-end overflow-hidden rounded-2xl md:col-span-2">
           <MediaBackground
             sizes="(max-width: 768px) 100vw, 66vw"
-            src="art:sovereign"
+            src="/landing/art/security.webp"
           />
           <div
             aria-hidden="true"
@@ -102,7 +102,7 @@ export function LandingPillars() {
         <div className="landing-card-media relative flex min-h-[22rem] flex-col justify-between overflow-hidden rounded-2xl p-7 md:col-span-2 md:p-9">
           <MediaBackground
             sizes="(max-width: 768px) 100vw, 66vw"
-            src="/landing/hero-field.webp"
+            src="/landing/art/africa-network.webp"
           />
           <div
             aria-hidden="true"

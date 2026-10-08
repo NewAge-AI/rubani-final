@@ -27,6 +27,8 @@ export type Solution = {
   headline: string;
   description: string;
   image: string;
+  /** Ultra-wide variant with the subject in the right third, for heroes. */
+  heroImage: string;
   audience: string[];
   challenges: { title: string; description: string }[];
   useCases: Capability[];
@@ -43,7 +45,8 @@ export const SOLUTIONS: Solution[] = [
     headline: "Faster credit, sharper risk, and data that never leaves the bank.",
     description:
       "Banks, SACCOs, insurers, and digital lenders run credit, KYC, and fraud agents inside their own infrastructure, cutting review time without sending customer data to a foreign cloud.",
-    image: "/landing/solutions/financial-services.webp",
+    image: "/landing/art/industry-financial-services.webp",
+    heroImage: "/landing/art/industry-financial-services-wide.webp",
     audience: ["Commercial banks", "SACCOs", "Insurers", "Digital lenders"],
     challenges: [
       {
@@ -127,7 +130,8 @@ export const SOLUTIONS: Solution[] = [
     headline: "Clinical intelligence that keeps patient data where it belongs.",
     description:
       "Hospitals, clinics, and health networks deploy clinical copilots and records intelligence on-premise, keeping patient data sovereign while still reaching frontline staff at the edge.",
-    image: "/landing/solutions/healthcare.webp",
+    image: "/landing/art/industry-healthcare.webp",
+    heroImage: "/landing/art/industry-healthcare-wide.webp",
     audience: ["Hospital groups", "Clinic networks", "Health insurers", "Public health programmes"],
     challenges: [
       {
@@ -211,7 +215,8 @@ export const SOLUTIONS: Solution[] = [
     headline: "Modern citizen services on AI the state actually controls.",
     description:
       "Ministries, agencies, and parastatals modernise citizen services with orchestrated, auditable AI that stays in-country and satisfies public-sector governance requirements.",
-    image: "/landing/solutions/government.webp",
+    image: "/landing/art/industry-government.webp",
+    heroImage: "/landing/art/industry-government-wide.webp",
     audience: ["Ministries", "Revenue authorities", "Regulators", "Parastatals"],
     challenges: [
       {
@@ -295,7 +300,8 @@ export const SOLUTIONS: Solution[] = [
     headline: "Smarter networks and care for every customer on the grid.",
     description:
       "Networks, billing, and utility operators orchestrate OSS/BSS and customer-care agents at the edge, reaching low-bandwidth regions without routing traffic through distant data centres.",
-    image: "/landing/solutions/telecom-utilities.webp",
+    image: "/landing/art/industry-telecom-utilities.webp",
+    heroImage: "/landing/art/industry-telecom-utilities-wide.webp",
     audience: ["Mobile network operators", "Power utilities", "Water utilities", "ISPs"],
     challenges: [
       {

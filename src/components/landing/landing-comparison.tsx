@@ -1,5 +1,6 @@
 import { Cancel01Icon, Tick02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import Image from "next/image";
 import { LandingSectionFrame, LandingSectionHeader } from "./landing-section";
 
 const APPROACH = [
@@ -33,14 +34,29 @@ const APPROACH = [
 export function LandingComparison() {
   return (
     <LandingSectionFrame tone="stone">
-      <LandingSectionHeader
-        description="Rubani is built against the way the industry defaults: general-purpose models, cloud-only delivery, and unpredictable cost."
-        eyebrow="A differentiated approach"
-        titleLines={[
-          { text: "Built against the way" },
-          { muted: true, text: "the industry defaults." },
-        ]}
-      />
+      <div className="grid grid-cols-1 items-end gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
+        <LandingSectionHeader
+          description="Rubani is built against the way the industry defaults: general-purpose models, cloud-only delivery, and unpredictable cost."
+          eyebrow="A differentiated approach"
+          titleLines={[
+            { text: "Built against the way" },
+            { muted: true, text: "the industry defaults." },
+          ]}
+        />
+        <div className="landing-reveal landing-card-media relative aspect-[16/10] overflow-hidden rounded-2xl bg-ink">
+          <Image
+            alt="One large model beside a constellation of small, right-sized models"
+            className="object-cover"
+            fill
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            src="/landing/art/small-models-vs-llm.webp"
+          />
+          <div className="absolute inset-x-0 bottom-0 flex justify-between gap-4 p-5 font-mono text-[0.625rem] text-white/70 uppercase tracking-[0.14em] md:p-6">
+            <span>One big LLM</span>
+            <span>Right-sized, orchestrated</span>
+          </div>
+        </div>
+      </div>
 
       <div className="landing-reveal mt-14 overflow-hidden rounded-2xl border border-ink/8 bg-white">
         <div className="hidden grid-cols-[1fr_1.5fr_1.5fr] border-ink/8 border-b px-8 py-4 font-mono text-[0.6875rem] text-ink/50 uppercase tracking-[0.14em] md:grid">

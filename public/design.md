@@ -341,6 +341,10 @@ Navigation uses mega menus for Platform and Solutions: overview column, describe
 
 Media cards and panels use `rounded-2xl` (16px); the CTA panel uses 24px. Buttons, chips, and tags are full pills. Depth comes from photography, hairline borders (ink at 8-10%), and soft long shadows on floating UI overlays. Avoid hard grid borders and hatch textures.
 
+## Imagery
+
+Brand graphics are rendered 3D scenes in the brand palette: glass and satin forms, soft studio lighting, coral emissive accents, and a midnight or paper background. Heroes use ultra-wide variants (`*-wide.webp`) with the subject in the right third so headlines sit on clear space; cards use 16:9 or 5:4 variants with the subject centred.
+
 ## Voice
 
 Copy should be concrete, short, and product-specific. Avoid generic AI marketing language such as "revolutionize", "unlock", "supercharge", "seamless", and "effortless".
@@ -351,7 +355,7 @@ Copy should be concrete, short, and product-specific. Avoid generic AI marketing
 - Keep primary actions ink, and pair each with one underlined text link at most.
 - Keep navy and coral scarce and role-based.
 - Use JetBrains Mono only for eyebrows, metadata, and technical context.
-- Use clean photography or generated gradient art plus floating product UI as visual proof. Never use watermarked stock imagery.
+- Use content-specific 3D renders from `public/landing/art/` (Africa edge network, labelled orchestration router, data fabric, industry still lifes, security shield) or clean photography as visual proof. Each graphic should depict the subject of its page. Never use watermarked or unlicensed stock imagery.
 - Use gradient shapes for the closing CTA, the 404, and product art panels only.
 - Do not nest cards inside cards.
 - Do not center long-form prose.

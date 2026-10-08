@@ -1,0 +1,17 @@
+{
+  "name": "rubani-brand-art",
+  "private": true,
+  "type": "module",
+  "description": "Renders Rubani's 3D brand graphics with Three.js in headless Chromium.",
+  "scripts": {
+    "dots": "node africa-dots.mjs",
+    "render": "node render.mjs"
+  },
+  "dependencies": {
+    "playwright-core": "1.56.1",
+    "sharp": "0.34.5",
+    "three": "0.170.0",
+    "topojson-client": "3.1.0",
+    "world-atlas": "2.0.2"
+  }
+}

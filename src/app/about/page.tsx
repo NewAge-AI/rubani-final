@@ -127,13 +127,13 @@ export default function AboutPage() {
 
       <LandingSectionFrame>
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-20">
-          <div className="landing-card-media relative aspect-[4/5] overflow-hidden rounded-2xl bg-ink">
+          <div className="landing-card-media relative aspect-[5/4] overflow-hidden rounded-2xl bg-ink">
             <Image
-              alt="Institutional headquarters interior"
+              alt="Dot-matrix map of Africa with connected edge nodes"
               className="object-cover"
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
-              src="/landing/industry-building.webp"
+              src="/landing/art/africa-network-square.webp"
             />
           </div>
           <div>

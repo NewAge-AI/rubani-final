@@ -186,7 +186,7 @@ export default function SecurityPage() {
       <ImageHero
         description="Rubani is built for regulated environments where sovereignty, oversight, and auditability are non-negotiable. Security isn't a layer we add. It's the architecture."
         eyebrow="Security & Trust"
-        image="/landing/solutions/360-fabric.webp"
+        image="/landing/art/security-wide.webp"
         primary={{ label: "Request our security pack", href: "/contact" }}
         secondary={{ label: "Talk to our security team", href: "/contact" }}
         title="Sovereign by architecture. Secure by default."

@@ -42,66 +42,6 @@ function AgentsOverlay() {
   );
 }
 
-const ROUTES = [
-  { task: "KYC extraction", model: "Small · 3B", ms: "42ms" },
-  { task: "Credit memo", model: "Medium · 8B", ms: "310ms" },
-  { task: "Swahili support", model: "Edge · 1B", ms: "18ms" },
-] as const;
-
-function OrchestrationOverlay() {
-  return (
-    <OverlayCard>
-      <p className="font-mono text-[0.625rem] text-white/50 uppercase tracking-[0.14em]">
-        Routing policy
-      </p>
-      <ul className="mt-3 flex flex-col divide-y divide-white/10">
-        {ROUTES.map((route) => (
-          <li
-            className="flex items-center justify-between gap-3 py-2 text-[0.8125rem]"
-            key={route.task}
-          >
-            <span className="text-white/85">{route.task}</span>
-            <span className="flex items-center gap-3">
-              <span className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-[0.6875rem] text-white/80">
-                {route.model}
-              </span>
-              <span className="w-10 text-right font-mono text-[0.6875rem] text-white/45">
-                {route.ms}
-              </span>
-            </span>
-          </li>
-        ))}
-      </ul>
-    </OverlayCard>
-  );
-}
-
-const SOURCES = ["Transactions", "Devices", "Customers", "Compliance"] as const;
-
-function FabricOverlay() {
-  return (
-    <OverlayCard>
-      <p className="font-mono text-[0.625rem] text-white/50 uppercase tracking-[0.14em]">
-        Data fabric
-      </p>
-      <div className="mt-3 grid grid-cols-2 gap-2">
-        {SOURCES.map((source) => (
-          <span
-            className="flex items-center justify-between rounded-md border border-white/10 bg-white/5 px-2.5 py-2 text-[0.75rem] text-white/85"
-            key={source}
-          >
-            {source}
-            <span className="size-1.5 rounded-full bg-emerald-400" />
-          </span>
-        ))}
-      </div>
-      <p className="mt-3 text-[0.75rem] text-white/55">
-        4 sources aligned · lineage tracked
-      </p>
-    </OverlayCard>
-  );
-}
-
 const EDGE_NODES = [
   { site: "Kisumu branch", status: "Online" },
   { site: "Field agent 214", status: "Offline · queued" },
@@ -140,8 +80,6 @@ function EdgeOverlay() {
 
 export const PRODUCT_OVERLAYS: Record<string, ReactNode> = {
   agents: <AgentsOverlay />,
-  orchestration: <OrchestrationOverlay />,
-  "data-fabric": <FabricOverlay />,
   edge: <EdgeOverlay />,
 };
 
@@ -152,7 +90,7 @@ const PRODUCTS = [
     title: "Agents & Copilots",
     description:
       "Credit, savings, customer, and SME agents, plus developer APIs, deployed as copilots across the business.",
-    image: "art:agents",
+    image: "/landing/art/agents-conversation.webp",
     overlay: <AgentsOverlay />,
   },
   {
@@ -161,8 +99,8 @@ const PRODUCTS = [
     title: "Smart Model Orchestration",
     description:
       "The right-sized model for every task, balancing accuracy, cost, privacy, and latency.",
-    image: "art:orchestration",
-    overlay: <OrchestrationOverlay />,
+    image: "/landing/art/orchestration-router.webp",
+    overlay: null,
   },
   {
     slug: "data-fabric",
@@ -170,8 +108,8 @@ const PRODUCTS = [
     title: "360° Data Fabric",
     description:
       "Integrates, aligns, and contextualizes your data, from transactions and devices to customers, markets, and compliance, into one fabric that turns it into actionable insight.",
-    image: "/landing/solutions/360-fabric.webp",
-    overlay: <FabricOverlay />,
+    image: "/landing/art/data-fabric.webp",
+    overlay: null,
   },
 ] as const;
 
@@ -216,7 +154,7 @@ export function LandingProductCards() {
                 aria-hidden="true"
                 className="absolute inset-0 bg-linear-to-t from-ink/70 via-ink/20 to-transparent"
               />
-              <div className="relative">{product.overlay}</div>
+              {product.overlay ? <div className="relative">{product.overlay}</div> : null}
             </div>
           </article>
         ))}

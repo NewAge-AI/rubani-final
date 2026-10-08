@@ -53,7 +53,7 @@ export const PLATFORM_PRODUCTS: PlatformProduct[] = [
     headline: "Agents that do real work, inside your walls.",
     description:
       "Deploy credit, savings, customer, and SME agents, plus developer APIs, as copilots across the business. Every agent runs on your infrastructure, cites its evidence, and hands off to people when it should.",
-    image: "art:agents",
+    image: "/landing/art/agents-conversation.webp",
     capabilities: [
       {
         icon: BubbleChatIcon,
@@ -130,7 +130,7 @@ export const PLATFORM_PRODUCTS: PlatformProduct[] = [
     headline: "The right model for every task. Not one big LLM.",
     description:
       "Rubani routes each task to the smallest model that meets the bar for accuracy, cost, privacy, and latency. Open models first, frontier models only where policy allows, and no single vendor in the critical path.",
-    image: "art:orchestration",
+    image: "/landing/art/orchestration-router.webp",
     capabilities: [
       {
         icon: Route01Icon,
@@ -207,7 +207,7 @@ export const PLATFORM_PRODUCTS: PlatformProduct[] = [
     headline: "Every system, aligned into one governed fabric.",
     description:
       "Integrate, align, and contextualise data from transactions and devices to customers, markets, and compliance. The fabric turns fragmented systems into actionable intelligence without moving data out of your control.",
-    image: "/landing/solutions/360-fabric.webp",
+    image: "/landing/art/data-fabric.webp",
     capabilities: [
       {
         icon: Plug01Icon,
@@ -284,7 +284,7 @@ export const PLATFORM_PRODUCTS: PlatformProduct[] = [
     headline: "AI that reaches people where the network doesn't.",
     description:
       "Run Rubani in your data centre, your private cloud, or on devices in the field. Compact models keep working in low-bandwidth and intermittently connected environments, where a billion people and SMEs will meet AI first.",
-    image: "art:edge",
+    image: "/landing/art/africa-network-square.webp",
     capabilities: [
       {
         icon: ServerStack01Icon,

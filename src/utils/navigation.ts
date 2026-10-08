@@ -35,7 +35,7 @@ export const MAIN_NAV: readonly NavItem[] = [
       })),
       featured: {
         href: "/platform/edge",
-        image: "art:edge",
+        image: "/landing/art/africa-network.webp",
         eyebrow: "Deployment",
         title: "Run AI at the edge, even offline",
       },
@@ -58,7 +58,7 @@ export const MAIN_NAV: readonly NavItem[] = [
       })),
       featured: {
         href: "/solutions/financial-services",
-        image: "/landing/solutions/financial-services.webp",
+        image: "/landing/art/industry-financial-services.webp",
         eyebrow: "Financial services",
         title: "Credit and KYC agents that never leave the bank",
       },

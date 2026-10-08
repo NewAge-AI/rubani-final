@@ -18,7 +18,7 @@ const SOLUTIONS = [
     description:
       "Banks, SACCOs, insurers, and digital lenders run credit, KYC, and fraud agents inside their own infrastructure, cutting review time without sending customer data to a foreign cloud.",
         cta: "See how banks use Rubani",
-    image: "/landing/solutions/financial-services.webp",
+    image: "/landing/art/industry-financial-services.webp",
   },
   {
     id: "healthcare",
@@ -26,7 +26,7 @@ const SOLUTIONS = [
     description:
       "Hospitals, clinics, and health networks deploy clinical copilots and records intelligence on-premise, keeping patient data sovereign while still reaching frontline staff at the edge.",
         cta: "See how healthcare uses Rubani",
-    image: "/landing/solutions/healthcare.webp",
+    image: "/landing/art/industry-healthcare.webp",
   },
   {
     id: "government",
@@ -34,7 +34,7 @@ const SOLUTIONS = [
     description:
       "Ministries, agencies, and parastatals modernise citizen services with orchestrated, auditable AI that stays in-country and satisfies public-sector governance requirements.",
         cta: "See how government uses Rubani",
-    image: "/landing/solutions/government.webp",
+    image: "/landing/art/industry-government.webp",
   },
   {
     id: "telecom-utilities",
@@ -42,7 +42,7 @@ const SOLUTIONS = [
     description:
       "Networks, billing, and utility operators orchestrate OSS/BSS and customer-care agents at the edge, reaching low-bandwidth regions without routing traffic through distant data centres.",
         cta: "See how operators use Rubani",
-    image: "/landing/solutions/telecom-utilities.webp",
+    image: "/landing/art/industry-telecom-utilities.webp",
   },
 ] as const;
 
@@ -146,7 +146,7 @@ export function LandingSolutions() {
             >
               <Image
                 alt=""
-                className="object-cover"
+                className="object-cover object-[72%_50%]"
                 fill
                 sizes="(max-width: 1024px) 100vw, 55vw"
                 src={solution.image}
@@ -155,7 +155,7 @@ export function LandingSolutions() {
           ))}
           <div
             aria-hidden="true"
-            className="absolute inset-0 bg-linear-to-t from-ink/40 to-transparent"
+            className="absolute inset-0 bg-linear-to-t from-ink/30 to-transparent"
           />
         </div>
       </div>
